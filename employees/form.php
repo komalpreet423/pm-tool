@@ -103,12 +103,8 @@
 
 <script>
     $(document).ready(function() {
-        $("#dob").datepicker();
-        $("#doj").datepicker();
-        $('#role').select2();
-        $('#jobt').select2();
-        $('#gender').select2();
-        $('#status').select2();
+        $("#dob, #doj").datepicker();
+        $('#role, #jobt, #gender, #status').select2();
 
         var isEditMode = $("input[name='employee_id']").val() !== "";
 
