@@ -37,7 +37,7 @@
                                 <td><?php echo $row['email']; ?></td>
                                 <td><?php echo $row['phone']; ?></td>
                                 <td><?php echo $row['address']; ?></td>
-                                <td><a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-success">Edit</a>
+                                <td><a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-success">Update</a>
                                     <button class="btn btn-danger delete-btn" data-table-name="clients" data-id="<?php echo $row['id'] ?>">Delete</button>
                                 </td>
                             </tr>

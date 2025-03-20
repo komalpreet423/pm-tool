@@ -37,7 +37,7 @@
                         <td><?php echo $row['description'] ?></td>
                         <td><?php echo $row['type'] ?></td>
                         <td>
-                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success">Edit</a>
+                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success">Update</a>
                             <button class="btn btn-danger delete-btn" data-table-name="projects" data-id="<?php echo $row['id'] ?>">Delete</button>
                         </td>
                     <?php  } ?>

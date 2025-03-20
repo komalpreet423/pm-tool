@@ -30,6 +30,7 @@ if (isset($_POST['add_client'])) {
     </div>
 </div>
 <div class="card">
+    <div class="card-body">
     <?php
     if ($errorMessage) {
         echo $errorMessage;
@@ -66,6 +67,7 @@ if (isset($_POST['add_client'])) {
         </div>
         <button type="submit" class="btn btn-primary" name="add_client">Add Client</button>
     </form>
+</div>
 </div>
 <script>
     $(document).ready(function() {
