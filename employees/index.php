@@ -37,8 +37,8 @@
                         <td><?php echo $row['job_title'] ?></td>
                         <td><?php echo $row['status'] ?></td>
                         <td>
-                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success">Edit</a>
-                            <button class="btn btn-danger delete-btn" data-table-name="users" data-id="<?php echo $row['id'] ?>">Delete</button>
+                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success btn-sm">Edit</a>
+                            <button class="btn btn-danger btn-sm delete-btn" data-table-name="users" data-id="<?php echo $row['id'] ?>">Delete</button>
                         </td>
                     <?php  } ?>
             </tbody>
