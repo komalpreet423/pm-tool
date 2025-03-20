@@ -28,7 +28,7 @@ if (isset($_GET['id'])) {
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Update Project </h4>
+            <h4 class="mb-sm-0 font-size-18">Edit Project </h4>
         </div>
     </div>
 </div>
@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
                                         <label for="type">Type</label>
                                         <select class="form-select" name="type" required>
                                         <option value="" disabled>Select Type</option>
-                                            <option value="hourlyrate" <?php if ($row['type'] == 'hourlyrate') echo 'selected'; ?>>Hourly</option>
+                                            <option value="hourly" <?php if ($row['type'] == 'hourly') echo 'selected'; ?>>Hourly</option>
                                             <option value="fixed" <?php if ($row['type'] == 'fixed') echo 'selected'; ?>>Fixed</option>
                                         </select>
                                     </div>
@@ -87,11 +87,11 @@ if (isset($_GET['id'])) {
                                 <label for="status">Status</label>
                                 <select class="form-select" name="status" required>
                                 <option value="" disabled>Select Status</option>
-                                    <option value="Planned" <?php if ($row['status'] == 'Planned') echo 'selected'; ?>>Planned</option>
-                                    <option value="InProgress" <?php if ($row['status'] == 'InProgress') echo 'selected'; ?>>In Progress</option>
-                                    <option value="Completed" <?php if ($row['status'] == 'Completed') echo 'selected'; ?>>Completed</option>
-                                    <option value="OnHold" <?php if ($row['status'] == 'OnHold') echo 'selected'; ?>>OnHold</option>
-                                    <option value="Cancelled" <?php if ($row['status'] == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
+                                    <option value="planned" <?php if ($row['status'] == 'planned') echo 'selected'; ?>>Planned</option>
+                                    <option value="in_progress" <?php if ($row['status'] == 'in_progress') echo 'selected'; ?>>In Progress</option>
+                                    <option value="completed" <?php if ($row['status'] == 'completed') echo 'selected'; ?>>Completed</option>
+                                    <option value="on_hold" <?php if ($row['status'] == 'on_hold') echo 'selected'; ?>>OnHold</option>
+                                    <option value="cancelled" <?php if ($row['status'] == 'cancelled') echo 'selected'; ?>>Cancelled</option>
                                 </select>
                             </div>
                         </div>

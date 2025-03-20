@@ -12,6 +12,7 @@
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatable/dataTables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/select2/js/select2.min.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.js"></script>
 <script>
     $(document).ready(function() {
         $(document).on('click', '.delete-btn', function() {
@@ -48,7 +49,6 @@
                     });
                 }
             });
-
         })
     });
 </script>

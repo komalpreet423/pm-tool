@@ -1,52 +1,23 @@
-<?php
-ob_start();
-require_once '../includes/header.php';
-$plugins = ['datepicker', 'select2'];
-if (isset($_POST['add_project'])) {
-    $name = $_POST['name'];
-    $startdate = date('Y-m-d', strtotime($_POST['startdate']));
-    $duedate = date('Y-m-d', strtotime($_POST['duedate']));
-    $currencycode = $_POST['currencycode'];
-    $status = $_POST['status'];
-    $type = $_POST['type'];
-    $description = $_POST['description'];
-    $client = $_POST['client'];
-    $manager = $_POST['manager'];
-    $insertquery = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, description, client_id, manager_id) 
-                    VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$description', '$client', '$manager')";
-    if (mysqli_query($conn, $insertquery)) {
-        header('Location: ' . BASE_URL . './projects/index.php');
-    } else {
-        $errorMessage = mysqli_error($conn);
-    }
-}
-$clients = mysqli_query($conn, "SELECT * FROM `clients` ");
-$managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ");
-?>
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box  p-2 d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Add New Project </h4>
-        </div>
-    </div>
-</div>
 <div class="card">
     <form method="POST" name="project-form" id="project-form" class="p-3" enctype="multipart/form-data">
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="name">Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="name" required minlength="2">
+                    <input type="text" class="form-control" name="name" required minlength="2"
+                        value="<?php echo isset($row['name']) ? $row['name'] : ''; ?>">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="mb-3">
                     <label for="client">Client<span class="text-danger">*</span></label>
                     <select id="client" class="form-select" name="client" required>
-                        <option value="" selected disabled>Select Client</option>
+                        <option value="" disabled>Select Client</option>
                         <?php
+                        $selectedClientId = isset($existingClientId) ? $existingClientId : null;
                         while ($client = mysqli_fetch_assoc($clients)) {
-                            echo '<option value="' . $client['id'] . '">' . $client['name'] . '</option>';
+                            $selected = ($client['id'] == $selectedClientId) ? 'selected' : '';
+                            echo '<option value="' . $client['id'] . '" ' . $selected . '>' . $client['name'] . '</option>';
                         }
                         ?>
                     </select>
@@ -75,7 +46,7 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                                 <label for="type">Type<span class="text-danger">*</span></label>
                                 <select class="form-select" id="type" name="type" required>
                                     <option value="" selected disabled>Select Type</option>
-                                    <option value="hourlyrate">Hourly</option>
+                                    <option value="hourly">Hourly</option>
                                     <option value="fixed">Fixed</option>
                                 </select>
                             </div>
@@ -130,87 +101,3 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
         <button type="submit" class="btn btn-primary" name="add_project">Add Project</button>
     </form>
 </div>
-<script>
-    $(document).ready(function() {
-        $("#startdate").datepicker({
-            autoclose: true
-        });
-        $("#duedate").datepicker({
-            autoclose: true
-        });
-        $('#manager').select2();
-        $('#client').select2();
-        $('#s').select2();
-        $('#type').select2();
-        $('#currency-code').select2();
-        $('#description').summernote();
-        $('#project-form').validate({
-            rules: {
-                name: {
-                    required: true,
-                    minlength: 2
-                },
-                client: {
-                    required: true
-                },
-                manager: {
-                    required: true
-                },
-                type: {
-                    required: true
-                },
-                currencycode: {
-                    required: true
-                },
-                startdate: {
-                    required: true,
-                    date: true,
-                    maxDate: true
-                },
-                duedate: {
-                    date: true
-                },
-                status: {
-                    required: true
-                },
-                description: {
-                    required: true,
-                    minlength: 10
-                }
-            },
-            messages: {
-                name: {
-                    required: "Please enter the project name",
-                    minlength: "The name must be at least 2 characters long"
-                },
-                client: {
-                    required: "Please select a client"
-                },
-                manager: {
-                    required: "Please select a manager"
-                },
-                type: {
-                    required: "Please select the project type"
-                },
-                currencycode: {
-                    required: "Please select a currency code"
-                },
-                st: {
-                    required: "Please select a start date",
-                    date: "Please enter a valid date"
-                },
-                dd: {
-                    date: "Please enter a valid due date"
-                },
-                status: {
-                    required: "Please select the project status"
-                },
-                description: {
-                    required: "Please provide a description",
-                    minlength: "Description must be at least 10 characters long"
-                }
-            },
-        });
-    });
-</script>
-<?php require_once '../includes/footer.php'; ?>
