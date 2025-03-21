@@ -17,15 +17,9 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="description">Description</label> <span class="text-danger">*</span>
-                <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
-            </div>
-        </div>
         <div class="col-md-3">
             <div class="mb-3">
-                <label for="type">Type</label>
+                <label for="type">Type</label> <span class="text-danger">*</span>
                 <select class="form-select" name="type" required>
                     <option value="public" <?php echo (isset($row['type']) && $row['type'] == 'public') ? 'selected' : ''; ?>>Public</option>
                     <option value="company" <?php echo (isset($row['type']) && $row['type'] == 'company') ? 'selected' : ''; ?>>Company</option>
@@ -34,14 +28,24 @@
             </div>
         </div>
         <div class="col-md-3 d-flex align-items-center">
-            <div class="mb-3 form-check form-switch">
+            <div class="mb-3 form-check">
                 <input type="hidden" name="recurring" value="0">
+
                 <input class="form-check-input" type="checkbox" id="recurring" name="recurring" value="1"
-                    <?php echo isset($row['recurring']) && $row['recurring'] ? 'checked' : ''; ?>>
-                <label class="form-check-label" for="recurring">Every Year</label>
+                    <?php echo isset($row['recurring']) && $row['recurring'] ? 'checked' : ''; ?>
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Enable if this holiday repeats every year">
+
+                <label class="form-check-label ms-2 fw-semibold" for="recurring">
+                    <i class="bi bi-check-square"></i> Every Year
+                </label>
             </div>
         </div>
-
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+            </div>
+        </div>
     </div>
 
     <input type="hidden" name="id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
@@ -53,6 +57,8 @@
 
 <script>
     $(document).ready(function() {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+
         $("#date").datepicker({
             format: 'yyyy-mm-dd'
         });
