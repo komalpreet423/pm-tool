@@ -182,17 +182,18 @@ require_once __DIR__ . '/db.php';
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo BASE_URL; ?>/clients" class="waves-effect">
-                                <i class="bx bx-user"></i>
-                                <span>Clients</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="<?php echo BASE_URL; ?>/milestones" class="waves-effect">
                                 <i class="bx bx-target-lock"></i>
                                 <span>Milestones</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?php echo BASE_URL; ?>/clients" class="waves-effect">
+                                <i class="bx bx-user"></i>
+                                <span>Clients</span>
+                            </a>
+                        </li>
+                        
 
                         <li class="menu-title">HR</li>
                         <li>
