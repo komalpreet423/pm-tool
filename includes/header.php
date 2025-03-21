@@ -3,6 +3,7 @@ require_once __DIR__ . '/db.php';
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title><?php echo isset($page_title) ? $page_title : 'PM Tool'; ?></title>
@@ -12,12 +13,12 @@ require_once __DIR__ . '/db.php';
     <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo BASE_URL; ?>/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="<?php echo BASE_URL; ?>/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet">
-    <link  href="<?php echo BASE_URL; ?>/assets/libs/datatable/dataTables.dataTables.min.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL; ?>/assets/libs/datatable/dataTables.dataTables.min.css" rel="stylesheet">
     <link href="<?php echo BASE_URL; ?>/assets/libs/select2/css/select2.min.css" rel="stylesheet">
     <link href="<?php echo BASE_URL; ?>/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
     <link href="<?php echo BASE_URL; ?>/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo BASE_URL; ?>/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />     
+    <link href="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet">
     <script src="<?php echo BASE_URL; ?>/assets/libs/jquery/jquery.min.js"></script>
 </head>
@@ -196,7 +197,7 @@ require_once __DIR__ . '/db.php';
                                 <span>Clients</span>
                             </a>
                         </li>
-                        
+
 
                         <li class="menu-title">HR</li>
                         <li>
@@ -212,10 +213,14 @@ require_once __DIR__ . '/db.php';
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="waves-effect">
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-stats"></i>
                                 <span>Expenses</span>
                             </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?php echo BASE_URL; ?>/expense_categories/">Expenses Categories</a></li>
+                                <li><a href="#">Expense</a></li>
+                            </ul>
                         </li>
                         <li class="menu-title">Administrator</li>
                         <li>

@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-if (isset($_POST['edit_client'])) {
+if (isset($_POST['edit_expense_categories'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
