@@ -71,10 +71,11 @@
     <div class="row">
         <div class="col-md-3">
             <div class="mb-3">
-                <label>Date Of Birth</label> <span class="text-danger">*</span>
+                <label for="dob">Date Of Birth <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="dob" id="dob"
                     value="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : ''; ?>" required autocomplete="off">
             </div>
+
         </div>
         <div class="col-md-3">
             <div class="mb-3">
@@ -116,7 +117,10 @@
 
 <script>
     $(document).ready(function() {
-        $("#dob, #doj").datepicker();
+        $("#dob, #doj").datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        });
 
         $('select[name="role"], select[name="jobt"], select[name="gender"], select[name="status"]').select2({
             width: '100%'
@@ -199,6 +203,6 @@
             } else {
                 $('select[name="jobt"]').removeAttr('required');
             }
-        }).trigger('change'); 
+        }).trigger('change');
     });
 </script>
