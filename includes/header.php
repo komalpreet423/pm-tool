@@ -202,7 +202,7 @@ require_once __DIR__ . '/db.php';
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="waves-effect">
+                            <a href="<?php echo BASE_URL; ?>/holidays" class="waves-effect">
                                 <i class="bx bx-calendar"></i>
                                 <span>Holidays</span>
                             </a>
