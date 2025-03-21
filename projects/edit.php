@@ -1,16 +1,16 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-if (isset($_POST['update_project'])) {
+if (isset($_POST['edit_project'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
-    $st = date('Y-m-d', strtotime($_POST['st']));
-    $dd = date('Y-m-d', strtotime($_POST['dd']));
+    $startdate= date('Y-m-d', strtotime($_POST['start_date']));
+    $duedate = date('Y-m-d', strtotime($_POST['due_date']));
     $currencycode = $_POST['currencycode'];
     $status = $_POST['status'];
     $type = $_POST['type'];
     $description = $_POST['description'];
-    $sql = "UPDATE projects SET name = '$name', start_date = '$st', due_date = '$dd', currency_code = '$currencycode', status = '$status', type = '$type', description = '$description' WHERE id = '$id'";
+    $sql = "UPDATE projects SET name = '$name', start_date = '$startdate', due_date = '$startdate', currency_code = '$currencycode', status = '$status', type = '$type', description = '$description' WHERE id = '$id'";
     if (mysqli_query($conn, $sql)) {
         header('Location: ' . BASE_URL . './projects/index.php');
         exit();
@@ -28,82 +28,13 @@ if (isset($_GET['id'])) {
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Update Project </h4>
+            <h4 class="mb-sm-0 font-size-18">Edit Project </h4>
         </div>
     </div>
 </div>
         <div class="card">
             <div class="card-body">
-                <form method="POST" class="p-3" id="update-project">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" name="name" required value="<?php echo $row['name']; ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="currencycode">Currency Code</label>
-                                        <select class="form-select" name="currencycode" required>
-                                        <option value="" disabled>Select Currency Code</option>
-                                            <option value="INR" <?php if ($row['currency_code'] == 'INR') echo 'selected'; ?>>INR</option>
-                                            <option value="USD" <?php if ($row['currency_code'] == 'USD') echo 'selected'; ?>>USD</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="type">Type</label>
-                                        <select class="form-select" name="type" required>
-                                        <option value="" disabled>Select Type</option>
-                                            <option value="hourlyrate" <?php if ($row['type'] == 'hourlyrate') echo 'selected'; ?>>Hourly</option>
-                                            <option value="fixed" <?php if ($row['type'] == 'fixed') echo 'selected'; ?>>Fixed</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Start Date</label>
-                                <input type="text" class="form-control" name="st" required value="<?php echo $row['start_date']; ?>">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Due Date</label>
-                                <input type="text" class="form-control" name="dd" required value="<?php echo $row['due_date']; ?>">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="status">Status</label>
-                                <select class="form-select" name="status" required>
-                                <option value="" disabled>Select Status</option>
-                                    <option value="Planned" <?php if ($row['status'] == 'Planned') echo 'selected'; ?>>Planned</option>
-                                    <option value="InProgress" <?php if ($row['status'] == 'InProgress') echo 'selected'; ?>>In Progress</option>
-                                    <option value="Completed" <?php if ($row['status'] == 'Completed') echo 'selected'; ?>>Completed</option>
-                                    <option value="OnHold" <?php if ($row['status'] == 'OnHold') echo 'selected'; ?>>OnHold</option>
-                                    <option value="Cancelled" <?php if ($row['status'] == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="description">Description</label>
-                                <textarea class="form-control" name="description" required><?php echo $row['description']; ?></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" name="update_project">Update Project</button>
-                </form>
+                <?php include './form.php' ?>
             </div>
         </div>
         </div>

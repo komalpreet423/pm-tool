@@ -1,7 +1,7 @@
 <?php require_once '../includes/header.php'; ?>
 <div class="row">
     <div class="col-12">
-        <div class="page-title-box p-2 d-sm-flex align-items-center justify-content-between">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Projects</h4>
             <a href="./create.php" class="btn btn-primary">Add Project</a>
         </div>
@@ -37,7 +37,7 @@
                         <td><?php echo $row['description'] ?></td>
                         <td><?php echo $row['type'] ?></td>
                         <td>
-                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success">Update</a>
+                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success">Edit</a>
                             <button class="btn btn-danger delete-btn" data-table-name="projects" data-id="<?php echo $row['id'] ?>">Delete</button>
                         </td>
                     <?php  } ?>
