@@ -15,7 +15,7 @@
     if ($num = mysqli_num_rows($query) > 0) {
         $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
     ?>
-        <table class="table table-striped" id="employeeTable">
+        <table class="table table-sm" id="employeeTable">
             <thead>
                 <th>#</th>
                 <th>Name</th>
