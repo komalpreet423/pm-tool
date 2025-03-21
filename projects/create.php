@@ -9,11 +9,12 @@ if (isset($_POST['add_project'])) {
     $currencycode = $_POST['currencycode'];
     $status = $_POST['status'];
     $type = $_POST['type'];
+    $hourly_rate = $_POST['hourly_rate'];
     $description = $_POST['description'];
     $client = $_POST['client'];
     $manager = $_POST['manager'];
-    $insertquery = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, description, client_id, manager_id) 
-                    VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$description', '$client', '$manager')";
+    $insertquery = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, hourly_rate, description, client_id, manager_id) 
+    VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$hourly_rate', '$description', '$client', '$manager')";
     if (mysqli_query($conn, $insertquery)) {
         header('Location: ' . BASE_URL . './projects/index.php');
     } else {

@@ -46,24 +46,27 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="mb-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="type">Type<span class="text-danger">*</span></label>
-                            <select class="form-select" id="type" name="type" required>
-                                <option value="" selected disabled>Select Type</option>
-                                <option value="hourly" <?php echo isset($row['type']) && $row['type'] == 'hourly' ? 'selected' : ''; ?>>Hourly</option>
-                                <option value="fixed" <?php echo isset($row['type']) && $row['type'] == 'fixed' ? 'selected' : ''; ?>>Fixed</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="currencycode">Currency Code<span class="text-danger">*</span></label>
-                            <select class="form-select" id="currency-code" name="currencycode" required>
-                                <option value="" selected disabled>Select Currency Code</option>
-                                <option value="INR" <?php echo isset($row['currency_code']) && $row['currency_code'] == 'INR' ? 'selected' : ''; ?>>INR</option>
-                                <option value="USD" <?php echo isset($row['currency_code']) && $row['currency_code'] == 'USD' ? 'selected' : ''; ?>>USD</option>
-                            </select>
-                        </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="type">Type<span class="text-danger">*</span></label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="" selected disabled>Select Type</option>
+                            <option value="hourly" <?php echo isset($row['type']) && $row['type'] == 'hourly' ? 'selected' : ''; ?>>Hourly</option>
+                            <option value="fixed" <?php echo isset($row['type']) && $row['type'] == 'fixed' ? 'selected' : ''; ?>>Fixed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4" id="hourly_rate_container" style="display: none;">
+                        <label for="hourly_rate">Hourly Rate<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="hourly_rate" name="hourly_rate"
+                            value="<?php echo isset($row['hourly_rate']) ? $row['hourly_rate'] : ''; ?>">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="currencycode">Currency Code<span class="text-danger">*</span></label>
+                        <select class="form-select" id="currency-code" name="currencycode" required>
+                            <option value="" selected disabled>Select Currency Code</option>
+                            <option value="INR" <?php echo isset($row['currency_code']) && $row['currency_code'] == 'INR' ? 'selected' : ''; ?>>INR</option>
+                            <option value="USD" <?php echo isset($row['currency_code']) && $row['currency_code'] == 'USD' ? 'selected' : ''; ?>>USD</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -111,6 +114,22 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
 </div>
 <script>
     $(document).ready(function() {
+        function toggleHourlyRate() {
+            if ($('#type').val() === 'hourly') {
+                $('#hourly_rate_container').show();
+                $('#hourly_rate').prop('required', true);
+            } else {
+                $('#hourly_rate_container').hide();
+                $('#hourly_rate').prop('required', false);
+            }
+        }
+
+        toggleHourlyRate();
+
+        $('#type').change(function() {
+            toggleHourlyRate();
+        });
+        
         $("#start_date, #due_date").datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
