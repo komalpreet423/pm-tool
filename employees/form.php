@@ -39,45 +39,51 @@
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label>Date Of Birth</label> <span class="text-danger">*</span>
-                <input type="text" class="form-control" name="dob" id="dob"
-                    value="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : ''; ?>" required>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label>Date Of Joining</label> <span class="text-danger">*</span>
-                <input type="text" class="form-control" name="doj" id="doj"
-                    value="<?php echo isset($row['date_of_joining']) ? $row['date_of_joining'] : ''; ?>" required>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="mb-3">
                 <label for="address">Address</label> <span class="text-danger">*</span>
                 <textarea class="form-control" name="address" id="address" required><?php echo isset($row['address']) ? $row['address'] : ''; ?></textarea>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <div class="mb-3">
+                <label for="role">Role</label>
+                <select class="form-select" name="role" required>
+                    <option value="employee" <?php echo (isset($row['role']) && $row['role'] == 'employee') ? 'selected' : ''; ?>>Employee</option>
+                    <option value="Admin" <?php echo (isset($row['role']) && $row['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
+                    <option value="Manager" <?php echo (isset($row['role']) && $row['role'] == 'Manager') ? 'selected' : ''; ?>>Manager</option>
+                    <option value="HR" <?php echo (isset($row['role']) && $row['role'] == 'HR') ? 'selected' : ''; ?>>HR</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
             <div class="mb-3">
                 <label for="jobt">Job Title</label>
-                <select class="form-select" name="jobt" required>
+                <select class="form-select" name="jobt">
+                    <option value="" disabled selected>Select a Job Title</option>
                     <option value="phpdeveloper" <?php echo (isset($row['job_title']) && $row['job_title'] == 'phpdeveloper') ? 'selected' : ''; ?>>PHP Developer</option>
                     <option value="frontendd" <?php echo (isset($row['job_title']) && $row['job_title'] == 'frontendd') ? 'selected' : ''; ?>>Frontend Developer</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-6">
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
             <div class="mb-3">
-                <label for="role">Role</label>
-                <select class="form-select" name="role" required>
-                    <option value="Admin" <?php echo (isset($row['role']) && $row['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-                    <option value="Manager" <?php echo (isset($row['role']) && $row['role'] == 'Manager') ? 'selected' : ''; ?>>Manager</option>
-                    <option value="HR" <?php echo (isset($row['role']) && $row['role'] == 'HR') ? 'selected' : ''; ?>>HR</option>
-                    <option value="employee" <?php echo (isset($row['role']) && $row['role'] == 'employee') ? 'selected' : ''; ?>>Employee</option>
-                </select>
+                <label>Date Of Birth</label> <span class="text-danger">*</span>
+                <input type="text" class="form-control" name="dob" id="dob"
+                    value="<?php echo isset($row['date_of_birth']) ? $row['date_of_birth'] : ''; ?>" required autocomplete="off">
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <div class="mb-3">
+                <label>Date Of Joining</label> <span class="text-danger">*</span>
+                <input type="text" class="form-control" name="doj" id="doj"
+                    value="<?php echo isset($row['date_of_joining']) ? $row['date_of_joining'] : ''; ?>" required autocomplete="off">
+            </div>
+        </div>
+        <div class="col-md-3">
             <div class="mb-3">
                 <label for="status">Status</label>
                 <select class="form-select" name="status" required>
@@ -86,9 +92,16 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-6">
+        <?php
+        $isEdit = isset($_GET['id']);
+        ?>
+        <div class="col-md-3">
             <div class="mb-3">
-                <label for="password">Password</label> <span class="text-danger">*</span>
+                <label for="password">Password
+                    <?php if (!$isEdit): ?>
+                        <span class="text-danger">*</span>
+                    <?php endif; ?>
+                </label>
                 <input type="password" class="form-control" name="password" id="password">
             </div>
         </div>
@@ -103,12 +116,11 @@
 
 <script>
     $(document).ready(function() {
-        $("#dob").datepicker();
-        $("#doj").datepicker();
-        $('#role').select2();
-        $('#jobt').select2();
-        $('#gender').select2();
-        $('#status').select2();
+        $("#dob, #doj").datepicker();
+
+        $('select[name="role"], select[name="jobt"], select[name="gender"], select[name="status"]').select2({
+            width: '100%'
+        });
 
         var isEditMode = $("input[name='employee_id']").val() !== "";
 
@@ -128,9 +140,14 @@
                 address: "required",
                 dob: "required",
                 doj: "required",
+                jobt: {
+                    required: function() {
+                        return $('select[name="role"]').val() === 'employee';
+                    }
+                },
                 password: {
                     <?php if (!isset($row['id'])) { ?>
-                        required: true, 
+                        required: true,
                     <?php } ?>
                     minlength: 6
                 }
@@ -147,12 +164,41 @@
                 address: "Please enter an address.",
                 dob: "Please enter Date Of Birth",
                 doj: "Please enter Date Of Joining",
+                jobt: "Please select a Job Title (Required for Employees)",
                 password: {
                     required: "Please enter a password with at least 6 characters",
                     minlength: "Password must be at least 6 characters"
                 }
+            },
+            errorPlacement: function(error, element) {
+                error.addClass("invalid-feedback");
+
+                if (element.hasClass("form-select")) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function(element) {
+                $(element).addClass("is-invalid");
+                if ($(element).hasClass("form-select")) {
+                    $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
+                }
+            },
+            unhighlight: function(element) {
+                $(element).removeClass("is-invalid");
+                if ($(element).hasClass("form-select")) {
+                    $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
+                }
             }
         });
 
+        $('select[name="role"]').change(function() {
+            if ($(this).val() === 'employee') {
+                $('select[name="jobt"]').attr('required', true);
+            } else {
+                $('select[name="jobt"]').removeAttr('required');
+            }
+        }).trigger('change'); 
     });
 </script>
