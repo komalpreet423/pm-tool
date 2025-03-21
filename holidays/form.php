@@ -30,10 +30,8 @@
         <div class="col-md-3 d-flex align-items-center">
             <div class="mb-3 form-check">
                 <input type="hidden" name="recurring" value="0">
-
                 <input class="form-check-input" type="checkbox" id="recurring" name="recurring" value="1"
-                    <?php echo isset($row['recurring']) && $row['recurring'] ? 'checked' : ''; ?>
-                    data-bs-toggle="tooltip" data-bs-placement="top" title="Enable if this holiday repeats every year">
+                    <?php echo isset($row['recurring']) && $row['recurring'] ? 'checked' : ''; ?>>
 
                 <label class="form-check-label ms-2 fw-semibold" for="recurring">
                     <i class="bi bi-check-square"></i> Every Year
@@ -98,6 +96,14 @@
                 if ($(element).hasClass("form-select")) {
                     $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
                 }
+            }
+        });
+
+        $("#recurring").on("change", function() {
+            if ($(this).is(":checked")) {
+                $(this).val(1);
+            } else {
+                $(this).val(0);
             }
         });
     });
