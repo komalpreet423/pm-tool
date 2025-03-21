@@ -16,7 +16,7 @@
             $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <div class="container">
-                <table class="table table-striped" id="clientTable">
+                <table class="table table-sm" id="clientTable">
                     <thead>
                         <tr>
                             <th>#</th>
