@@ -1,6 +1,7 @@
 <?php
 $clients = mysqli_query($conn, "SELECT * FROM `clients`");
 $team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team leader' ");
+$employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' ");
 ?>
 <div class="card">
     <form method="POST" name="project-form" id="project-form" class="p-3" enctype="multipart/form-data">
@@ -30,16 +31,30 @@ $team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team le
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="mb-3">
-                    <label for="team_leader">Team Leader<span class="text-danger">*</span></label>
-                    <select id="team_leader" class="form-select" name="team_leader" required>
+                    <label for="team_leader">Team Leader</label>
+                    <select id="team_leader" class="form-select" name="team_leader">
                         <option value="" selected disabled>Select team leader</option>
                         <?php
                         $selectedTeamLeaderId = isset($row['team_leader_id']) ? $row['team_leader_id'] : null;
                         while ($team_leader = mysqli_fetch_assoc($team_leaders)) {
                             $selected = ($team_leader['id'] == $selectedTeamLeaderId) ? 'selected' : '';
                             echo '<option value="' . $team_leader['id'] . '" ' . $selected . '>' . $team_leader['name'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="employees">Assign Employees <span class="text-danger">*</span></label>
+                    <select id="employees" class="form-select" name="employees[]" multiple required>
+                        <?php
+                        $selectedEmployees = isset($existingEmployeeIds) ? $existingEmployeeIds : [];
+                        while ($employee = mysqli_fetch_assoc($employees)) {
+                            $selected = in_array($employee['id'], $selectedEmployees) ? 'selected' : '';
+                            echo '<option value="' . $employee['id'] . '" ' . $selected . '>' . $employee['name'] . '</option>';
                         }
                         ?>
                     </select>
@@ -129,7 +144,7 @@ $team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team le
         $('#type').change(function() {
             toggleHourlyRate();
         });
-        
+
         $("#start_date, #due_date").datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
@@ -145,7 +160,7 @@ $team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team le
                 client: {
                     required: true
                 },
-                team_leader: {
+                employee: {
                     required: true
                 },
                 type: {
@@ -200,7 +215,18 @@ $team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team le
                     required: "Please provide a description",
                     minlength: "Description must be at least 10 characters long"
                 }
+            },
+            errorPlacement: function(error, element) {
+                if (element.hasClass("form-select")) {
+                    error.insertAfter(element.next('.select2-container'));
+                } else {
+                    error.insertAfter(element);
+                }
             }
+        });
+        $('#employees').select2({
+            placeholder: "Select Employees",
+            allowClear: true
         });
     });
 </script>

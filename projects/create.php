@@ -12,15 +12,25 @@ if (isset($_POST['add_project'])) {
     $hourly_rate = $_POST['hourly_rate'];
     $description = $_POST['description'];
     $client = $_POST['client'];
-    $team_leader = $_POST['team_leader'];
-    $insertquery = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, hourly_rate, description, client_id, team_leader_id) 
-    VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$hourly_rate', '$description', '$client', '$team_leader')";
-    if (mysqli_query($conn, $insertquery)) {
+    $team_leader = isset($_POST['team_leader']) && $_POST['team_leader'] !== '' ? $_POST['team_leader'] : "NULL";
+    $employee_id = $_POST['employee'];
+
+    $insertProject = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, hourly_rate, description, client_id, team_leader_id) 
+    VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$hourly_rate', '$description', '$client', 
+            " . ($team_leader === "NULL" ? "NULL" : "'$team_leader'") . ")";
+
+    if (mysqli_query($conn, $insertProject)) {
+        $project_id = mysqli_insert_id($conn);
+        $assignEmployee = "INSERT INTO employee_projects (employee_id, project_id, assigned_date) 
+                           VALUES ('$employee_id', '$project_id', NOW())";
+        mysqli_query($conn, $assignEmployee);
+
         header('Location: ' . BASE_URL . './projects/index.php');
     } else {
         $errorMessage = mysqli_error($conn);
     }
 }
+
 ?>
 <div class="row">
     <div class="col-12">
