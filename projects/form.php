@@ -121,6 +121,30 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
             </div>
         </div>
+        <div class="mb-3">
+            <label for="project_documents">Upload Files</label>
+            <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
+                accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
+            <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+        </div>
+        <?php if (isset($id) && !empty($id)): ?>
+            <?php
+            $filesQuery = mysqli_query($conn, "SELECT * FROM project_documents WHERE project_id = '$id'");
+
+            if (mysqli_num_rows($filesQuery) > 0) {
+                echo "<h5>Uploaded Files:</h5><ul>";
+                while ($file = mysqli_fetch_assoc($filesQuery)) {
+                    $fileId = $file['id'];
+                    $filePath = $file['file_path'];
+                    echo "<li>
+                    <a href='$filePath' target='_blank'>" . basename($filePath) . "</a>
+                    <a href='#' class='btn btn-sm btn-danger ms-2 m-1 delete-file' data-id='$fileId'>Delete</a>
+                  </li>";
+                }
+                echo "</ul>";
+            }
+            ?>
+        <?php endif; ?>
         <input type="hidden" name="project_id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
         <button type="submit" class="btn btn-primary" name=<?php echo isset($row['id']) ? 'edit_project' : 'add_project'; ?>>
             <?php echo isset($row['id']) ? 'Update' : 'Submit'; ?>
@@ -156,7 +180,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
 
             if (dueDate < startDate) {
                 alert("Due Date cannot be earlier than Start Date.");
-                $(this).val(''); 
+                $(this).val('');
             }
         });
 
@@ -220,5 +244,33 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
             var startDate = $(param).val();
             return !startDate || !value || new Date(value) >= new Date(startDate);
         }, "Due Date must be greater than or equal to Start Date.");
+
+        $(".delete-file").click(function(e) {
+            e.preventDefault();
+            let fileId = $(this).data("id");
+            let fileItem = $(this).closest("li");
+
+            if (confirm("Are you sure you want to delete this file?")) {
+                $.ajax({
+                    url: "delete_file.php",
+                    type: "POST",
+                    data: {
+                        file_id: fileId
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            fileItem.remove();
+                            alert("File deleted successfully!");
+                        } else {
+                            alert("Failed to delete the file.");
+                        }
+                    },
+                    error: function() {
+                        alert("Error occurred while deleting the file.");
+                    }
+                });
+            }
+        });
     });
 </script>
