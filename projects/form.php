@@ -149,8 +149,20 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+
+        $('#due_date').on('change', function() {
+            var startDate = new Date($('#start_date').val());
+            var dueDate = new Date($(this).val());
+
+            if (dueDate < startDate) {
+                alert("Due Date cannot be earlier than Start Date.");
+                $(this).val(''); 
+            }
+        });
+
         $('#team_leader, #client, #project-status, #type, #currency-code').select2();
         $('#description').summernote();
+
         $('#project-form').validate({
             rules: {
                 name: {
@@ -160,7 +172,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 client: {
                     required: true
                 },
-                employee: {
+                employees: {
                     required: true
                 },
                 type: {
@@ -174,7 +186,8 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                     date: true
                 },
                 due_date: {
-                    date: true
+                    date: true,
+                    greaterThanOrEqual: "#start_date"
                 },
                 status: {
                     required: true
@@ -185,35 +198,8 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 }
             },
             messages: {
-                name: {
-                    required: "Please enter the project name",
-                    minlength: "The name must be at least 2 characters long"
-                },
-                client: {
-                    required: "Please select a client"
-                },
-                team_leader: {
-                    required: "Please select a team leader"
-                },
-                type: {
-                    required: "Please select the project type"
-                },
-                currencycode: {
-                    required: "Please select a currency code"
-                },
-                start_date: {
-                    required: "Please select a start date",
-                    date: "Please enter a valid start date"
-                },
                 due_date: {
-                    date: "Please enter a valid due date"
-                },
-                status: {
-                    required: "Please select the project status"
-                },
-                description: {
-                    required: "Please provide a description",
-                    minlength: "Description must be at least 10 characters long"
+                    greaterThanOrEqual: "Due Date cannot be before Start Date."
                 }
             },
             errorPlacement: function(error, element) {
@@ -224,9 +210,15 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 }
             }
         });
+
         $('#employees').select2({
             placeholder: "Select Employees",
             allowClear: true
         });
+
+        jQuery.validator.addMethod("greaterThanOrEqual", function(value, element, param) {
+            var startDate = $(param).val();
+            return !startDate || !value || new Date(value) >= new Date(startDate);
+        }, "Due Date must be greater than or equal to Start Date.");
     });
 </script>

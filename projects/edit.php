@@ -14,8 +14,12 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
     $hourly_rate = ($type === 'hourly' && isset($_POST['hourly_rate'])) ? $_POST['hourly_rate'] : NULL;
     $client = $_POST['client'];
     $team_leader = $_POST['team_leader'] ?? NULL;
-    $employees = $_POST['employees']; 
+    $employees = $_POST['employees'];
 
+    if (!empty($duedate) && $duedate < $startdate) {
+        echo "<script>alert('Due Date cannot be earlier than Start Date.'); window.history.back();</script>";
+        exit();
+    }
     $sql = "UPDATE projects 
             SET name = '$name', start_date = '$startdate', due_date = '$duedate', currency_code = '$currencycode', 
                 status = '$status', type = '$type', description = '$description', hourly_rate = '$hourly_rate', 
