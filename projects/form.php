@@ -1,6 +1,6 @@
 <?php
 $clients = mysqli_query($conn, "SELECT * FROM `clients`");
-$managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ");
+$team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team leader' ");
 ?>
 <div class="card">
     <form method="POST" name="project-form" id="project-form" class="p-3" enctype="multipart/form-data">
@@ -32,14 +32,14 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                    <label for="manager">Manager<span class="text-danger">*</span></label>
-                    <select id="manager" class="form-select" name="manager" required>
-                        <option value="" selected disabled>Select Manager</option>
+                    <label for="team_leader">Team Leader<span class="text-danger">*</span></label>
+                    <select id="team_leader" class="form-select" name="team_leader" required>
+                        <option value="" selected disabled>Select team leader</option>
                         <?php
-                        $selectedManagerId = isset($row['manager_id']) ? $row['manager_id'] : null;
-                        while ($manager = mysqli_fetch_assoc($managers)) {
-                            $selected = ($manager['id'] == $selectedManagerId) ? 'selected' : '';
-                            echo '<option value="' . $manager['id'] . '" ' . $selected . '>' . $manager['name'] . '</option>';
+                        $selectedTeamLeaderId = isset($row['team_leader_id']) ? $row['team_leader_id'] : null;
+                        while ($team_leader = mysqli_fetch_assoc($team_leaders)) {
+                            $selected = ($team_leader['id'] == $selectedTeamLeaderId) ? 'selected' : '';
+                            echo '<option value="' . $team_leader['id'] . '" ' . $selected . '>' . $team_leader['name'] . '</option>';
                         }
                         ?>
                     </select>
@@ -134,7 +134,7 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
             format: 'yyyy-mm-dd',
             autoclose: true
         });
-        $('#manager, #client, #project-status, #type, #currency-code').select2();
+        $('#team_leader, #client, #project-status, #type, #currency-code').select2();
         $('#description').summernote();
         $('#project-form').validate({
             rules: {
@@ -145,7 +145,7 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 client: {
                     required: true
                 },
-                manager: {
+                team_leader: {
                     required: true
                 },
                 type: {
@@ -177,8 +177,8 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 client: {
                     required: "Please select a client"
                 },
-                manager: {
-                    required: "Please select a manager"
+                team_leader: {
+                    required: "Please select a team leader"
                 },
                 type: {
                     required: "Please select the project type"

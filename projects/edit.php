@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $existingClientId = $row['client_id'];
-        $existingManagerId = $row['manager_id'];
+        $existingTeamLeaderId = $row['team_leader_id'];
 ?>
         <div class="row">
             <div class="col-12">
