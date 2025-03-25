@@ -16,10 +16,40 @@ if (isset($_POST['add_milestone'])) {
     $result = mysqli_query($conn, $projectCheckQuery);
 
     if (mysqli_num_rows($result) > 0) {
-        $insertquery = "INSERT INTO project_milestones (project_id, milestone_name, due_date, amount, currency_code, description, status) 
-                        VALUES ('$project_id', '$milestone_name', '$due_date', '$amount', '$currency_code', '$status','$description')";
+        $insertQuery = "INSERT INTO project_milestones (project_id, milestone_name, due_date, amount, currency_code, description, status) 
+                        VALUES ('$project_id', '$milestone_name', '$due_date', '$amount', '$currency_code', '$description', '$status')";
 
-        if (mysqli_query($conn, $insertquery)) {
+        if (mysqli_query($conn, $insertQuery)) {
+            $milestone_id = mysqli_insert_id($conn); 
+
+            if (!empty($_FILES['milestone_documents']['name'][0])) {
+                $uploadDir = "../uploads/milestones/";
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true); 
+                }
+
+                foreach ($_FILES['milestone_documents']['name'] as $key => $filename) {
+                    $tmpName = $_FILES['milestone_documents']['tmp_name'][$key];
+                    $fileType = $_FILES['milestone_documents']['type'][$key];
+                    $fileSize = $_FILES['milestone_documents']['size'][$key];
+
+                    $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'text/plain', 'video/mp4', 'video/avi', 'video/mov'];
+                    if (!in_array($fileType, $allowedTypes)) {
+                        $errorMessage = "Invalid file type: $filename";
+                        continue;
+                    }
+
+                    $newFileName = time() . "-" . basename($filename);
+                    $filePath = $uploadDir . $newFileName;
+
+                    if (move_uploaded_file($tmpName, $filePath)) {
+                        $fileInsertQuery = "INSERT INTO milestone_documents (milestone_id, file_path, file_name) 
+                                            VALUES ('$milestone_id', '$filePath', '$newFileName')";
+                        mysqli_query($conn, $fileInsertQuery);
+                    }
+                }
+            }
+
             header('Location: ' . BASE_URL . './milestones/index.php');
             exit();
         } else {
