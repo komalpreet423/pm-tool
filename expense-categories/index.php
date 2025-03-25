@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="page-title-box  pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Expense Categories</h4>
-            <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Expense Categorie</a>
+            <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Expense Category</a>
         </div>
     </div>
 </div>
@@ -13,7 +13,7 @@
         $sql = "SELECT * FROM expense_categories";
         $query = mysqli_query($conn, $sql);
         if ($num = mysqli_num_rows($query) > 0) {
-            $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
+            $expense_categories = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <table class="table table-sm" id="expense_categories_table">
                 <thead>
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     <?php
-                    foreach ($projects as $key => $row) {
+                    foreach ($expense_categories as $key => $row) {
                     ?>
                         <tr>
                             <td><?php echo  $key + 1 ?></td>

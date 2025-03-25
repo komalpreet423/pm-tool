@@ -22,7 +22,6 @@ require_once __DIR__ . '/db.php';
     <link href="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.css" rel="stylesheet">
     <script src="<?php echo BASE_URL; ?>/assets/libs/jquery/jquery.min.js"></script>
 </head>
-
 <body data-sidebar="dark">
     <div id="layout-wrapper">
         <header id="page-topbar">
@@ -37,7 +36,6 @@ require_once __DIR__ . '/db.php';
                                 <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="" height="17">
                             </span>
                         </a>
-
                         <a href="<?php echo BASE_URL; ?>" class="logo logo-light">
                             <span class="logo-sm">
                                 <img src="<?php echo BASE_URL; ?>/assets/images/small-logo.png" alt="" height="32">
@@ -47,20 +45,16 @@ require_once __DIR__ . '/db.php';
                             </span>
                         </a>
                     </div>
-
                     <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
                         <i class="fa fa-fw fa-bars"></i>
                     </button>
-
                 </div>
-
                 <div class="d-flex">
                     <div class="dropdown d-none d-lg-inline-block ms-1">
                         <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen">
                             <i class="bx bx-fullscreen"></i>
                         </button>
                     </div>
-
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -125,7 +119,6 @@ require_once __DIR__ . '/db.php';
                                         </div>
                                     </div>
                                 </a>
-
                                 <a href="javascript: void(0);" class="text-reset notification-item">
                                     <div class="d-flex">
                                         <img src="<?php echo BASE_URL; ?>/assets/images/default-user.png"
@@ -147,7 +140,6 @@ require_once __DIR__ . '/db.php';
                             </div>
                         </div>
                     </div>
-
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -218,8 +210,8 @@ require_once __DIR__ . '/db.php';
                                 <span>Expenses</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="<?php echo BASE_URL; ?>/expense_categories/">Expenses Categories</a></li>
-                                <li><a href="#">Expense</a></li>
+                                <li><a href="<?php echo BASE_URL; ?>/expense-categories/">Expense Categories</a></li>
+                                <li><a href="<?php echo BASE_URL; ?>/expenses/">Expenses</a></li>
                             </ul>
                         </li>
                         <li class="menu-title">Administrator</li>
