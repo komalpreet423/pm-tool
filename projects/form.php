@@ -1,6 +1,7 @@
 <?php
 $clients = mysqli_query($conn, "SELECT * FROM `clients`");
-$managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ");
+$team_leaders = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='team leader' ");
+$employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' ");
 ?>
 <div class="card">
     <form method="POST" name="project-form" id="project-form" class="p-3" enctype="multipart/form-data">
@@ -30,16 +31,30 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="mb-3">
-                    <label for="manager">Manager<span class="text-danger">*</span></label>
-                    <select id="manager" class="form-select" name="manager" required>
-                        <option value="" selected disabled>Select Manager</option>
+                    <label for="team_leader">Team Leader</label>
+                    <select id="team_leader" class="form-select" name="team_leader">
+                        <option value="" selected disabled>Select team leader</option>
                         <?php
-                        $selectedManagerId = isset($row['manager_id']) ? $row['manager_id'] : null;
-                        while ($manager = mysqli_fetch_assoc($managers)) {
-                            $selected = ($manager['id'] == $selectedManagerId) ? 'selected' : '';
-                            echo '<option value="' . $manager['id'] . '" ' . $selected . '>' . $manager['name'] . '</option>';
+                        $selectedTeamLeaderId = isset($row['team_leader_id']) ? $row['team_leader_id'] : null;
+                        while ($team_leader = mysqli_fetch_assoc($team_leaders)) {
+                            $selected = ($team_leader['id'] == $selectedTeamLeaderId) ? 'selected' : '';
+                            echo '<option value="' . $team_leader['id'] . '" ' . $selected . '>' . $team_leader['name'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="employees">Assign Employees <span class="text-danger">*</span></label>
+                    <select id="employees" class="form-select" name="employees[]" multiple required>
+                        <?php
+                        $selectedEmployees = isset($existingEmployeeIds) ? $existingEmployeeIds : [];
+                        while ($employee = mysqli_fetch_assoc($employees)) {
+                            $selected = in_array($employee['id'], $selectedEmployees) ? 'selected' : '';
+                            echo '<option value="' . $employee['id'] . '" ' . $selected . '>' . $employee['name'] . '</option>';
                         }
                         ?>
                     </select>
@@ -106,6 +121,30 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
             </div>
         </div>
+        <div class="mb-3">
+            <label for="project_documents">Upload Files</label>
+            <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
+                accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
+            <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+        </div>
+        <?php if (isset($id) && !empty($id)): ?>
+            <?php
+            $filesQuery = mysqli_query($conn, "SELECT * FROM project_documents WHERE project_id = '$id'");
+
+            if (mysqli_num_rows($filesQuery) > 0) {
+                echo "<h5>Uploaded Files:</h5><ul>";
+                while ($file = mysqli_fetch_assoc($filesQuery)) {
+                    $fileId = $file['id'];
+                    $filePath = $file['file_path'];
+                    echo "<li>
+                    <a href='$filePath' target='_blank'>" . basename($filePath) . "</a>
+                    <a href='#' class='btn btn-sm btn-danger ms-2 m-1 delete-file' data-id='$fileId'>Delete</a>
+                  </li>";
+                }
+                echo "</ul>";
+            }
+            ?>
+        <?php endif; ?>
         <input type="hidden" name="project_id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
         <button type="submit" class="btn btn-primary" name=<?php echo isset($row['id']) ? 'edit_project' : 'add_project'; ?>>
             <?php echo isset($row['id']) ? 'Update' : 'Submit'; ?>
@@ -129,13 +168,25 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
         $('#type').change(function() {
             toggleHourlyRate();
         });
-        
+
         $("#start_date, #due_date").datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
         });
-        $('#manager, #client, #project-status, #type, #currency-code').select2();
+
+        $('#due_date').on('change', function() {
+            var startDate = new Date($('#start_date').val());
+            var dueDate = new Date($(this).val());
+
+            if (dueDate < startDate) {
+                alert("Due Date cannot be earlier than Start Date.");
+                $(this).val('');
+            }
+        });
+
+        $('#team_leader, #client, #project-status, #type, #currency-code').select2();
         $('#description').summernote();
+
         $('#project-form').validate({
             rules: {
                 name: {
@@ -145,7 +196,7 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 client: {
                     required: true
                 },
-                manager: {
+                employees: {
                     required: true
                 },
                 type: {
@@ -159,7 +210,8 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                     date: true
                 },
                 due_date: {
-                    date: true
+                    date: true,
+                    greaterThanOrEqual: "#start_date"
                 },
                 status: {
                     required: true
@@ -170,36 +222,54 @@ $managers = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='manager' ")
                 }
             },
             messages: {
-                name: {
-                    required: "Please enter the project name",
-                    minlength: "The name must be at least 2 characters long"
-                },
-                client: {
-                    required: "Please select a client"
-                },
-                manager: {
-                    required: "Please select a manager"
-                },
-                type: {
-                    required: "Please select the project type"
-                },
-                currencycode: {
-                    required: "Please select a currency code"
-                },
-                start_date: {
-                    required: "Please select a start date",
-                    date: "Please enter a valid start date"
-                },
                 due_date: {
-                    date: "Please enter a valid due date"
-                },
-                status: {
-                    required: "Please select the project status"
-                },
-                description: {
-                    required: "Please provide a description",
-                    minlength: "Description must be at least 10 characters long"
+                    greaterThanOrEqual: "Due Date cannot be before Start Date."
                 }
+            },
+            errorPlacement: function(error, element) {
+                if (element.hasClass("form-select")) {
+                    error.insertAfter(element.next('.select2-container'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+
+        $('#employees').select2({
+            placeholder: "Select Employees",
+            allowClear: true
+        });
+
+        jQuery.validator.addMethod("greaterThanOrEqual", function(value, element, param) {
+            var startDate = $(param).val();
+            return !startDate || !value || new Date(value) >= new Date(startDate);
+        }, "Due Date must be greater than or equal to Start Date.");
+
+        $(".delete-file").click(function(e) {
+            e.preventDefault();
+            let fileId = $(this).data("id");
+            let fileItem = $(this).closest("li");
+
+            if (confirm("Are you sure you want to delete this file?")) {
+                $.ajax({
+                    url: "delete_file.php",
+                    type: "POST",
+                    data: {
+                        file_id: fileId
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            fileItem.remove();
+                            alert("File deleted successfully!");
+                        } else {
+                            alert("Failed to delete the file.");
+                        }
+                    },
+                    error: function() {
+                        alert("Error occurred while deleting the file.");
+                    }
+                });
             }
         });
     });

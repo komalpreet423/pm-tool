@@ -49,7 +49,7 @@
                 <select class="form-select" name="role" required>
                     <option value="employee" <?php echo (isset($row['role']) && $row['role'] == 'employee') ? 'selected' : ''; ?>>Employee</option>
                     <option value="Admin" <?php echo (isset($row['role']) && $row['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-                    <option value="Manager" <?php echo (isset($row['role']) && $row['role'] == 'Manager') ? 'selected' : ''; ?>>Manager</option>
+                    <option value="team leader" <?php echo (isset($row['role']) && $row['role'] == 'team leader') ? 'selected' : ''; ?>>Team Leader</option>
                     <option value="HR" <?php echo (isset($row['role']) && $row['role'] == 'HR') ? 'selected' : ''; ?>>HR</option>
                 </select>
             </div>
