@@ -10,7 +10,8 @@ if (isset($_POST['edit_project'])) {
     $status = $_POST['status'];
     $type = $_POST['type'];
     $description = $_POST['description'];
-    $sql = "UPDATE projects SET name = '$name', start_date = '$startdate', due_date = '$startdate', currency_code = '$currencycode', status = '$status', type = '$type', description = '$description' WHERE id = '$id'";
+    $hourly_rate = ($type === 'hourly' && isset($_POST['hourly_rate'])) ? $_POST['hourly_rate'] : NULL;
+    $sql = "UPDATE projects SET name = '$name', start_date = '$startdate', due_date = '$duedate', currency_code = '$currencycode', status = '$status', type = '$type',description = '$description', hourly_rate = '$hourly_rate' WHERE id = '$id'";
     if (mysqli_query($conn, $sql)) {
         header('Location: ' . BASE_URL . './projects/index.php');
         exit();
