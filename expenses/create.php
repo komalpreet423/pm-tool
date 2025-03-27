@@ -6,11 +6,12 @@ if (isset($_POST['add_expense'])) {
     $amount = $_POST['amount'];
     $category_id = $_POST['category_id'];
     $description = $_POST['description'];
+    $encoded_description = base64_encode($description);
     $attachment = $_POST['attachment'];
     $status = $_POST['status'];
     $expense_date = date('Y-m-d', strtotime($_POST['expense_date']));
     $insertquery = "INSERT INTO expenses (title,amount,category_id,description,attachment,status,expense_date) 
-    VALUES ('$title','$amount','$category_id','$description','$attachment','$status','$expense_date')";
+    VALUES ('$title','$amount','$category_id','$encoded_description','$attachment','$status','$expense_date')";
     if (mysqli_query($conn, $insertquery)) {
         header('Location: ' . BASE_URL . './expenses/index.php');
     } else {

@@ -6,11 +6,13 @@ if (isset($_POST['edit_expense'])) {
     $title = $_POST['title'];
     $amount=$_POST['amount'];
     $category_id=$_POST['category_id'];
-    $attachment=$_POST['attachment'];
+    $attachment=$_FILES['attachment'];
+    print_r($attachment) ;
     $description=$_POST['description'];
     $status=$_POST['status'];
     $expense_date = date('Y-m-d', strtotime($_POST['expense_date']));
-    $sql = "UPDATE expenses SET title = '$title',category_id='$category_id', amount = '$amount', description = '$description', status = '$status', expense_date = '$expense_date', attachment = '$attachment' WHERE id = '$id'";
+    $sql = "UPDATE expenses SET title = '$title', category_id = '$category_id', amount = '$amount', description = '$description', status = '$status', expense_date = '$expense_date', attachment = '$attachment' WHERE id = '$id'";
+
     $result = mysqli_query($conn, $sql);
     if ($result) {
         header('Location: ' . BASE_URL . './expenses/index.php');
@@ -36,7 +38,7 @@ if (isset($_GET['id'])) {
 </div>
 <?php
     } else {
-        echo "Client not found.";
+        echo "expense not found.";
     }
 }
 ?> 

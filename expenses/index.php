@@ -9,7 +9,7 @@
 </div>
 <?php $categories = mysqli_query($conn, "SELECT * FROM `expense_categories`"); ?>
 <form>
-    <div class="row mb-3">
+    <div class="row ">
         <div class="col-md-3">
             <label>Category</label>
             <select class="form-control" name="category_id" id="category_id">
@@ -27,29 +27,46 @@
                 <label for="status">Status</label>
                 <select id="expense-status" class="form-select" name="status" required>
                     <option value="" selected disabled>Select Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="" selected>All Status</option>
+                    <option value="pending" <?php echo (($_GET['status'] ?? '') == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                    <option value="approved" <?php echo (($_GET['status']  ?? '') == 'approved') ? 'selected' : ''; ?>>Approved</option>
+                    <option value="rejected" <?php echo (isset($_GET['status']) && $_GET['status'] == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
                 </select>
             </div>
         </div>
         <div class="col-md-3">
-        <label for="expense_date"> Date</label>
-        <input type="text"  class="form-control" id="date"  name="date" required  autocomplete="off">
+            <label for="expense_date"> Date</label>
+            <input type="text" class="form-control" id="date" name="date" value="<?php echo isset($_GET['date']) ? $_GET['date'] : ''; ?>" required autocomplete="off">
+        </div>
+        <div class="col-md-3">
+            <div class="mb-3">
+                <button type="button" id="reset-filters" class="btn btn-secondary">Reset Filters</button>
+            </div>
+
         </div>
     </div>
 </form>
 <div class="card">
     <div class="card-body">
         <?php
-        $sql = "SELECT * FROM expenses INNER JOIN expense_categories
-                    ON expenses.category_id = expense_categories.id";
+        $sql = "SELECT e.id, e.title, e.amount, e.status, e.expense_date, ec.name FROM expenses as e INNER JOIN expense_categories as ec
+        ON e.category_id = ec.id";
+
         if (isset($_GET['category_id']) && !empty($_GET['category_id'])) {
-            $sql .= ' WHERE category_id=' . $_GET['category_id'];
+            $category_id = intval($_GET['category_id']);
+            $sql .= ' WHERE category_id=' . $category_id;
         }
+
         if (isset($_GET['status']) && !empty($_GET['status'])) {
-            $sql .= " WHERE status='" . $_GET['status']. "'";
+            $status = mysqli_real_escape_string($conn, $_GET['status']);
+            $sql .= " AND status='" . $status . "'";
         }
+
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $date = mysqli_real_escape_string($conn, $_GET['date']);
+            $sql .= " AND expense_date='" . $date . "'";
+        }
+
         $query = mysqli_query($conn, $sql);
         $expenses = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
@@ -88,17 +105,29 @@
             format: 'yyyy-mm-dd',
             autoclose: true
         })
-        $("#category_id, #expense-status").change(function() {
+        $("#category_id, #expense-status, #date").change(function() {
             var category_id = $('#category_id').val();
             var status = $('#expense-status').val();
+            var date = $('#date').val();
             let parameters = '';
-            if(category_id){
-                parameters += 'category_id='+category_id;
+
+            if (category_id) {
+                parameters += 'category_id=' + category_id;
             }
-            if(status){
-                parameters += '&status='+status;
+            if (status) {
+                parameters += '&status=' + status;
             }
+            if (date) {
+                parameters += '&date=' + date;
+            }
+
             window.location.href = '?' + parameters;
+        });
+        $('#reset-filters').click(function() {
+            $('#category_id').val('').trigger('change');
+            $('#expense-status').val('').trigger('change');
+            $('#date').val('').trigger('change');
+            window.location.href = window.location.pathname;
         });
         $('#category_id,#expense-status').select2();
         $('#expensesTable').DataTable({

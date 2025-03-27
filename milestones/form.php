@@ -17,9 +17,9 @@
         </div>
         <div class="col-md-3">
             <div class="mb-3">
-                <label for="amount">Amount</label>
-                <input type="number" step="0.01" class="form-control" name="amount"
-                    value="<?php echo isset($row['amount']) ? $row['amount'] : ''; ?>">
+                <label for="budget">Budget</label>
+                <input type="number" step="0.01" class="form-control" name="budget"
+                    value="<?php echo isset($row['budget']) ? $row['budget'] : ''; ?>">
             </div>
         </div>
         <div class="col-md-3">
@@ -105,44 +105,106 @@
 
 <script>
     $(document).ready(function() {
-        $("#due_date, #completed_date").datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-        $('#description').summernote();
+                $("#due_date, #completed_date").datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true
+                });
+                $('#description').summernote();
+                $('select[name="project_id"], select[name="currency_code"], select[name="status"]').select2({
+                    width: '100%'
+                });
 
-        $('select[name="project_id"], select[name="currency_code"], select[name="status"]').select2({
-            width: '100%'
-        });
 
-        $(".delete-file").click(function(e) {
-            e.preventDefault();
-            let fileId = $(this).data("id");
-            let fileItem = $(this).closest("li");
+                $(".delete-file").click(function(e) {
+                    e.preventDefault();
+                    let fileId = $(this).data("id");
+                    let fileItem = $(this).closest("li");
 
-            if (confirm("Are you sure you want to delete this file?")) {
-                $.ajax({
-                    url: "delete_file.php",
-                    type: "POST",
-                    data: {
-                        file_id: fileId
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success) {
-                            fileItem.remove();
-                            alert("File deleted successfully!");
-                        } else {
-                            alert("Error: " + response.message);
-                            console.log(response);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert("AJAX Error: " + error);
-                        console.log(xhr.responseText);
+                    if (confirm("Are you sure you want to delete this file?")) {
+                        $.ajax({
+                            url: "delete_file.php",
+                            type: "POST",
+                            data: {
+                                file_id: fileId
+                            },
+                            dataType: "json",
+                            success: function(response) {
+                                if (response.success) {
+                                    fileItem.remove();
+                                    alert("File deleted successfully!");
+                                } else {
+                                    alert("Error: " + response.message);
+                                    console.log(response);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                alert("AJAX Error: " + error);
+                                console.log(xhr.responseText);
+                            }
+                        });
                     }
                 });
-            }
-        });
-    });
+                $("#milestone-form").validate({
+                    rules: {
+                        project_id: {
+                            required: true
+                        },
+                        budget: {
+                            required: true,
+                            number: true,
+                            min: 0
+                        },
+                        currency_code: {
+                            required: true
+                        },
+                        status: {
+                            required: true
+                        },
+                        milestone_name: {
+                            required: true,
+                            minlength: 2
+                        },
+                        due_date: {
+                            required: true,
+                            date: true
+                        },
+                        description: {
+                            required: true
+                        },
+                        "milestone_documents[]": {
+                            extension: "jpg|jpeg|png|gif|doc|docx|txt|pdf|mp4|avi|mov"
+                        }
+                    },
+                    messages: {
+                        project_id: {
+                            required: "Please select a project."
+                        },
+                        amount: {
+                            required: "Please enter a budget.",
+                            number: "Please enter a valid number.",
+                            min: "Budget must be a positive number."
+                        },
+                        currency_code: {
+                            required: "Please select a currency."
+                        },
+                        status: {
+                            required: "Please select the status."
+                        },
+                        milestone_name: {
+                            required: "Please enter a milestone name.",
+                            minlength: "Milestone name must be at least 2 characters long."
+                        },
+                        due_date: {
+                            required: "Please enter the due date.",
+                            date: "Please enter a valid date."
+                        },
+                        description: {
+                            required: "Please provide a description."
+                        },
+                        "milestone_documents[]": {
+                            extension: "Only image files, documents, and video files are allowed."
+                        }
+                    },
+                });
+            });
 </script>

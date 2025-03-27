@@ -18,10 +18,9 @@
         <table class="table table-sm" id="employeeTable">
             <thead>
                 <th>#</th>
-                <th>Name</th>
+                <th>Project Name</th>
                 <th>Start Date</th>
                 <th>Due Date</th>
-                <th>Description</th>
                 <th>Type</th>
                 <th>Action</th>
             </thead>
@@ -34,9 +33,9 @@
                         <td><?php echo $row['name'] ?></td>
                         <td><?php echo $row['start_date'] ?></td>
                         <td><?php echo $row['due_date'] ?></td>
-                        <td><?php echo $row['description'] ?></td>
                         <td><?php echo $row['type'] ?></td>
                         <td>
+                        <a href='./add-status.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm">Add Status</a>
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger delete-btn btn-sm" data-table-name="projects" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                         </td>

@@ -13,10 +13,10 @@
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-<script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/js/datatables.init.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/select2/js/select2.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
 <script>
     $(document).ready(function() {
         $(document).on('click', '.delete-btn', function() {

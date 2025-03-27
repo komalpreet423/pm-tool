@@ -38,7 +38,10 @@
                 </label>
             </div>
         </div>
-        <div class="col-md-6">
+        
+    </div>
+    <div class="row">
+    <div class="col-md-12">
             <div class="mb-3">
                 <label for="description">Description</label>
                 <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
@@ -66,6 +69,7 @@
         });
 
         var isEditMode = $("input[name='id']").val() !== "";
+        $('#description').summernote();
 
         $('#holiday-form').validate({
             rules: {
