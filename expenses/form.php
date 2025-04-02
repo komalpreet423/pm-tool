@@ -29,10 +29,7 @@
                 $file_tmp=$_FILES['image']['tmp_name'];
                 $file_type=$_FILES['image']['type'];
                 move_uploaded_file($file_tmp,"images/".$file_name);
-               
-
             }
-            
             ?>
             <div class="col-md-6">
                 <div class="mb-3">

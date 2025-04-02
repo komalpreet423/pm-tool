@@ -9,38 +9,44 @@
 </div>
 <?php $categories = mysqli_query($conn, "SELECT * FROM `expense_categories`"); ?>
 <form>
-    <div class="row ">
-        <div class="col-md-3">
-            <label>Category</label>
-            <select class="form-control" name="category_id" id="category_id">
-                <option value="" selected>All Categories</option>
-                <?php
-                while ($category = mysqli_fetch_assoc($categories)) {
-                    $selected = ($_GET['category_id'] == $category['id']) ? 'selected' : '';
-                    echo '<option value="' . $category['id'] . '" ' . $selected . ' >' . $category['name'] . '</option>';
-                }
-                ?>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <div class="mb-3">
-                <label for="status">Status</label>
-                <select id="expense-status" class="form-select" name="status" required>
-                    <option value="" selected disabled>Select Status</option>
-                    <option value="" selected>All Status</option>
-                    <option value="pending" <?php echo (($_GET['status'] ?? '') == 'pending') ? 'selected' : ''; ?>>Pending</option>
-                    <option value="approved" <?php echo (($_GET['status']  ?? '') == 'approved') ? 'selected' : ''; ?>>Approved</option>
-                    <option value="rejected" <?php echo (isset($_GET['status']) && $_GET['status'] == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
+    <div class="col-md-12">
+        <div class="row ">
+
+            <div class="col-md-3">
+                <label>Category</label>
+                <select class="form-control" name="category_id" id="category_id">
+                    <option value="" selected>All Categories</option>
+                    <?php
+                    while ($category = mysqli_fetch_assoc($categories)) {
+                        $selected = ($_GET['category_id'] == $category['id']) ? 'selected' : '';
+                        echo '<option value="' . $category['id'] . '" ' . $selected . ' >' . $category['name'] . '</option>';
+                    }
+                    ?>
                 </select>
             </div>
-        </div>
-        <div class="col-md-3">
-            <label for="expense_date"> Date</label>
-            <input type="text" class="form-control" id="date" name="date" value="<?php echo isset($_GET['date']) ? $_GET['date'] : ''; ?>" required autocomplete="off">
-        </div>
-        <div class="col-md-3">
-            <div class="mb-3">
-                <button type="button" id="reset-filters" class="btn btn-secondary">Reset Filters</button>
+
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="status">Status</label>
+                    <select id="expense-status" class="form-select" name="status" required>
+                        <option value="" selected disabled>Select Status</option>
+                        <option value="" selected>All Status</option>
+                        <option value="pending" <?php echo (($_GET['status'] ?? '') == 'pending') ? 'selected' : ''; ?>>Pending</option>
+                        <option value="approved" <?php echo (($_GET['status']  ?? '') == 'approved') ? 'selected' : ''; ?>>Approved</option>
+                        <option value="rejected" <?php echo (isset($_GET['status']) && $_GET['status'] == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                    <label for="expense_date"> Date</label>
+                    <input type="text" class="form-control" id="date" name="date" value="<?php echo isset($_GET['date']) ? $_GET['date'] : ''; ?>" required autocomplete="off">
+            </div>
+
+            <div class="col-md-3">
+                <div class="mt-4">
+                    <button type="button" id="reset-filters" class="btn btn-secondary">Reset Filters</button>
+                </div>
             </div>
 
         </div>
@@ -49,9 +55,7 @@
 <div class="card">
     <div class="card-body">
         <?php
-        $sql = "SELECT e.id, e.title, e.amount, e.status, e.expense_date, ec.name FROM expenses as e INNER JOIN expense_categories as ec
-        ON e.category_id = ec.id";
-
+        $sql = "SELECT e.id, e.title, e.amount, e.status, e.expense_date, ec.name FROM expenses as e INNER JOIN expense_categories as ec ON e.category_id = ec.id";
         if (isset($_GET['category_id']) && !empty($_GET['category_id'])) {
             $category_id = intval($_GET['category_id']);
             $sql .= ' WHERE category_id=' . $category_id;

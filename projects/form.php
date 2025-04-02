@@ -11,7 +11,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 <div class="mb-3">
                     <label for="name">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="name" required minlength="2"
-                        value="<?php echo isset($row['name']) ? $row['name'] : ''; ?>">
+                        value="<?php echo $row['name'] ?? $name ?? ' '; ?>">
                 </div>
             </div>
             <div class="col-md-6">
@@ -116,16 +116,20 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
             </div>
         </div>
         <div class="row">
-            <div class="mb-3">
-                <label for="description">Description<span class="text-danger">*</span></label>
-                <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+            <div class="col-md-12">
+            <label for="description">Description<span class="text-danger">*</span></label>
+            <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="project_documents">Upload Files</label>
-            <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
-                accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
-            <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+            </div>
+            <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="project_documents">Upload Files</label>
+                    <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
+                        accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
+                    <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+                </div>
+            </div>
         </div>
         <?php if (isset($id) && !empty($id)): ?>
             <?php
@@ -151,6 +155,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
         </button>
     </form>
 </div>
+
 <script>
     $(document).ready(function() {
         function toggleHourlyRate() {

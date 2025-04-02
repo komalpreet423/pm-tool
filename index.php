@@ -5,5 +5,86 @@
             <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
         </div>
     </div>
-</div>
-<?php require_once './includes/footer.php'; ?>
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium fs-3">Employees</p>
+                                <h4 class="mb-0"> <?php $count = "SELECT COUNT(*)  FROM users ";
+                                                    $result = mysqli_query($conn, $count);
+                                                    $row = mysqli_fetch_array($result);
+                                                    $totalUsers = $row[0];
+                                                    ?>
+                                    <?php echo $totalUsers; ?>
+                                </h4>
+                            </div>
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
+                                    <span class="avatar-title">
+                                    <i class="bx bxs-user fs-2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium fs-3">Projects</p>
+                                <h4 class="mb-0"> <?php $count = "SELECT COUNT(*)  FROM projects ";
+                                                    $result = mysqli_query($conn, $count);
+                                                    $row = mysqli_fetch_array($result);
+                                                    $totalUsers = $row[0];
+                                                    ?>
+                                    <?php echo $totalUsers; ?>
+                                </h4>
+                            </div>
+                            <div class="flex-shrink-0 align-self-center ">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                        <i class="bx bx-briefcase-alt-2 fs-2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mini-stats-wid">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <p class="text-muted fw-medium fs-3">clients</p>
+                                <h4 class="mb-0"> <?php $count = "SELECT COUNT(*)  FROM clients ";
+                                                    $result = mysqli_query($conn, $count);
+                                                    $row = mysqli_fetch_array($result);
+                                                    $totalUsers = $row[0];
+                                                    ?>
+                                    <?php echo $totalUsers; ?>
+                                </h4>
+                            </div>
+
+                            <div class="flex-shrink-0 align-self-center">
+                                <div class="avatar-sm rounded-circle bg-primary mini-stat-icon">
+                                    <span class="avatar-title rounded-circle bg-primary">
+                                    <i class="bx bxs-user fs-2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <?php require_once './includes/footer.php'; ?>

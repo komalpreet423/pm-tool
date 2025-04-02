@@ -157,7 +157,7 @@ if (!isAuth()) {
                             <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span>Profile</span></a>
+                            <a class="dropdown-item" href="<?php echo BASE_URL;?>/profile.php"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span>Profile</span></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="<?php echo BASE_URL; ?>/logout.php"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span>Logout</span></a>
                         </div>
@@ -179,8 +179,8 @@ if (!isAuth()) {
                         </li>
                         <li class="menu-title">Daily Report</li>
                         <li>
-                            <a href="<?php echo BASE_URL; ?>" class="waves-effect">
-                                <i class="bx bx-rocket"></i>
+                            <a href="<?php echo BASE_URL; ?>/daily-report/index.php" class="waves-effect">
+                                <i class="bx bxs-report"></i>
                                 <span>Daily Report</span>
                             </a>
                         </li>
@@ -220,6 +220,12 @@ if (!isAuth()) {
                             </a>
                         </li>
                         <li>
+                            <a href="<?php echo BASE_URL; ?>/attendance" class="waves-effect">
+                                <i class="bx bx-calendar"></i>
+                                <span>Attendance</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-stats"></i>
                                 <span>Expenses</span>
@@ -228,6 +234,12 @@ if (!isAuth()) {
                                 <li><a href="<?php echo BASE_URL; ?>/expense-categories/">Expense Categories</a></li>
                                 <li><a href="<?php echo BASE_URL; ?>/expenses/">Expenses</a></li>
                             </ul>
+                        </li>
+                        <li>
+                            <a href="<?php echo BASE_URL; ?>/leaves" class="waves-effect">
+                                <i class="mdi mdi-login"></i>
+                                <span>leaves</span>
+                            </a>
                         </li>
                         <li class="menu-title">Administrator</li>
                         <li>
