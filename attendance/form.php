@@ -8,18 +8,17 @@ $users = mysqli_query($conn, "SELECT * FROM `users`");
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="employee">Employee Name<span class="text-danger">*</span></label>
-                        <select id="employee" class="form-select" name="employee">
+                        <select id="employee" class="form-select" name="employee" required>
+                            <option value="" selected disabled>Select Employee</option>
                             <?php
-
+                         
                             $selectedemployeeid = isset($existingemployeeid) ? $existingemployeeid : (isset($row['employee_id']) ? $row['employee_id'] : null);
                             while ($Ausers = mysqli_fetch_assoc($users)) {
-
+                       
                                 $selected = ($Ausers['id'] == $selectedemployeeid) ? 'selected' : '';
                                 echo '<option value="' . $Ausers['id'] . '" ' . $selected . '>' . $Ausers['name'] . '</option>';
                             }
                             ?>
-                            <option value="" selected disabled>Select Employee</option>
-
                         </select>
                     </div>
                 </div>

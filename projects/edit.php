@@ -13,6 +13,7 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
     $type = $_POST['type'];
     $hourly_rate = ($type === 'hourly' && isset($_POST['hourly_rate'])) ? $_POST['hourly_rate'] : NULL;
     $description = $_POST['description'];
+    $encoded_description = base64_encode($description);
     $client = $_POST['client'];
     $team_leader = $_POST['team_leader'] ?? NULL;
     $employees = $_POST['employees'];
@@ -23,7 +24,7 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
 
     $sql = "UPDATE projects 
             SET name = '$name', start_date = '$startdate', due_date = '$duedate', currency_code = '$currencycode', 
-                status = '$status', type = '$type', hourly_rate = '$hourly_rate', description = '$description', 
+                status = '$status', type = '$type', hourly_rate = '$hourly_rate', description = '$encoded_description', 
                 client_id = '$client', team_leader_id = " . ($team_leader ? "'$team_leader'" : "NULL") . "
             WHERE id = '$id'";
             

@@ -3,11 +3,6 @@
         <input type="hidden" name="expense_id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
         <div class="row">
             <div class="col-md-6">
-
-
-
-
-            
                 <div class="mb-3">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" name="title" value="<?php echo isset($row['title']) ? $row['title'] : ''; ?>" required>
@@ -70,7 +65,6 @@
                     ?>
                 </select>
             </div>
-
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="description">Description</label>

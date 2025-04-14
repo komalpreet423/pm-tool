@@ -23,7 +23,6 @@ if ($userRole == 'admin') {
 if ($date_filter) {
     $sql .= " AND (DATE(ps.created_at) = '$date' OR DATE(ps.updated_at) = '$date')";
 }
-
 $query = mysqli_query($conn, $sql);
 $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
 ?>

@@ -70,7 +70,7 @@
 
     <div class="mb-3">
         <label for="description">Description<span class="text-danger">*</span></label>
-        <textarea class="form-control" name="description" id="description" ><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+        <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
     </div>
     <div class="mb-3">
         <label for="milestone_documents">Upload Files</label>
@@ -109,9 +109,7 @@
             format: 'yyyy-mm-dd',
             autoclose: true
         });
-
         $('#description').summernote();
-
         $('select[name="project_id"], select[name="currency_code"], select[name="status"]').select2({
             width: '100%'
         });
@@ -145,9 +143,7 @@
                 });
             }
         });
-
         $("#milestone-form").validate({
-            ignore: [],
             rules: {
                 project_id: {
                     required: true
@@ -174,13 +170,15 @@
                 description: {
                     required: true
                 },
-               
+                "milestone_documents[]": {
+                    extension: "jpg|jpeg|png|gif|doc|docx|txt|pdf|mp4|avi|mov"
+                }
             },
             messages: {
                 project_id: {
                     required: "Please select a project."
                 },
-                budget: {
+                amount: {
                     required: "Please enter a budget.",
                     number: "Please enter a valid number.",
                     min: "Budget must be a positive number."
@@ -191,7 +189,10 @@
                 status: {
                     required: "Please select the status."
                 },
-                
+                milestone_name: {
+                    required: "Please enter a milestone name.",
+                    minlength: "Milestone name must be at least 2 characters long."
+                },
                 due_date: {
                     required: "Please enter the due date.",
                     date: "Please enter a valid date."
@@ -199,34 +200,10 @@
                 description: {
                     required: "Please provide a description."
                 },
-            
-            },
-            errorPlacement: function(error, element) {
-                if (element.attr("name") === "description") {
-                    error.insertAfter($("#description").next('.note-editor'));
-                } else if (element.hasClass('select2-hidden-accessible')) {
-                    error.insertAfter(element.next('.select2')); 
-                } else {
-                    error.insertAfter(element); 
+                "milestone_documents[]": {
+                    extension: "Only image files, documents, and video files are allowed."
                 }
             },
-
-
-            highlight: function(element) {
-                if ($(element).hasClass('select2-hidden-accessible')) {
-                    $(element).removeClass('is-invalid');
-                    $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
-                } else {
-                    $(element).addClass('is-invalid');
-                }
-            },
-            unhighlight: function(element) {
-                if ($(element).hasClass('select2-hidden-accessible')) {
-                    $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
-                } else {
-                    $(element).removeClass('is-invalid');
-                }
-            }
         });
     });
 </script>
