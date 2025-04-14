@@ -16,7 +16,6 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
     $client = $_POST['client'];
     $team_leader = $_POST['team_leader'] ?? NULL;
     $employees = $_POST['employees'];
-
     if (!empty($duedate) && $duedate < $startdate) {
         echo "<script>alert('Due Date cannot be earlier than Start Date.'); window.history.back();</script>";
         exit();
@@ -27,6 +26,7 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
                 status = '$status', type = '$type', hourly_rate = '$hourly_rate', description = '$description', 
                 client_id = '$client', team_leader_id = " . ($team_leader ? "'$team_leader'" : "NULL") . "
             WHERE id = '$id'";
+            
 
     if (mysqli_query($conn, $sql)) {
         mysqli_query($conn, "DELETE FROM employee_projects WHERE project_id = '$id'");

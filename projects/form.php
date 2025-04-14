@@ -11,7 +11,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 <div class="mb-3">
                     <label for="name">Name <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="name" required minlength="2"
-                        value="<?php echo isset($row['name']) ? $row['name'] : ''; ?>">
+                        value="<?php echo $row['name'] ?? $name ?? ' '; ?>">
                 </div>
             </div>
             <div class="col-md-6">
@@ -34,7 +34,7 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
             <div class="col-md-3">
                 <div class="mb-3">
                     <label for="team_leader">Team Leader</label>
-                    <select id="team_leader" class="form-select" name="team_leader">
+                    <select id="team_leader" class="form-select" name="team_leader" required>
                         <option value="" selected disabled>Select team leader</option>
                         <?php
                         $selectedTeamLeaderId = isset($row['team_leader_id']) ? $row['team_leader_id'] : null;
@@ -106,26 +106,33 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                     <label for="status">Status<span class="text-danger">*</span></label>
                     <select class="form-select" id="project-status" name="status" required>
                         <option value="" selected disabled>Select Status</option>
-                        <option value="Planned" <?php echo isset($row['status']) && $row['status'] == 'planned' ? 'selected' : ''; ?>>Planned</option>
-                        <option value="In Progress" <?php echo isset($row['status']) && $row['status'] == 'in_progress' ? 'selected' : ''; ?>>In Progress</option>
-                        <option value="Completed" <?php echo isset($row['status']) && $row['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
-                        <option value="On Hold" <?php echo isset($row['status']) && $row['status'] == 'on_hold' ? 'selected' : ''; ?>>On Hold</option>
-                        <option value="Cancelled" <?php echo isset($row['status']) && $row['status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                        <option value="planned" <?php echo isset($row['status']) && $row['status'] == 'planned' ? 'selected' : ''; ?>>Planned</option>
+                        <option value="in_progress" <?php echo isset($row['status']) && $row['status'] == 'in_progress' ? 'selected' : ''; ?>>In Progress</option>
+                        <option value="completed" <?php echo isset($row['status']) && $row['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
+                        <option value="on_hold" <?php echo isset($row['status']) && $row['status'] == 'on_hold' ? 'selected' : ''; ?>>On Hold</option>
+                        <option value="cancelled" <?php echo isset($row['status']) && $row['status'] == 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
                     </select>
                 </div>
             </div>
+
         </div>
         <div class="row">
-            <div class="mb-3">
+            <div class="col-md-12 mb-3">
                 <label for="description">Description<span class="text-danger">*</span></label>
-                <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+                <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? htmlspecialchars($row['description']) : ''; ?></textarea>
+                <span class="text-danger d-none">Please enter description</span>
             </div>
         </div>
-        <div class="mb-3">
-            <label for="project_documents">Upload Files</label>
-            <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
-                accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
-            <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="project_documents">Upload Files</label>
+                    <input type="file" class="form-control" id="project_documents" name="project_documents[]" multiple
+                        accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
+                    <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+                </div>
+            </div>
         </div>
         <?php if (isset($id) && !empty($id)): ?>
             <?php
@@ -151,8 +158,11 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
         </button>
     </form>
 </div>
+
 <script>
     $(document).ready(function() {
+        $('#description').summernote();
+
         function toggleHourlyRate() {
             if ($('#type').val() === 'hourly') {
                 $('#hourly_rate_container').show();
@@ -185,9 +195,9 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
         });
 
         $('#team_leader, #client, #project-status, #type, #currency-code').select2();
-        $('#description').summernote();
 
         $('#project-form').validate({
+            ignore: [],
             rules: {
                 name: {
                     required: true,
@@ -218,19 +228,42 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 },
                 description: {
                     required: true,
-                    minlength: 10
-                }
+                },
+
             },
             messages: {
                 due_date: {
                     greaterThanOrEqual: "Due Date cannot be before Start Date."
+                },
+                description: {
+                    required: "Please provide a description."
                 }
             },
+
             errorPlacement: function(error, element) {
-                if (element.hasClass("form-select")) {
-                    error.insertAfter(element.next('.select2-container'));
+                console.log('error', error);
+                if (element.attr("name") === "description") {
+                    error.insertAfter($("#description").next('.note-editor'));
+                } else if (element.hasClass('select2-hidden-accessible')) {
+                    error.insertAfter(element.next('.select2'));
                 } else {
                     error.insertAfter(element);
+                }
+            },
+
+            highlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).removeClass('is-invalid');
+                    $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
+                } else {
+                    $(element).addClass('is-invalid');
+                }
+            },
+            unhighlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
+                } else {
+                    $(element).removeClass('is-invalid');
                 }
             }
         });
@@ -240,10 +273,12 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
             allowClear: true
         });
 
+
         jQuery.validator.addMethod("greaterThanOrEqual", function(value, element, param) {
             var startDate = $(param).val();
             return !startDate || !value || new Date(value) >= new Date(startDate);
         }, "Due Date must be greater than or equal to Start Date.");
+
 
         $(".delete-file").click(function(e) {
             e.preventDefault();

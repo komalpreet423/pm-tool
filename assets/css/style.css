@@ -1,0 +1,9 @@
+.select2-selection.is-invalid {
+    border-color: #f46a6a !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, .25);
+    border-width: 0.5px;
+}
+.note-editor {
+    margin-bottom: 0px !important;
+
+}

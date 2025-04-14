@@ -29,9 +29,11 @@
             <div class="mb-3">
                 <label for="gender">Gender</label>
                 <select class="form-select" name="gender" required>
+                    <option value="" disabled <?php echo !isset($row['gender']) ? 'selected' : ''; ?>>Select Gender</option>
                     <option value="Male" <?php echo (isset($row['gender']) && $row['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
                     <option value="Female" <?php echo (isset($row['gender']) && $row['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                 </select>
+
             </div>
         </div>
     </div>
@@ -135,6 +137,10 @@
                     required: true,
                     email: true
                 },
+                gender: {
+                    required: true
+                },
+
                 phoneno: {
                     required: true,
                     minlength: 10,
@@ -152,8 +158,9 @@
                 password: {
                     <?php if (!isset($row['id'])) { ?>
                         required: true,
-                    <?php } ?>
-                    minlength: 6
+                    <?php }
+                    minlength:6
+                     ?>
                 }
             },
             messages: {
@@ -165,6 +172,8 @@
                     maxlength: "Phone number must be exactly 10 digits",
                     digits: "Phone number can only contain digits"
                 },
+                gender: "Please select a gender",
+
                 address: "Please enter an address.",
                 dob: "Please enter Date Of Birth",
                 doj: "Please enter Date Of Joining",
@@ -204,5 +213,10 @@
                 $('select[name="jobt"]').removeAttr('required');
             }
         }).trigger('change');
+
+        $('select[name="gender"]').on('change', function() {
+            $(this).valid();
+        });
+
     });
 </script>

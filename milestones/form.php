@@ -3,7 +3,7 @@
         <div class="col-md-3">
             <div class="mb-3">
                 <label for="project_id">Project</label> <span class="text-danger">*</span>
-                <select class="form-select" name="project_id" required>
+                <select class="form-select" name="project_id">
                     <option value="">Select Project</option>
                     <?php
                     $projectQuery = mysqli_query($conn, "SELECT id, name FROM projects WHERE type = 'fixed'");
@@ -17,9 +17,9 @@
         </div>
         <div class="col-md-3">
             <div class="mb-3">
-                <label for="amount">Amount</label>
-                <input type="number" step="0.01" class="form-control" name="amount"
-                    value="<?php echo isset($row['amount']) ? $row['amount'] : ''; ?>">
+                <label for="budget">Budget</label>
+                <input type="number" step="0.01" class="form-control" name="budget"
+                    value="<?php echo isset($row['budget']) ? $row['budget'] : ''; ?>">
             </div>
         </div>
         <div class="col-md-3">
@@ -70,7 +70,7 @@
 
     <div class="mb-3">
         <label for="description">Description<span class="text-danger">*</span></label>
-        <textarea class="form-control" name="description" id="description" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+        <textarea class="form-control" name="description" id="description" ><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
     </div>
     <div class="mb-3">
         <label for="milestone_documents">Upload Files</label>
@@ -109,6 +109,7 @@
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+
         $('#description').summernote();
 
         $('select[name="project_id"], select[name="currency_code"], select[name="status"]').select2({
@@ -142,6 +143,89 @@
                         console.log(xhr.responseText);
                     }
                 });
+            }
+        });
+
+        $("#milestone-form").validate({
+            ignore: [],
+            rules: {
+                project_id: {
+                    required: true
+                },
+                budget: {
+                    required: true,
+                    number: true,
+                    min: 0
+                },
+                currency_code: {
+                    required: true
+                },
+                status: {
+                    required: true
+                },
+                milestone_name: {
+                    required: true,
+                    minlength: 2
+                },
+                due_date: {
+                    required: true,
+                    date: true
+                },
+                description: {
+                    required: true
+                },
+               
+            },
+            messages: {
+                project_id: {
+                    required: "Please select a project."
+                },
+                budget: {
+                    required: "Please enter a budget.",
+                    number: "Please enter a valid number.",
+                    min: "Budget must be a positive number."
+                },
+                currency_code: {
+                    required: "Please select a currency."
+                },
+                status: {
+                    required: "Please select the status."
+                },
+                
+                due_date: {
+                    required: "Please enter the due date.",
+                    date: "Please enter a valid date."
+                },
+                description: {
+                    required: "Please provide a description."
+                },
+            
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("name") === "description") {
+                    error.insertAfter($("#description").next('.note-editor'));
+                } else if (element.hasClass('select2-hidden-accessible')) {
+                    error.insertAfter(element.next('.select2')); 
+                } else {
+                    error.insertAfter(element); 
+                }
+            },
+
+
+            highlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).removeClass('is-invalid');
+                    $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
+                } else {
+                    $(element).addClass('is-invalid');
+                }
+            },
+            unhighlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
+                } else {
+                    $(element).removeClass('is-invalid');
+                }
             }
         });
     });
