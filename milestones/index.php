@@ -45,8 +45,8 @@
                                 </span>
                             </td>
                             <td>
-                                <a href='./edit.php?id=<?php echo $row['milestone_id']; ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
-                                <button class="btn btn-danger delete-btn btn-sm" data-table-name="milestones" data-id="<?php echo $row['milestone_id']; ?>"><i class="bx bx-trash fs-5"></i></button>
+                                <a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
+                                <button class="btn btn-danger delete-btn btn-sm" data-table-name="project_milestones" data-id="<?php echo $row['id']; ?>"><i class="bx bx-trash fs-5"></i></button>
                             </td>
                         </tr>
                     <?php } ?>

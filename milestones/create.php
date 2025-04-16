@@ -8,16 +8,19 @@ if (isset($_POST['add_milestone'])) {
     $milestone_name = $_POST['milestone_name'];
     $description = $_POST['description'];
     $due_date = date('Y-m-d', strtotime($_POST['due_date']));
-    $budget = $_POST['budget'] ? $_POST['budget'] : NULL;
+    $amount = $_POST['amount'] ? $_POST['amount'] : NULL;
     $currency_code = $_POST['currency_code'];
     $status = $_POST['status'];
 
     $projectCheckQuery = "SELECT id FROM projects WHERE id = '$project_id' AND type = 'fixed'";
     $result = mysqli_query($conn, $projectCheckQuery);
 
+    if (empty($amount)) {
+        $errorMessage = "Amount is required.";
+    }
     if (mysqli_num_rows($result) > 0) {
         $insertQuery = "INSERT INTO project_milestones (project_id, milestone_name, due_date, amount, currency_code, description, status) 
-                        VALUES ('$project_id', '$milestone_name', '$due_date', '$budget', '$currency_code', '$description', '$status')";
+                        VALUES ('$project_id', '$milestone_name', '$due_date', '$amount', '$currency_code', '$description', '$status')";
 
         if (mysqli_query($conn, $insertQuery)) {
             $milestone_id = mysqli_insert_id($conn); 

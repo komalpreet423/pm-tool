@@ -87,33 +87,78 @@
     </div>
 </div>
 
+<?php
+
+$currentDate = date('Y-m-d');
+$milestones = [];
+
+$sql = "SELECT pm.milestone_name, pm.due_date, pm.status, p.name AS project_name
+FROM project_milestones pm
+JOIN projects p ON pm.project_id = p.id
+WHERE pm.due_date <= '$currentDate'";
+
+
+$query = mysqli_query($conn, $sql);
+
+$milestones = [];
+if ($query) {
+    while ($row = mysqli_fetch_assoc($query)) {
+        $milestones[] = $row;
+    }
+}  ?>
+
 <div class="row">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Expiery Data</h4>
+        <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Due Dates Of Projects</h4>
         </div>
     </div>
-    <div class="col-xl-12">
-        <div class="row">
-
-
-            <?php
-            $currentDate = date('Y-m-d');
-            $sql = "SELECT due_date FROM project_milestones WHERE due_date < '$currentDate'";
-            $query = mysqli_query($conn, $sql);
-            ?>
-            <?php
-            while ($row = mysqli_fetch_assoc($query)) {
-            ?>
-            <li><?php echo $row['due_date']; ?></li>
-            <?php
-            }
-            ?>
-
-
+    <div class="card p-3">
+        <div class="card-body">
+            <table class="table table-sm" id="daily-report">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Project Name</th>
+                        <th>Name</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($milestones as $key => $row) { ?>
+                        <tr>
+                            <td><?php echo $key + 1; ?></td>
+                            <td><?php echo $row['project_name']; ?></td>
+                            <td><?php echo $row['milestone_name']; ?></td>
+                            <td><?php echo $row['due_date']; ?></td>
+                            <td>
+                                <span class="badge bg-<?php echo ($row['status'] == 'completed') ? 'success' : (($row['status'] == 'in_progress') ? 'warning' : 'secondary'); ?>">
+                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                                </span>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#daily-report').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthMenu": [10, 25, 50, 100],
+            "autoWidth": false
+        });
+    });
+</script>
 
 
 

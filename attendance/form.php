@@ -11,17 +11,17 @@ $users = mysqli_query($conn, "SELECT * FROM `users`");
                         <select id="employee" class="form-select" name="employee" required>
                             <option value="" selected disabled>Select Employee</option>
                             <?php
-                         
                             $selectedemployeeid = isset($existingemployeeid) ? $existingemployeeid : (isset($row['employee_id']) ? $row['employee_id'] : null);
+
                             while ($Ausers = mysqli_fetch_assoc($users)) {
-                       
                                 $selected = ($Ausers['id'] == $selectedemployeeid) ? 'selected' : '';
-                                echo '<option value="' . $Ausers['id'] . '" ' . $selected . '>' . $Ausers['name'] . '</option>';
+                                echo '<option value="' . $Ausers['id'] . '" ' . $selected . '>' . htmlspecialchars($Ausers['name']) . '</option>';
                             }
                             ?>
                         </select>
                     </div>
                 </div>
+
 
                 <div class="col-md-6">
                     <div class="mb-3">

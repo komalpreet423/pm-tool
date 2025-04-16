@@ -17,9 +17,9 @@
         </div>
         <div class="col-md-3">
             <div class="mb-3">
-                <label for="budget">Budget</label>
-                <input type="number" step="0.01" class="form-control" name="budget"
-                    value="<?php echo isset($row['budget']) ? $row['budget'] : ''; ?>">
+                <label for="amount">Budget</label>
+                <input type="number" step="0.01" class="form-control" name="amount" 
+                    value="<?php echo isset($row['amount']) ? $row['amount'] : ''; ?>" required>
             </div>
         </div>
         <div class="col-md-3">
@@ -67,20 +67,26 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="description">Description<span class="text-danger">*</span></label>
+                <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="milestone_documents">Upload Documents</label>
+                    <input type="file" class="form-control" id="milestone_documents" name="milestone_documents[]" multiple
+                        accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
+                    <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="mb-3">
-        <label for="description">Description<span class="text-danger">*</span></label>
-        <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="milestone_documents">Upload Files</label>
-        <input type="file" class="form-control" id="milestone_documents" name="milestone_documents[]" multiple
-            accept="image/*, .doc, .docx, .txt, .pdf, .mp4, .avi, .mov">
-        <small class="text-muted">Allowed file types: Images, DOC, TXT, PDF, Videos</small>
-    </div>
-    <?php if (isset($row['milestone_id']) && !empty($row['milestone_id'])): ?>
+    <?php if (isset($row['id']) && !empty($row['id'])): ?>
         <?php
-        $filesQuery = mysqli_query($conn, "SELECT * FROM milestone_documents WHERE milestone_id = '{$row['milestone_id']}'");
+        $filesQuery = mysqli_query($conn, "SELECT * FROM milestone_documents WHERE id = '{$row['id']}'");
 
         if (mysqli_num_rows($filesQuery) > 0) {
             echo "<h5>Uploaded Files:</h5><ul>";
@@ -96,10 +102,10 @@
         }
         ?>
     <?php endif; ?>
-    <input type="hidden" name="milestone_id" value="<?php echo isset($row['milestone_id']) ? $row['milestone_id'] : ''; ?>">
+    <input type="hidden" name="id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
 
-    <button type="submit" class="btn btn-primary" name="<?php echo isset($row['milestone_id']) ? 'edit-milestone' : 'add_milestone'; ?>">
-        <?php echo isset($row['milestone_id']) ? 'Update' : 'Submit'; ?>
+    <button type="submit" class="btn btn-primary" name="<?php echo isset($row['id']) ? 'edit-milestone' : 'add_milestone'; ?>">
+        <?php echo isset($row['id']) ? 'Update' : 'Submit'; ?>
     </button>
 </form>
 
@@ -148,7 +154,7 @@
                 project_id: {
                     required: true
                 },
-                budget: {
+                amount: {
                     required: true,
                     number: true,
                     min: 0
@@ -179,9 +185,9 @@
                     required: "Please select a project."
                 },
                 amount: {
-                    required: "Please enter a budget.",
+                    required: "Please enter a amount.",
                     number: "Please enter a valid number.",
-                    min: "Budget must be a positive number."
+                    min: "amount must be a positive number."
                 },
                 currency_code: {
                     required: "Please select a currency."

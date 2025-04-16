@@ -69,6 +69,7 @@ $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
             </table>
         </div>
     </div>
+</div>
     <script>
         $(document).ready(function() {
             $('#date-filter').datepicker({
@@ -87,6 +88,7 @@ $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
                 lengthMenu: [10, 25, 50, 100],
                 autoWidth: false
             });
+
         });
     </script>
 

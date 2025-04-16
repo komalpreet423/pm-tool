@@ -28,12 +28,6 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <?php
-                include 'form.php';
-                ?>
-            </div>
-
 <?php }
     }
 } ?>

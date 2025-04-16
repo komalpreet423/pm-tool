@@ -92,6 +92,7 @@
                 <select class="form-select" name="status" required>
                     <option value="Active" <?php echo (isset($row['status']) && $row['status'] == 'Active') ? 'selected' : ''; ?>>Active</option>
                     <option value="Inactive" <?php echo (isset($row['status']) && $row['status'] == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
+                    <option value="Terminated" <?php echo (isset($row['status']) && $row['status'] == 'Terminated') ? 'selected' : ''; ?>>Terminated</option>
                 </select>
             </div>
         </div>
@@ -127,6 +128,7 @@
         $('select[name="role"], select[name="jobt"], select[name="gender"], select[name="status"]').select2({
             width: '100%'
         });
+        
 
         var isEditMode = $("input[name='employee_id']").val() !== "";
 

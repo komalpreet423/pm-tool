@@ -35,7 +35,15 @@
                         <td><?php echo $row['email'] ?></td>
                         <td><?php echo $row['phone_number'] ?></td>
                         <td><?php echo $row['job_title'] ?></td>
-                        <td><?php echo $row['status'] ?></td>
+                        <td>
+                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">
+
+
+
+                                
+                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                                </span>
+                            </td>
                         <td>
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger btn-sm delete-btn btn-sm" data-table-name="users" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
