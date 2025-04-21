@@ -12,7 +12,6 @@
         <?php
         $sql = "SELECT * FROM clients";
         $query = mysqli_query($conn, $sql);
-        if ($num = mysqli_num_rows($query) > 0) {
             $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <div class="container">
@@ -47,7 +46,6 @@
             </div>
     </div>
 </div>
-<?php } ?>
 <script>
     $(document).ready(function() {
         $('#clientTable').DataTable({

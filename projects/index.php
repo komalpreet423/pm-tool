@@ -6,7 +6,10 @@ $userRole=userProfile()['role'];
     <div class="col-12">
         <div class="page-title-box  pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Projects</h4>
+             <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
             <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Project</a>
+            <?php } else  ?>
+
         </div>
     </div>
 </div>
@@ -32,8 +35,9 @@ $userRole=userProfile()['role'];
                 <th>Project Name</th>
                 <th>Start Date</th>
                 <th>Due Date</th>
-                <th>Type</th>
+                <th>Type</th>    
                 <th>Action</th>
+     
             </thead>
             <tbody> 
                 <?php
@@ -50,11 +54,17 @@ $userRole=userProfile()['role'];
                                 </span></td>
                         <td>
                             <a href='./add-status.php?id=<?php echo $row['id'] ?>' class="btn btn-success btn-sm">Add Status</a>
+
+                            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger delete-btn btn-sm" data-table-name="projects" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                         </td>
+                        <?php } else { ?>
                     <?php  } ?>
             </tbody>
+            <?php } ?>
+
     </div>
 </div>
 <script>

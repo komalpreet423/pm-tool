@@ -12,7 +12,6 @@
         <?php
         $sql = "SELECT * FROM holidays";
         $query = mysqli_query($conn, $sql);
-        if ($num = mysqli_num_rows($query) > 0) {
             $holidays = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <table class="table table-striped" id="employeeTable">
@@ -41,7 +40,6 @@
                         <?php  } ?>
                 </tbody>
     </div>
-<?php } ?>
 </div>
 <script>
     $(document).ready(function() {

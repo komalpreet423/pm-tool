@@ -14,6 +14,17 @@ $userProfile = userProfile(); ?>
         $sql = "SELECT attendance.*, users.name FROM attendance 
         LEFT JOIN users ON attendance.employee_id = users.id";
         $query = mysqli_query($conn, $sql);
+
+        if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') {
+            $sql = "SELECT attendance.*, users.name FROM attendance 
+                    LEFT JOIN users ON attendance.employee_id = users.id";
+        } else {
+            $userId = $userProfile['id'];
+            $sql = "SELECT attendance.*, users.name FROM attendance 
+                    LEFT JOIN users ON attendance.employee_id = users.id
+                    WHERE attendance.employee_id = $userId";
+        }
+        
         $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
         <div class="container">
@@ -25,19 +36,45 @@ $userProfile = userProfile(); ?>
                         <th>Date</th>
                         <th>Status</th>
                         <th>Note </th>
-                        <th>Action</th>
+                        < <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+            <th>Action</th>
+        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <?php
+                    if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') {
+                        $sql = "SELECT attendance.*, users.name FROM attendance 
+                                LEFT JOIN users ON attendance.employee_id = users.id";
+                    } else {
+                        $userId = $userProfile['id'];
+                        $sql = "SELECT attendance.*, users.name FROM attendance 
+                                LEFT JOIN users ON attendance.employee_id = users.id
+                                WHERE attendance.employee_id = $userId";
+                    }
+                    
                     foreach ($clients as $key => $row) {
+
+                        if (
+                            $userProfile['role'] !== 'admin' &&
+                            $userProfile['role'] !== 'hr' &&
+                            $row['employee_id'] != $userProfile['id']
+                        ) {
+                            continue;
+                        }
+                        
                     ?>
+                    
                         <tr>
+                            
                             <td><?php echo $key + 1; ?></td>
                             <td><?php echo $row['name']; ?></td>
                             <td><?php echo $row['date']; ?></td>
                             <td>
-                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'primary' : 'secondary')) ?>">
+                                <span class="badge bg-<?php
+                                echo ($row['status'] == 'present') ? 'success' : (($row['status'] == 'short_leave') ? 'warning' : (($row['status'] == 'absent') ? 'danger' : (($row['status'] == 'late') ? 'info' : (($row['status'] == 'half_day') ? 'secondary' : 'dark'))));
+                                ?>">
                                     <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
                                 </span>
                             </td>
@@ -51,7 +88,7 @@ $userProfile = userProfile(); ?>
                                         <i class="bx bx-trash fs-5"></i>
                                     </button>
                                 <?php } else { ?>
-                                    <span class="text-muted">No action available</span>
+                                    
                                 <?php } ?>
                             </td>
                         </tr>

@@ -10,7 +10,7 @@ if (isset($_POST['edit_attendance'])) {
     $sql = "UPDATE attendance SET employee_id = '$employee_id', date = '$date', status = '$status', note ='$note' WHERE id = $id";
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        header('Location: ' . BASE_URL . './attendance /index.php');
+        header('Location: ' . BASE_URL . '/attendance/index.php');
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);

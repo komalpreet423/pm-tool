@@ -14,15 +14,9 @@ $userProfile = userProfile(); ?>
         $sql = "SELECT * FROM policies";
         $query = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($query);
-        if ($num > 0) {
-
-            $policies = mysqli_fetch_all($query, MYSQLI_ASSOC);
-        } else {
-            echo "<p class='text-muted'>No policies found.</p>";
-        }
+        $policies = mysqli_fetch_all($query, MYSQLI_ASSOC);
+       
         ?>
-
-
 
         <table class="table table-striped" id="policyTable">
             <thead>
@@ -48,7 +42,7 @@ $userProfile = userProfile(); ?>
                     <?php  } ?>
             </tbody>
     </div>
-    <?php  ?>
+
 </div>
 <script>
     $(document).ready(function() {

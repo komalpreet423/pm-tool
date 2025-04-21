@@ -94,7 +94,11 @@
                         <td><?php echo $row['amount'] ?></td>
                         <td><?php echo $row['name']; ?></td>
                         <td><?php echo $row['expense_date'] ?></td>
-                        <td><?php echo $row['status'] ?></td>
+                        <td>
+                        <span class="badge bg-<?php echo ($row['status'] == 'approved') ? 'success' : (($row['status'] == 'pending') ? 'warning' : (($row['status'] == 'rejected') ? 'danger' : 'secondary')) ?>">  
+                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                                </span>
+                            </td>
                         <td>
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger delete-btn btn-sm" data-table-name="expenses" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>

@@ -12,7 +12,6 @@
     <?php
     $sql = "SELECT * FROM users";
     $query = mysqli_query($conn, $sql);
-    if ($num = mysqli_num_rows($query) > 0) {
         $users = mysqli_fetch_all($query, MYSQLI_ASSOC);
     ?>
         <table class="table table-sm" id="employeeTable">
@@ -36,11 +35,7 @@
                         <td><?php echo $row['phone_number'] ?></td>
                         <td><?php echo $row['job_title'] ?></td>
                         <td>
-                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">
-
-
-
-                                
+                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">  
                                     <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
                                 </span>
                             </td>
@@ -50,8 +45,8 @@
                         </td>
                     <?php  } ?>
             </tbody>
-<?php } ?>
 </div>
+
 <script>
     $(document).ready(function() {
         $('#employeeTable').DataTable({

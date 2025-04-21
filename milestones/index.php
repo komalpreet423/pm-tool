@@ -16,7 +16,6 @@
                 FROM project_milestones pm
                 JOIN projects p ON pm.project_id = p.id";
         $query = mysqli_query($conn, $sql);
-        if ($num = mysqli_num_rows($query) > 0) {
             $milestones = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <table class="table table-sm" id="milestoneTable">
@@ -52,9 +51,6 @@
                     <?php } ?>
                 </tbody>
             </table>
-        <?php } else { ?>
-            <p class="text-center">No milestones found.</p>
-        <?php } ?>
     </div>
 </div>
 

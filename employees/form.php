@@ -49,6 +49,7 @@
             <div class="mb-3">
                 <label for="role">Role</label>
                 <select class="form-select" name="role" required>
+
                     <option value="employee" <?php echo (isset($row['role']) && $row['role'] == 'employee') ? 'selected' : ''; ?>>Employee</option>
                     <option value="Admin" <?php echo (isset($row['role']) && $row['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
                     <option value="team leader" <?php echo (isset($row['role']) && $row['role'] == 'team leader') ? 'selected' : ''; ?>>Team Leader</option>
@@ -90,9 +91,9 @@
             <div class="mb-3">
                 <label for="status">Status</label>
                 <select class="form-select" name="status" required>
-                    <option value="Active" <?php echo (isset($row['status']) && $row['status'] == 'Active') ? 'selected' : ''; ?>>Active</option>
-                    <option value="Inactive" <?php echo (isset($row['status']) && $row['status'] == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
-                    <option value="Terminated" <?php echo (isset($row['status']) && $row['status'] == 'Terminated') ? 'selected' : ''; ?>>Terminated</option>
+                    <option value="Active" <?php echo (isset($row['status']) && $row['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
+                    <option value="Inactive" <?php echo (isset($row['status']) && $row['status'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                    <option value="Terminated" <?php echo (($row['status'] ?? '') == 'terminated') ? 'selected' : ''; ?>>Terminated</option>
                 </select>
             </div>
         </div>
@@ -106,7 +107,9 @@
                         <span class="text-danger">*</span>
                     <?php endif; ?>
                 </label>
-                <input type="password" class="form-control" name="password" id="password">
+                <input type="password" class="form-control" name="password" id="password"
+                    <?= !$isEdit ? 'required' : '' ?> placeholder="<?= $isEdit ? 'Leave blank to keep current password' : 'Enter password' ?>">
+
             </div>
         </div>
     </div>
@@ -118,6 +121,7 @@
     </button>
 </form>
 
+
 <script>
     $(document).ready(function() {
         $("#dob, #doj").datepicker({
@@ -128,9 +132,9 @@
         $('select[name="role"], select[name="jobt"], select[name="gender"], select[name="status"]').select2({
             width: '100%'
         });
-        
 
-        var isEditMode = $("input[name='employee_id']").val() !== "";
+
+        var isEdit = $("input[name='employee_id']").val() !== "";
 
         $('#employee-form').validate({
             rules: {
@@ -161,8 +165,9 @@
                     <?php if (!isset($row['id'])) { ?>
                         required: true,
                     <?php }
-                    minlength:6
-                     ?>
+                    minlength:
+                    6
+                    ?>
                 }
             },
             messages: {
