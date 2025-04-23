@@ -1,17 +1,21 @@
 <?php ob_start();
-require_once '../includes/header.php'; ?>
+require_once '../includes/header.php';
+?>
+
 <?php
 if (isset($_POST['project_status'])) {
-    $employee_id = 6;
+    $employee_id = 1; 
+
     $project_id = $_GET['id'];
     $chargable_hours = $_POST['chargable_hours'];
-    $non_chargable_hours=$_POST['non_chargable_hours'];
-    echo $non_chargable_hours;
-    $update =  $_POST['update'];
+    $non_chargable_hours = isset($_POST['non_chargable_hours']) ? $_POST['non_chargable_hours'] : 0;
+
+    $update = $_POST['update'];
     $query = "INSERT INTO project_status (employee_id, project_id, chargable_hours, non_chargable_hours, `update`) 
               VALUES ('$employee_id', '$project_id', '$chargable_hours', '$non_chargable_hours', '$update')";
+
     if (mysqli_query($conn, $query)) {
-        header('Location: ' . BASE_URL . './projects/index.php');
+        header('Location: ' . BASE_URL . '/projects/index.php');
         exit();
     } else {
         $errorMessage = mysqli_error($conn);
@@ -19,6 +23,7 @@ if (isset($_POST['project_status'])) {
     }
 }
 ?>
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
@@ -34,7 +39,7 @@ if (mysqli_num_rows($query) > 0) {
     $project = mysqli_fetch_assoc($query);
 ?>
     <div class="card ">
-        <div class="card-body"> 
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -63,26 +68,26 @@ if (mysqli_num_rows($query) > 0) {
                         <label for="chargable_hours">Chargable Hours</label>
                         <select class="form-control" name="chargable_hours" id="chargable_hours">
                             <option value="" selected disabled>Select Hours</option>
-                            <?php  
+                            <?php
                             $numbers = range(1, 9);
                             foreach ($numbers as $number) {
                                 echo "<option value=\"$number\">$number</option>";
-                            }                    
+                            }
                             ?>
                         </select>
                     </div>
                 </div>
-                <?php  if ($project['type'] == 'hourly') { ?>
+                <?php if ($project['type'] == 'hourly') { ?>
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="non_chargable_hours">Non Billable Hours</label>
                             <select class="form-control" name="non_chargable_hours" id="non_chargable_hours" required>
                                 <option value="" selected disabled>Select Hours</option>
-                                <?php  
+                                <?php
                                 $numbers = range(1, 9);
                                 foreach ($numbers as $number) {
                                     echo "<option value=\"$number\">$number</option>";
-                                }                    
+                                }
                                 ?>
                             </select>
                         </div>
@@ -102,7 +107,7 @@ if (mysqli_num_rows($query) > 0) {
                     <button type="submit" class="btn btn-primary" name="project_status">Submit</button>
                 </div>
             </div>
-            </form>
+        </form>
     </div>
 </div>
 <script>

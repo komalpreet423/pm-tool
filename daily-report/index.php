@@ -46,7 +46,7 @@ $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
                         <th>Spend Hours</th>
                         <th>Created Time</th>
                         <th>Updated Time</th>
-                        <th>Action</th>
+                       
                     </tr>
                 </thead>
                 <tbody>
@@ -58,11 +58,7 @@ $projects = mysqli_fetch_all($query, MYSQLI_ASSOC);
                             <td><?php echo $row['chargable_hours'] + $row['non_chargable_hours']; ?></td>
                             <td><?php echo $row['created_at']; ?></td>
                             <td><?php echo $row['updated_at']; ?></td>
-                            <td>
-                                <a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-primary btn-sm">
-                                    <i class="bx bx-edit fs-5"></i>
-                                </a>
-                            </td>
+                            
                         </tr>
                     <?php } ?>
                 </tbody>
