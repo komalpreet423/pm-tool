@@ -14,7 +14,7 @@ if (isset($_POST['add_client'])) {
         $errorMessage =  "This email or phone number already exists";
     } else {
         $insert = "INSERT INTO clients (name, email, phone, address) VALUES ('$name', '$email', '$phoneno', '$address')";
-        header('Location: ' . BASE_URL . './clients/index.php');
+        header('Location: ' . BASE_URL . '/clients/index.php');
         if (mysqli_query($conn, $insert)) {
         } else {
             $errorMessage = mysqli_error($conn);

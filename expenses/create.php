@@ -13,7 +13,7 @@ if (isset($_POST['add_expense'])) {
     $insertquery = "INSERT INTO expenses (title,amount,category_id,description,attachment,status,expense_date) 
     VALUES ('$title','$amount','$category_id','$encoded_description','$attachment','$status','$expense_date')";
     if (mysqli_query($conn, $insertquery)) {
-        header('Location: ' . BASE_URL . './expenses/index.php');
+        header('Location: ' . BASE_URL . '/expenses/index.php');
     } else {
         $errorMessage = mysqli_error($conn);
     }

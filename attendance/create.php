@@ -10,7 +10,7 @@ if (isset($_POST['add_attendance'])) {
     $note = $_POST['note'];
     $insert = "INSERT INTO attendance (employee_id, date, status, note) VALUES ('$employee_id', '$date', '$status', '$note')";
     if (mysqli_query($conn, $insert)) {
-        header('Location: ' . BASE_URL . './attendance/index.php');
+        header('Location: ' . BASE_URL . '/attendance/index.php');
         exit(); 
     } else {
         $errorMessage = "Error: " . mysqli_error($conn);

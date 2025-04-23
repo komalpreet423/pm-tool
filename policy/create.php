@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_policies'])) {
                 $insertStmt->bind_param("sss", $name, $filesToStore, $description);
 
                 if ($insertStmt->execute()) {
-                    header('Location: ' . BASE_URL . './policy/index.php');
+                    header('Location: ' . BASE_URL . '/policy/index.php');
                     exit();
                 } else {
                     $errorMessage = "Error adding policy: " . $insertStmt->error;

@@ -2,27 +2,58 @@
 ob_start();
 require_once '../includes/header.php';
 
-// Handle update submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit-policies'])) {
+if (isset($_POST['edit-policies'])) {
     $id = $_POST['id'];
-    $name =  $_POST['name'];
-    $file =  $_POST['file'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
 
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
-
-    $stmt = $conn->prepare("UPDATE policies SET name = ?, file = ?, description = ? WHERE id = ?");
-    $stmt->bind_param("sssi", $name, $file, $description, $id);
-
-    if ($stmt->execute()) {
-        header('Location: ' . BASE_URL . './policy/index.php');
+    $uploadedFiles = [];
+    if (isset($_POST['edit-policies'])) {
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+    
+        $uploadedFiles = [];
+    
+        if (!empty($_FILES['file']['name'][0])) {
+            foreach ($_FILES['file']['name'] as $key => $filename) {
+                $tmpName = $_FILES['file']['tmp_name'][$key];
+                $uploadDir = '../uploads/';
+                $filePath = $uploadDir . basename($filename);
+                if (move_uploaded_file($tmpName, $filePath)) {
+                    $uploadedFiles[] = $filePath;
+                }
+            }
+        }
+    
+        // If files were uploaded, prepare the file string
+        $fileString = !empty($uploadedFiles) ? implode(',', $uploadedFiles) : null;
+    
+        // Use conditional SQL depending on file update
+        if ($fileString) {
+            $sql = "UPDATE policies SET name = ?, description = ?, file = ? WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("sssi", $name, $description, $fileString, $id);
+                $stmt->execute();
+            } else {
+                die("Prepare failed: " . $conn->error);
+            }
+        } else {
+            $sql = "UPDATE policies SET name = ?, description = ? WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("ssi", $name, $description, $id);
+                $stmt->execute();
+            } else {
+                die("Prepare failed: " . $conn->error);
+            }
+        }
+    
+        header("Location: index.php");
         exit();
-    } else {
-        echo "<div class='alert alert-danger'>Failed to update policy: " . $stmt->error . "</div>";
     }
-    $stmt->close();
 }
-
-// Load data for editing
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $stmt = $conn->prepare("SELECT * FROM policies WHERE id = ?");

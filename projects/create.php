@@ -2,7 +2,6 @@
 ob_start();
 require_once '../includes/header.php';
 $plugins = ['datepicker', 'select2'];
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $startdate = date('Y-m-d', strtotime($_POST['start_date']));
@@ -32,7 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $assignEmployee = "INSERT INTO employee_projects (employee_id, project_id, assigned_date) 
                                 VALUES ('$employee_id', '$project_id', NOW())";
                 mysqli_query($conn, $assignEmployee);
+
+                $message = "You have been assigned to a new project: " . $name;
+                $link = BASE_URL . "/projects/view.php?id=" . $project_id;
+
+                $notif_sql = "INSERT INTO notifications (user_id, message, link) 
+                              VALUES ('$employee_id', '$message', '$link')";
+                mysqli_query($conn, $notif_sql) or die("Notification insert failed: " . mysqli_error($conn));
             }
+
             if (!empty($_FILES['project_documents']['name'][0])) {
                 $targetDir = "uploads/projects/";
                 if (!is_dir($targetDir)) {
@@ -50,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
 
-            header('Location: ' . BASE_URL . './projects/index.php');
+            header('Location: ' . BASE_URL . '/projects/index.php');
             exit();
         } else {
             echo "Error creating project: " . mysqli_error($conn);

@@ -4,15 +4,26 @@ $userProfile = userProfile(); ?>
     <div class="col-12">
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Attendance </h4>
-            <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Attendance </a>
+            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+                <a href="./create.php" class="btn btn-primary d-flex">
+                    <i class="bx bx-plus me-1 fs-5"></i>Add Attendance
+                </a>
+            <?php } ?>  
         </div>
     </div>
 </div>
 <div class="card">
     <div class="card-body">
         <?php
-        $sql = "SELECT attendance.*, users.name FROM attendance 
-        LEFT JOIN users ON attendance.employee_id = users.id";
+        $sql = "SELECT attendance.id, attendance.date, attendance.status, attendance.note, attendance.employee_id, users.name 
+       FROM attendance 
+       LEFT JOIN users ON attendance.employee_id = users.id";
+
+        if ($userProfile['role'] !== 'admin' && $userProfile['role'] !== 'hr') {
+            $userId = $userProfile['id'];
+            $sql .= " WHERE attendance.employee_id = $userId";
+        }
+
         $query = mysqli_query($conn, $sql);
 
         if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') {
@@ -24,7 +35,7 @@ $userProfile = userProfile(); ?>
                     LEFT JOIN users ON attendance.employee_id = users.id
                     WHERE attendance.employee_id = $userId";
         }
-        
+
         $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
         <div class="container">
@@ -35,65 +46,43 @@ $userProfile = userProfile(); ?>
                         <th>Name</th>
                         <th>Date</th>
                         <th>Status</th>
-                        <th>Note </th>
-                        < <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
-            <th>Action</th>
-        <?php } ?>
+                        <th>Note</th>
+                        <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+                            <th>Action</th>
+                        <?php } ?>
+
                     </tr>
                 </thead>
-                <tbody>
-                    
-                    <?php
-                    if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') {
-                        $sql = "SELECT attendance.*, users.name FROM attendance 
-                                LEFT JOIN users ON attendance.employee_id = users.id";
-                    } else {
-                        $userId = $userProfile['id'];
-                        $sql = "SELECT attendance.*, users.name FROM attendance 
-                                LEFT JOIN users ON attendance.employee_id = users.id
-                                WHERE attendance.employee_id = $userId";
-                    }
-                    
-                    foreach ($clients as $key => $row) {
 
-                        if (
-                            $userProfile['role'] !== 'admin' &&
-                            $userProfile['role'] !== 'hr' &&
-                            $row['employee_id'] != $userProfile['id']
-                        ) {
-                            continue;
-                        }
-                        
-                    ?>
-                    
+                <tbody>
+                    <?php foreach ($clients as $key => $row): ?>
                         <tr>
-                            
                             <td><?php echo $key + 1; ?></td>
                             <td><?php echo $row['name']; ?></td>
                             <td><?php echo $row['date']; ?></td>
                             <td>
                                 <span class="badge bg-<?php
-                                echo ($row['status'] == 'present') ? 'success' : (($row['status'] == 'short_leave') ? 'warning' : (($row['status'] == 'absent') ? 'danger' : (($row['status'] == 'late') ? 'info' : (($row['status'] == 'half_day') ? 'secondary' : 'dark'))));
-                                ?>">
+                                                        echo ($row['status'] == 'present') ? 'success' : (($row['status'] == 'short_leave') ? 'warning' : (($row['status'] == 'absent') ? 'danger' : (($row['status'] == 'late') ? 'info' : (($row['status'] == 'half_day') ? 'secondary' : 'dark'))));
+                                                        ?>">
                                     <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
                                 </span>
                             </td>
                             <td><?php echo $row['note']; ?></td>
-                            <td>
-                                <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+
+                            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr'): ?>
+                                <td>
                                     <a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-primary btn-sm">
                                         <i class="bx bx-edit fs-5"></i>
                                     </a>
-                                    <button class="btn btn-danger delete-btn btn-sm" data-table-name="attendance" data-id="<?php echo $row['id'] ?>">
+                                    <button class="btn btn-danger delete-btn btn-sm" data-table-name="attendance" data-id="<?php echo $row['id']; ?>">
                                         <i class="bx bx-trash fs-5"></i>
                                     </button>
-                                <?php } else { ?>
-                                    
-                                <?php } ?>
-                            </td>
+                                </td>
+                            <?php endif; ?>
                         </tr>
+                    <?php endforeach; ?>
                 </tbody>
-            <?php } ?>
+
             </table>
         </div>
     </div>

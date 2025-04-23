@@ -1,10 +1,13 @@
 <?php require_once '../includes/header.php';
-$userProfile = userProfile(); ?>
+$userProfile = userProfile();
+$userRole = $userProfile['role']; ?>
 <div class="row">
     <div class="col-12">
         <div class="page-title-box pb-2 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Policies</h4>
-            <a href="./create.php" class="btn btn-primary">Add Policy</a>
+            <?php if ($userRole === 'admin' || $userRole === 'hr'): ?>
+                <a href="./create.php" class="btn btn-primary">Add Policy</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -15,7 +18,7 @@ $userProfile = userProfile(); ?>
         $query = mysqli_query($conn, $sql);
         $num = mysqli_num_rows($query);
         $policies = mysqli_fetch_all($query, MYSQLI_ASSOC);
-       
+
         ?>
 
         <table class="table table-striped" id="policyTable">
@@ -24,7 +27,10 @@ $userProfile = userProfile(); ?>
                 <th>Name</th>
                 <th>Document</th>
                 <th>Description</th>
-                <th>Action</th>
+                <?php if ($userRole === 'admin' || $userRole === 'hr'): ?>
+                    <th>Action</th>
+                <?php endif; ?>
+
             </thead>
             <tbody>
                 <?php
@@ -32,13 +38,27 @@ $userProfile = userProfile(); ?>
                 ?>
                     <tr>
                         <td><?php echo  $key + 1 ?></td>
-                        <td><?php echo $row['name'] ?></td>
-                        <td><?php echo $row['file'] ?></td>
-                        <td><?php echo $row['description'] ?></td>
+                        <td><?php echo $row['name']; ?></td>
                         <td>
-                            <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success btn-sm"><i class="bx bx-edit fs-5"></i></a>
-                            <button class="btn btn-danger btn-sm delete-btn" data-table-name="policies" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
+                            <?php
+                            $files = explode(',', $row['file']);
+                            foreach ($files as $file) {
+                                $file = trim($file);
+                                if (!empty($file)) {
+                                    echo '<a href="  ' . htmlspecialchars($file) . '" target="_blank">' . basename($file) . '</a><br>';
+                                }
+                            }
+                            ?>
                         </td>
+
+                        <td><?php echo $row['description'] ?></td>
+                        <?php if ($userRole === 'admin' || $userRole === 'hr'): ?>
+                            <td>
+                                <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this?')">Delete</a>
+                            </td>
+                        <?php endif; ?>
+
                     <?php  } ?>
             </tbody>
     </div>

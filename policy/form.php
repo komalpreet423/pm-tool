@@ -23,7 +23,7 @@
                     <ul class="list-u   nstyled" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
                         <?php
                         $files = is_array($row['file']) ? $row['file'] : explode(',', $row['file']);
-                        $base_url = '/uploads/'; // Adjust this based on actual location
+                        $base_url = '/uploads/'; 
                         $image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
                         foreach ($files as $file):
                             $file = trim($file);

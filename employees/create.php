@@ -23,7 +23,7 @@ if (isset($_POST['add_employee'])) {
     } else {
         $insert = "INSERT INTO users (name, email,date_of_birth,date_of_joining,gender,phone_number,address,job_title,role,status,password_hash)  VALUES 
         ('$name', '$email',  '$dob','$doj', '$gender','$phoneno', '$address','$jobtitle','$role ','$status','$epass')";
-        header('Location: ' . BASE_URL . './employees/index.php');
+        header('Location: ' . BASE_URL . '/employees/index.php');
         if (mysqli_query($conn, $insert)) {
         } else {
             $errorMessage = mysqli_error($conn);

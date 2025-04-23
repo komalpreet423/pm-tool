@@ -1,3 +1,15 @@
+<?php require_once '../includes/functions.php'; ?>
+<?php
+    $user_values = userProfile();
+    
+    if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+    {
+        $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+        $_SESSION['toast'] = "Access denied. Employees only.";
+        header("Location: " . $redirectUrl); 
+        exit();
+    }
+?>
 <?php require_once '../includes/header.php'; ?>
 <div class="row">
     <div class="col-12">

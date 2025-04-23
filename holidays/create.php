@@ -16,7 +16,7 @@ if (isset($_POST['add_holiday'])) {
     } else {
         $insert = "INSERT INTO holidays (name,date,description,type,recurring) VALUES 
         ('$name','$date','$description','$type', '$recurring')";
-        header('Location: ' . BASE_URL . './holidays/index.php');
+        header('Location: ' . BASE_URL . '/holidays/index.php');
         if (mysqli_query($conn, $insert)) {
         } else {
             $errorMessage = mysqli_error($conn);

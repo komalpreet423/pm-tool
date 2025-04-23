@@ -6,7 +6,7 @@ if (isset($_POST['add_expense_categories'])) {
     $insertquery = "INSERT INTO expense_categories (name) 
     VALUES ('$name')";
 if (mysqli_query($conn, $insertquery)) {
-header('Location: ' . BASE_URL . './expense-categories/index.php');
+header('Location: ' . BASE_URL . '/expense-categories/index.php');
 } else {
 $errorMessage = mysqli_error($conn);
 }

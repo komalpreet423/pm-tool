@@ -1,3 +1,17 @@
+<?php 
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    if (isset($_SESSION['toast'])):
+?>
+<script>
+    // alert("<?= $_SESSION['toast'] ?>");
+</script>
+<?php
+    unset($_SESSION['toast']);
+?>
+<?php endif; ?>
 <?php require_once './includes/header.php'; ?>
 <div class="row">
     <div class="col-12">

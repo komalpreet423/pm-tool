@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
         if (mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
             $_SESSION['userId'] = $user['id'];
-           header('Location: ' . BASE_URL . './index.php');
+           header('Location: ' . BASE_URL . '/index.php');
             exit();
        } else {
         $error = "Invalid email or password";

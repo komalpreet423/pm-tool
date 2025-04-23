@@ -5,18 +5,43 @@ $userProfile = userProfile();
 $userId = $userProfile['id'];
 $userRole = $userProfile['role'];
 if (isset($_POST['edit_leave'])) {
-    $id = $_GET['id'];
-    $employee_id = $_GET['employee_id'];
+    $id = $_GET['id'] ?? 0;
+
+    // Get existing leave info (to fetch employee_id and current status)
+    $getEmp = mysqli_query($conn, "SELECT employee_id, status FROM leaves WHERE id = '$id'");
+    if (!$getEmp || mysqli_num_rows($getEmp) == 0) {
+        die("Leave not found.");
+    }
+    $leaveData = mysqli_fetch_assoc($getEmp);
+    $employee_id = $leaveData['employee_id'];
+    $oldStatus = $leaveData['status'];
+
+    // Get new form data
     $leave_type = $_POST['leave_type'];
     $start_date = $_POST['start_date'];
     $end_date =  $_POST['end_date'];
     $status =  $_POST['status'];
     $reason = $_POST['reason'];
-    $sql = "UPDATE leaves SET  leave_type = '$leave_type', start_date = '$start_date', end_date = '$end_date', status = '$status' ,reason='$reason'WHERE id = '$id' ";
+
+    // Update leave record
+    $sql = "UPDATE leaves 
+            SET leave_type = '$leave_type', start_date = '$start_date', end_date = '$end_date', status = '$status', reason = '$reason'
+            WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
-    header('Location: ' . BASE_URL . './leaves/index.php');
+
+    // Notify user if status changed
+    if ($result && $status !== $oldStatus && in_array($status, ['approved', 'rejected'])) {
+        $message = "Your leave request from $start_date to $end_date has been $status.";
+        $link = BASE_URL . "/leaves/view.php?id=$id"; // make sure this link is valid in your project
+        $notifSql = "INSERT INTO notifications (user_id, message, link) VALUES ('$employee_id', '$message', '$link')";
+        mysqli_query($conn, $notifSql);
+    }
+
+    header('Location: ' . BASE_URL . '/leaves/index.php');
     exit();
 }
+
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sqlquery = "SELECT * FROM leaves WHERE id={$id} ";
