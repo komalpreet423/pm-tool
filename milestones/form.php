@@ -95,7 +95,7 @@
                 $filePath = $file['file_path'];
                 echo "<li>
                 <a href='$filePath' target='_blank'>" . basename($filePath) . "</a>
-                <a href='#' class='btn btn-sm btn-danger ms-2 m-1 delete-file' data-id='$fileId'>Delete</a>
+                <a href='#' class='btn btn-sm btn-danger ms-2 m-1 delete-file' data-id='$fileId'><i class='fa fa-trash'></i></a>
             </li>";
             }
             echo "</ul>";

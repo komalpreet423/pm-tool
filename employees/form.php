@@ -75,8 +75,8 @@
                 <label for="jobt">Job Title</label>
                 <select class="form-select" name="jobt">
                     <option value="" disabled selected>Select a Job Title</option>
-                    <option value="phpdeveloper" <?php echo (isset($row['job_title']) && $row['job_title'] == 'phpdeveloper') ? 'selected' : ''; ?>>PHP Developer</option>
-                    <option value="frontendd" <?php echo (isset($row['job_title']) && $row['job_title'] == 'frontendd') ? 'selected' : ''; ?>>Frontend Developer</option>
+                    <option value="PHP Developer" <?php echo (isset($row['job_title']) && $row['job_title'] == 'PHP Developer') ? 'selected' : ''; ?>>PHP Developer</option>
+                    <option value="Frontend Developer" <?php echo (isset($row['job_title']) && $row['job_title'] == 'Frontend Developer') ? 'selected' : ''; ?>>Frontend Developer</option>
                 </select>
             </div>
         </div>
