@@ -1,19 +1,61 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-if (isset($_GET['id']) && ($_GET['id'])) {
-    $id = $_GET['id'];
-} else {
-    echo "Invalid ID";
+
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if (!$id) {
+    echo "<div class='alert alert-danger'>Invalid ID.</div>";
     exit;
 }
+
+// Handle form submission before any output
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_status'])) {
+    $chargable_hours = (int)$_POST['chargable_hours'];
+    $non_chargable_hours = (int)$_POST['non_chargable_hours'];
+    $update = mysqli_real_escape_string($conn, $_POST['update']);
+
+    $update_sql = "UPDATE project_status 
+                   SET chargable_hours = '$chargable_hours', 
+                       non_chargable_hours = '$non_chargable_hours', 
+                       `update` = '$update' 
+                   WHERE id = $id";
+
+    if (mysqli_query($conn, $update_sql)) {
+        header('Location: ' . BASE_URL . '/daily-report/index.php');
+        exit();
+    } else {
+        $error = "Error updating project status: " . mysqli_error($conn);
+    }
+}
+
+// Fetch the project status after update or on GET
 $sql = "SELECT ps.*, p.name AS project_name, p.description AS project_description 
         FROM project_status ps
         JOIN projects p ON ps.project_id = p.id
         WHERE ps.id = $id";
 $query = mysqli_query($conn, $sql);
-if (mysqli_num_rows($query) > 0) {
-    $project = mysqli_fetch_assoc($query);
+
+
+$project = mysqli_fetch_assoc($query);
+if (isset($_POST['project_status'])) {
+    $chargable_hours = (int)$_POST['chargable_hours'];
+    $non_chargable_hours = (int)$_POST['non_chargable_hours'];
+    $update = mysqli_real_escape_string($conn, $_POST['update']);
+
+    $update_sql = "UPDATE project_status 
+                   SET chargable_hours = '$chargable_hours', 
+                       non_chargable_hours = '$non_chargable_hours', 
+                       `update` = '$update' 
+                   WHERE id = $id";
+
+
+    if (mysqli_query($conn, $update_sql)) {
+        header('Location: ' . BASE_URL . '/daily-report/index.php');
+        exit();
+    } else {
+        echo "<div class='alert alert-danger'>Error updating project status: " . mysqli_error($conn) . "</div>";
+    }
+
 ?>
     <div class="row">
         <div class="col-12">
@@ -47,9 +89,7 @@ if (mysqli_num_rows($query) > 0) {
         </div>
     </div>
 <?php
-} else {
-    echo "Daily Report not found.";
-}
+};
 ?>
 <div class="card">
     <div class="card-body">
@@ -62,7 +102,7 @@ if (mysqli_num_rows($query) > 0) {
                             <option value="" disabled>Select Chargable Hours</option>
                             <?php
                             $numbers = range(0, 24);
-                            foreach ($numbers as $number) {?>
+                            foreach ($numbers as $number) { ?>
                                 <option value="<?php echo $number; ?>" <?php echo (isset($project['chargable_hours']) && $project['chargable_hours'] == $number) ? 'selected' : ''; ?>>
                                     <?php echo $number; ?>
                                 </option>
