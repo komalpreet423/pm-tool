@@ -125,7 +125,7 @@ if (isset($_POST['project_status'])) {
                    WHERE id = $id";
 
     if (mysqli_query($conn, $update_sql)) {
-        header('Location: ' . BASE_URL . './daily-report/index.php');
+        header('Location: ' . BASE_URL . '/daily-report/index.php');
         exit();
     } else {
         echo "<div class='alert alert-danger'>Error updating project status: " . mysqli_error($conn) . "</div>";

@@ -37,7 +37,7 @@ if (isset($_POST['edit-employee'])) {
             WHERE id = '$id'";
 
     $result = mysqli_query($conn, $sql);
-    header('Location: ' . BASE_URL . './employees/index.php');
+    header('Location: ' . BASE_URL . '/employees/index.php');
     exit();
 }
 

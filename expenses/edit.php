@@ -15,7 +15,7 @@ if (isset($_POST['edit_expense'])) {
 
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        header('Location: ' . BASE_URL . './expenses/index.php');
+        header('Location: ' . BASE_URL . '/expenses/index.php');
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);

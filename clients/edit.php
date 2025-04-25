@@ -10,7 +10,7 @@ if (isset($_POST['edit_expense_categories'])) {
     $sql = "UPDATE clients SET name = '$name', email = '$email', phone = '$phoneno', address = '$address' WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        header('Location: ' . BASE_URL . './clients/index.php');
+        header('Location: ' . BASE_URL . '/clients/index.php');
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);

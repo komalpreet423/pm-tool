@@ -23,12 +23,12 @@ if (isset($_POST['add_milestone'])) {
                         VALUES ('$project_id', '$milestone_name', '$due_date', '$amount', '$currency_code', '$description', '$status')";
 
         if (mysqli_query($conn, $insertQuery)) {
-            $milestone_id = mysqli_insert_id($conn); 
+            $milestone_id = mysqli_insert_id($conn);
 
             if (!empty($_FILES['milestone_documents']['name'][0])) {
                 $uploadDir = "../uploads/milestones/";
                 if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true); 
+                    mkdir($uploadDir, 0777, true);
                 }
 
                 foreach ($_FILES['milestone_documents']['name'] as $key => $filename) {

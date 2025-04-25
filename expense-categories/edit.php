@@ -7,7 +7,7 @@ if (isset($_POST['edit_expense_categories'])) {
     $sql = "UPDATE expense_categories SET name = '$name'  WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        header('Location: ' . BASE_URL . './expense-categories/index.php');
+        header('Location: ' . BASE_URL . '/expense-categories/index.php');
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);

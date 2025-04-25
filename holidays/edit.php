@@ -10,7 +10,7 @@ if (isset($_POST['edit-holiday'])) {
     $recurring = isset($_POST['recurring']) && $_POST['recurring'] == 1 ? 1 : 0;
     $sql = "UPDATE holidays SET name = '$name', date = '$date', description = '$description', type = '$type', recurring = '$recurring' WHERE id = '$id' ";
     $result = mysqli_query($conn, $sql);
-    header('Location: ' . BASE_URL . './holidays/index.php');
+    header('Location: ' . BASE_URL . '/holidays/index.php');
     exit();
 }
 if (isset($_GET['id'])) {

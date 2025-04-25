@@ -74,7 +74,7 @@ if (isset($_POST['edit-milestone'])) {
                 }
             }
 
-            header('Location: ' . BASE_URL . './milestones/index.php');
+            header('Location: ' . BASE_URL . '/milestones/index.php');
             exit();
         } else {
             $errorMessage = "Database Error: " . mysqli_error($conn);

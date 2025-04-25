@@ -4,7 +4,7 @@ require_once '../includes/header.php';
 
 <?php
 if (isset($_POST['project_status'])) {
-    $employee_id = 1; 
+    $employee_id = 1;
 
     $project_id = $_GET['id'];
     $chargable_hours = $_POST['chargable_hours'];
@@ -62,26 +62,24 @@ if (mysqli_num_rows($query) > 0) {
 <div class="card">
     <div class="card-body">
         <form method="POST">
-            <div class="row ">
-                <div class="col-md-3">
-                    <div class="mb-3">
-                        <label for="chargable_hours">Chargable Hours</label>
-                        <select class="form-control" name="chargable_hours" id="chargable_hours">
-                            <option value="" selected disabled>Select Hours</option>
-                            <?php
-                            $numbers = range(1, 9);
-                            foreach ($numbers as $number) {
-                                echo "<option value=\"$number\">$number</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <?php if ($project['type'] == 'hourly') { ?>
-                    <div class="col-md-3">
-                        <div class="mb-3">
-                            <label for="non_chargable_hours">Non Billable Hours</label>
-                            <select class="form-control" name="non_chargable_hours" id="non_chargable_hours" required>
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label for="chargable_hours">Chargable Hours</label>
+                            <select class="form-control" name="chargable_hours" id="chargable_hours">
+                                <option value="" selected disabled>Select Hours</option>
+                                <?php
+                                $numbers = range(1, 9);
+                                foreach ($numbers as $number) {
+                                    echo "<option value=\"$number\">$number</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="non_chargable_hours">Non Chargable Hours</label>
+                            <select class="form-control" name="non_chargable_hours" id="non_chargable_hours">
                                 <option value="" selected disabled>Select Hours</option>
                                 <?php
                                 $numbers = range(1, 9);
@@ -92,8 +90,9 @@ if (mysqli_num_rows($query) > 0) {
                             </select>
                         </div>
                     </div>
-                <?php }  ?>
+                </div>
             </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="mb-3">

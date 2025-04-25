@@ -57,7 +57,7 @@ if (isset($_POST['edit_project']) && isset($_GET['id'])) {
             }
         }
 
-        header('Location: ' . BASE_URL . './projects/index.php');
+        header('Location: ' . BASE_URL . '/projects/index.php');
         exit();
     } else {
         echo "Error updating project: " . mysqli_error($conn);

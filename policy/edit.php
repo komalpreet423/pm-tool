@@ -50,7 +50,7 @@ if (isset($_POST['edit-policies'])) {
             }
         }
     
-        header("Location: index.php");
+        header('Location: ' . BASE_URL . '/policy/index.php');
         exit();
     }
 }

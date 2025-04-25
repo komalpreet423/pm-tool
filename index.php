@@ -1,16 +1,16 @@
-<?php 
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    
-    if (isset($_SESSION['toast'])):
-?>
-<script>
-    // alert("<?= $_SESSION['toast'] ?>");
-</script>
 <?php
-    unset($_SESSION['toast']);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_SESSION['toast'])):
 ?>
+    <script>
+        // alert("<?= $_SESSION['toast'] ?>");
+    </script>
+    <?php
+    unset($_SESSION['toast']);
+    ?>
 <?php endif; ?>
 <?php require_once './includes/header.php'; ?>
 <div class="row">
@@ -110,10 +110,7 @@ $sql = "SELECT pm.milestone_name, pm.due_date, pm.status, p.name AS project_name
 FROM project_milestones pm
 JOIN projects p ON pm.project_id = p.id
 WHERE pm.due_date <= '$currentDate'";
-
-
 $query = mysqli_query($conn, $sql);
-
 $milestones = [];
 if ($query) {
     while ($row = mysqli_fetch_assoc($query)) {
@@ -121,48 +118,29 @@ if ($query) {
     }
 }  ?>
 
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Due Dates Of Projects</h4>
-        </div>
+<?php foreach ($milestones as $key => $row): ?>
+    <?php
+    $status = $row['status'];
+    if ($status === 'not_started' || $status === 'completed') {
+        continue;
+    }
+    $alertClass = ($status === 'in_progress') ? 'warning' : 'secondary';
+    $displayStatus = ($status === 'in_progress') ? 'Pending' : ucfirst(str_replace('_', ' ', $status));
+    ?>
+    <div class="alert alert-<?php echo $alertClass; ?> mb-3" role="alert">
+        <strong>#<?php echo $key + 1; ?></strong> –
+        Project: <strong><?php echo htmlspecialchars($row['project_name']); ?></strong> |
+        Milestone: <strong><?php echo htmlspecialchars($row['milestone_name']); ?></strong> |
+        Due Date: <strong><?php echo htmlspecialchars($row['due_date']); ?></strong> |
+        Status: <strong><?php echo $displayStatus; ?></strong>
     </div>
-    <div class="card p-3">
-        <div class="card-body">
-            <table class="table table-sm" id="daily-report">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Project Name</th>
-                        <th>Name</th>
-                        <th>Due Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($milestones as $key => $row) { ?>
-                        <tr>
-                            <td><?php echo $key + 1; ?></td>
-                            <td><?php echo $row['project_name']; ?></td>
-                            <td><?php echo $row['milestone_name']; ?></td>
-                            <td><?php echo $row['due_date']; ?></td>
-                            <td>
-                                <span class="badge bg-<?php echo ($row['status'] == 'completed') ? 'success' : (($row['status'] == 'in_progress') ? 'warning' : 'secondary'); ?>">
-                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
-                                </span>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+<?php endforeach; ?>
+
 
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function() {              
         $('#daily-report').DataTable({
             "paging": true,
             "searching": true,
