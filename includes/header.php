@@ -9,7 +9,7 @@
 
     $notifications = [];
     $user_id = $_SESSION['user_id'] ?? null;
-    $userProfile = userProfile(); 
+    $userProfile = userProfile();
     $userId = $userProfile['id'];
     $sql = "SELECT * FROM notifications WHERE user_id = '$userId' ORDER BY created_at DESC ";
     $query = mysqli_query($conn, $sql);
@@ -104,7 +104,7 @@
                                             <div class="avatar-xs me-3">
                                                 <span class="avatar-title bg-info rounded-circle font-size-16">
                                                     <i class="bx bx-bell"></i>
-                                                </span> 
+                                                </span>
                                             </div>
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1"><?php echo htmlspecialchars($noti['message']); ?></h6>
@@ -211,16 +211,22 @@
                                     <span>Attendance</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <i class="bx bx-stats"></i>
-                                    <span>Expenses</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="<?php echo BASE_URL; ?>/expense-categories//index.php">Expense Categories</a></li>
-                                    <li><a href="<?php echo BASE_URL; ?>/expenses/">Expenses</a></li>
-                                </ul>
-                            </li>
+                            <?php
+                            if (isset($userProfile['role']) && ($userProfile['role'] == 'hr' || $userProfile['role'] == 'admin')) {
+                            ?>
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <i class="bx bx-stats"></i>
+                                        <span>Expenses</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="<?php echo BASE_URL; ?>/expense-categories//index.php">Expense Categories</a></li>
+                                        <li><a href="<?php echo BASE_URL; ?>/expenses/">Expenses</a></li>
+                                    </ul>
+                                </li>
+                            <?php
+                            }
+                            ?>
                             <li>
                                 <a href="<?php echo BASE_URL; ?>/leaves/index.php" class="waves-effect">
                                     <i class="mdi mdi-login"></i>
