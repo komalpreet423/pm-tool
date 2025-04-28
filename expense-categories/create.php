@@ -11,6 +11,15 @@ header('Location: ' . BASE_URL . '/expense-categories/index.php');
 $errorMessage = mysqli_error($conn);
 }
 }
+$user_values = userProfile();
+    
+if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+{
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl); 
+    exit();
+};
     ?>
     <div class="row">
     <div class="col-12">
