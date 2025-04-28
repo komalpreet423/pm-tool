@@ -128,9 +128,9 @@ if ($query) {
     $displayStatus = ($status === 'in_progress') ? 'Pending' : ucfirst(str_replace('_', ' ', $status));
     ?>
     <div class="alert alert-<?php echo $alertClass; ?> mb-3" role="alert">
-        Project: <?php echo htmlspecialchars($row['project_name']); ?>|
-        Milestone: <?php echo htmlspecialchars($row['milestone_name']); ?> |
-        Due Date: <?php echo htmlspecialchars($row['due_date']); ?>  
+         <?php echo htmlspecialchars($row['project_name']); ?>'s
+        milestone <?php echo htmlspecialchars($row['milestone_name']); ?> is
+        due on <?php echo htmlspecialchars($row['due_date']); ?>  
 
     </div>
 <?php endforeach; ?>
