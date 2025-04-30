@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
-                <label for="name">Name</label>
+                <label for="name"> Name<span style="color: red;">*</span></label>
                 <input type="text" class="form-control" name="name" id="name" required minlength="2"
                 value="<?php echo isset($row['name']) ? $row['name'] : ''; ?>">  
                 </div>
@@ -14,6 +14,7 @@
                     <input type="email" class="form-control" name="email" required value="<?php echo isset($row['email']) ? $row['email'] : ''; ?>">
                 </div>
             </div>
+          
         </div>
         <div class="row">
             <div class="col-md-6">
@@ -26,6 +27,12 @@
                 <div class="mb-3">
                     <label for="address">Address</label>
                     <textarea class="form-control" name="address" id="address" required><?php echo isset($row['address']) ? $row['address'] : ''; ?></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="cname">Company Name</label>
+                    <input type="cname" class="form-control" name="cname" required value="<?php echo isset($row['cname']) ? $row['cname'] : ''; ?>">
                 </div>
             </div>
         </div>

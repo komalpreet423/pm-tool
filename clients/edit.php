@@ -1,13 +1,14 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-if (isset($_POST['edit_expense_categories'])) {
+if (isset($_POST['edit_client'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phoneno = $_POST['phone'];
     $address = $_POST['address'];
-    $sql = "UPDATE clients SET name = '$name', email = '$email', phone = '$phoneno', address = '$address' WHERE id = '$id'";
+    $cname = $_POST['cname'];
+    $sql = "UPDATE clients SET name = '$name', email = '$email', phone = '$phoneno', address = '$address', cname = '$cname' WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
         header('Location: ' . BASE_URL . '/clients/index.php');
