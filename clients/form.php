@@ -61,6 +61,28 @@
                     maxlength: "Phone number cannot be more than 10 digits"
                 },
                 address: "Please enter address."
+            },
+            errorPlacement: function(error, element) {
+                if (element.hasClass('select2-hidden-accessible')) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).removeClass('is-invalid');
+                    $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
+                } else {
+                    $(element).addClass('is-invalid');
+                }
+            },
+            unhighlight: function(element) {
+                if ($(element).hasClass('select2-hidden-accessible')) {
+                    $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
+                } else {
+                    $(element).removeClass('is-invalid');
+                }
             }
         });
     });

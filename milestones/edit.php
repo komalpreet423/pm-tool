@@ -4,15 +4,15 @@ require_once '../includes/header.php';
 $plugins = ['datepicker', 'select2'];
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $milestone_id = intval($_GET['id']);
+    $id = intval($_GET['id']);
 
-    $query = "SELECT * FROM project_milestones WHERE milestone_id = '$milestone_id'";
+    $query = "SELECT * FROM project_milestones WHERE id = '$id'";
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
 
-        $docQuery = "SELECT * FROM milestone_documents WHERE milestone_id = '$milestone_id'";
+        $docQuery = "SELECT * FROM milestone_documents WHERE id = '$id'";
         $docResult = mysqli_query($conn, $docQuery);
         $documents = mysqli_fetch_all($docResult, MYSQLI_ASSOC);
     } else {
@@ -43,7 +43,7 @@ if (isset($_POST['edit-milestone'])) {
                             due_date='$due_date', amount=" . ($amount ? "'$amount'" : "NULL") . ", 
                             currency_code='$currency_code', status='$status', 
                             completed_date=" . ($completed_date ? "'$completed_date'" : "NULL") . "
-                        WHERE milestone_id='$milestone_id'";
+                        WHERE id='$id'";
 
         if (mysqli_query($conn, $updateQuery)) {
             if (!empty($_FILES['milestone_documents']['name'][0])) {
@@ -67,14 +67,14 @@ if (isset($_POST['edit-milestone'])) {
                     $filePath = $uploadDir . $newFileName;
 
                     if (move_uploaded_file($tmpName, $filePath)) {
-                        $fileInsertQuery = "INSERT INTO milestone_documents (milestone_id, file_path, file_name) 
-                                            VALUES ('$milestone_id', '$filePath', '$newFileName')";
+                        $fileInsertQuery = "INSERT INTO milestone_documents (id, file_path, file_name) 
+                                            VALUES ('$id', '$filePath', '$newFileName')";
                         mysqli_query($conn, $fileInsertQuery);
                     }
                 }
             }
 
-            header('Location: ' . BASE_URL . './milestones/index.php');
+            header('Location: ' . BASE_URL . '/milestones/index.php');
             exit();
         } else {
             $errorMessage = "Database Error: " . mysqli_error($conn);
@@ -87,6 +87,7 @@ if (isset($_POST['edit-milestone'])) {
 
 <div class="row">
     <div class="col-12">
+        
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Edit Milestone</h4>
             <a href="./index.php" class="btn btn-primary d-flex"><i class="bx bx-left-arrow-alt me-1 fs-4"></i>Go Back</a>
@@ -94,6 +95,7 @@ if (isset($_POST['edit-milestone'])) {
     </div>
 </div>
 
+<div class="card">
 <?php include './form.php'; ?>
-
+</div>
 <?php require_once '../includes/footer.php'; ?>

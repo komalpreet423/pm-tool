@@ -15,17 +15,20 @@ if (isset($_POST['add_milestone'])) {
     $projectCheckQuery = "SELECT id FROM projects WHERE id = '$project_id' AND type = 'fixed'";
     $result = mysqli_query($conn, $projectCheckQuery);
 
+    if (empty($amount)) {
+        $errorMessage = "Amount is required.";
+    }
     if (mysqli_num_rows($result) > 0) {
         $insertQuery = "INSERT INTO project_milestones (project_id, milestone_name, due_date, amount, currency_code, description, status) 
                         VALUES ('$project_id', '$milestone_name', '$due_date', '$amount', '$currency_code', '$description', '$status')";
 
         if (mysqli_query($conn, $insertQuery)) {
-            $milestone_id = mysqli_insert_id($conn); 
+            $milestone_id = mysqli_insert_id($conn);
 
             if (!empty($_FILES['milestone_documents']['name'][0])) {
                 $uploadDir = "../uploads/milestones/";
                 if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true); 
+                    mkdir($uploadDir, 0777, true);
                 }
 
                 foreach ($_FILES['milestone_documents']['name'] as $key => $filename) {
@@ -50,7 +53,7 @@ if (isset($_POST['add_milestone'])) {
                 }
             }
 
-            header('Location: ' . BASE_URL . './milestones/index.php');
+            header('Location: ' . BASE_URL . '/milestones/index.php');
             exit();
         } else {
             $errorMessage = "Database Error: " . mysqli_error($conn);

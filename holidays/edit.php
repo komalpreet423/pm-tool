@@ -1,6 +1,7 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
+require_once '../includes/db.php';
 if (isset($_POST['edit-holiday'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
@@ -10,7 +11,7 @@ if (isset($_POST['edit-holiday'])) {
     $recurring = isset($_POST['recurring']) && $_POST['recurring'] == 1 ? 1 : 0;
     $sql = "UPDATE holidays SET name = '$name', date = '$date', description = '$description', type = '$type', recurring = '$recurring' WHERE id = '$id' ";
     $result = mysqli_query($conn, $sql);
-    header('Location: ' . BASE_URL . './holidays/index.php');
+    header('Location: ' . BASE_URL . '/holidays/index.php');
     exit();
 }
 if (isset($_GET['id'])) {
@@ -18,7 +19,7 @@ if (isset($_GET['id'])) {
     $sqlquery = "SELECT * FROM holidays WHERE id={$id} ";
     $result = mysqli_query($conn, $sqlquery);
     if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
+       $row = mysqli_fetch_assoc($result); {
 ?>
             <div class="row">
                 <div class="col-12">
@@ -28,13 +29,9 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <?php
-                include 'form.php';
-                ?>
-            </div>
-
 <?php }
     }
 } ?>
+<?php include './form.php' ?>
+
 <?php require_once '../includes/footer.php'; ?>

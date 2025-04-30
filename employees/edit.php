@@ -1,6 +1,16 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
+
+$user_values = userProfile();
+    
+if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+{
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl); 
+    exit();
+};
 if (isset($_POST['edit-employee'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
@@ -14,11 +24,32 @@ if (isset($_POST['edit-employee'])) {
     $role = $_POST['role'];
     $status = $_POST['status'];
     $password = $_POST['password'];
-    $sql = "UPDATE users SET name = '$name', email = '$email', date_of_birth = '$dob', date_of_joining = '$doj', gender = '$gender', phone_number = '$phoneno', address = '$address', job_title = '$jobt', role = '$role', status = '$status' WHERE id = '$id' ";
+    $passwordUpdate = '';
+
+    if (!empty($password)) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $passwordUpdate = ", password = '$hashedPassword'";
+    };
+
+    $sql = "UPDATE users SET 
+                name = '$name', 
+                email = '$email', 
+                date_of_birth = '$dob', 
+                date_of_joining = '$doj', 
+                gender = '$gender', 
+                phone_number = '$phoneno', 
+                address = '$address', 
+                job_title = '$jobt', 
+                role = '$role', 
+                status = '$status'
+              
+            WHERE id = '$id'";
+
     $result = mysqli_query($conn, $sql);
-    header('Location: ' . BASE_URL . './employees/index.php');
+    header('Location: ' . BASE_URL . '/employees/index.php');
     exit();
 }
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sqlquery = "SELECT * FROM users WHERE id={$id} ";

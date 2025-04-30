@@ -4,7 +4,8 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'pm_tool');
 
-define('BASE_URL', 'http://localhost/pm-tool');
-
-session_start();
+define('BASE_URL', 'http://localhost/test/pm-tool');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>

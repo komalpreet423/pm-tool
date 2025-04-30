@@ -21,10 +21,12 @@
             <div class="mb-3">
                 <label for="type">Type</label> <span class="text-danger">*</span>
                 <select class="form-select" name="type" required>
+                    <option value="" disabled <?php echo (!isset($row['type']) || $row['type'] == '') ? 'selected' : ''; ?>>Select Type</option>
                     <option value="public" <?php echo (isset($row['type']) && $row['type'] == 'public') ? 'selected' : ''; ?>>Public</option>
                     <option value="company" <?php echo (isset($row['type']) && $row['type'] == 'company') ? 'selected' : ''; ?>>Company</option>
                     <option value="regional" <?php echo (isset($row['type']) && $row['type'] == 'regional') ? 'selected' : ''; ?>>Regional</option>
                 </select>
+
             </div>
         </div>
         <div class="col-md-3 d-flex align-items-center">
@@ -38,7 +40,10 @@
                 </label>
             </div>
         </div>
-        <div class="col-md-6">
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="mb-3">
                 <label for="description">Description</label>
                 <textarea class="form-control" name="description" id="description"><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
@@ -66,16 +71,23 @@
         });
 
         var isEditMode = $("input[name='id']").val() !== "";
+        $('#description').summernote();
 
         $('#holiday-form').validate({
             rules: {
                 name: "required",
                 date: "required",
+                type: "required",
+                description: "required"
             },
+
             messages: {
                 name: "Please enter holiday name",
                 date: "Please select a date",
+                type: "Please select a holiday type",
+                description: "Please enter a description"
             },
+
             errorPlacement: function(error, element) {
                 error.addClass("invalid-feedback");
 
@@ -98,6 +110,11 @@
                 }
             }
         });
+
+        $('select[name="type"]').on('change', function() {
+            $(this).valid();
+        });
+
 
         $("#recurring").on("change", function() {
             if ($(this).is(":checked")) {

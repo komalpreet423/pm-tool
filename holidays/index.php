@@ -1,9 +1,26 @@
+<?php 
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    if (isset($_SESSION['toast'])):
+?>
+<script>
+    // alert("<?= $_SESSION['toast'] ?>");
+</script>
+<?php
+    unset($_SESSION['toast']);
+?>
+<?php endif; ?>
+
 <?php require_once '../includes/header.php'; ?>
 <div class="row">
     <div class="col-12">
         <div class="page-title-box pb-2 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Holidays</h4>
+            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr'): ?>
             <a href="./create.php" class="btn btn-primary">Add Holiday</a>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -12,7 +29,6 @@
         <?php
         $sql = "SELECT * FROM holidays";
         $query = mysqli_query($conn, $sql);
-        if ($num = mysqli_num_rows($query) > 0) {
             $holidays = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
             <table class="table table-striped" id="employeeTable">
@@ -22,7 +38,10 @@
                     <th>Date</th>
                     <th>Description</th>
                     <th>Type</th>
+                    <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr'): ?>
                     <th>Action</th>
+                    <?php endif; ?>
+
                 </thead>
                 <tbody>
                     <?php
@@ -34,14 +53,17 @@
                             <td><?php echo $row['date'] ?></td>
                             <td><?php echo $row['description'] ?></td>
                             <td><?php echo $row['type'] ?></td>
+                    <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr'): ?>
+
                             <td>
                                 <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success btn-sm"><i class="bx bx-edit fs-5"></i></a>
                                 <button class="btn btn-danger btn-sm delete-btn" data-table-name="holidays" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                             </td>
+                    <?php endif; ?>
+
                         <?php  } ?>
                 </tbody>
     </div>
-<?php } ?>
 </div>
 <script>
     $(document).ready(function() {

@@ -1,3 +1,15 @@
+<?php require_once '../includes/functions.php'; ?>
+<?php
+    $user_values = userProfile();
+    
+    if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+    {
+        $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+        $_SESSION['toast'] = "Access denied. Employees only.";
+        header("Location: " . $redirectUrl); 
+        exit();
+    }
+?>
 <?php require_once '../includes/header.php'; ?>
 <div class="row">
     <div class="col-12">
@@ -12,7 +24,6 @@
     <?php
     $sql = "SELECT * FROM users";
     $query = mysqli_query($conn, $sql);
-    if ($num = mysqli_num_rows($query) > 0) {
         $users = mysqli_fetch_all($query, MYSQLI_ASSOC);
     ?>
         <table class="table table-sm" id="employeeTable">
@@ -35,15 +46,19 @@
                         <td><?php echo $row['email'] ?></td>
                         <td><?php echo $row['phone_number'] ?></td>
                         <td><?php echo $row['job_title'] ?></td>
-                        <td><?php echo $row['status'] ?></td>
+                        <td>
+                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">  
+                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                                </span>
+                            </td>
                         <td>
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger btn-sm delete-btn btn-sm" data-table-name="users" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                         </td>
                     <?php  } ?>
             </tbody>
-<?php } ?>
 </div>
+
 <script>
     $(document).ready(function() {
         $('#employeeTable').DataTable({

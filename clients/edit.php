@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-if (isset($_POST['edit_client'])) {
+if (isset($_POST['edit_expense_categories'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -10,7 +10,7 @@ if (isset($_POST['edit_client'])) {
     $sql = "UPDATE clients SET name = '$name', email = '$email', phone = '$phoneno', address = '$address' WHERE id = '$id'";
     $result = mysqli_query($conn, $sql);
     if ($result) {
-        header('Location: ' . BASE_URL . './clients/index.php');
+        header('Location: ' . BASE_URL . '/clients/index.php');
         exit();
     } else {
         echo "Error: " . mysqli_error($conn);
