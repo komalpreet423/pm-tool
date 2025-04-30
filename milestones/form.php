@@ -23,14 +23,26 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="mb-3">
-                <label for="currency_code">Currency</label>
-                <select class="form-select" name="currency_code" required>
-                    <option value="INR" <?php echo (isset($row['currency_code']) && $row['currency_code'] == 'INR') ? 'selected' : ''; ?>>INR</option>
-                    <option value="USD" <?php echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? 'selected' : ''; ?>>USD</option>
-                </select>
-            </div>
-        </div>
+    <div class="mb-3">
+        <label for="currency_code">Currency</label>
+        <select class="form-select" name="currency_code" id="currency_code" required onchange="updateCurrencySymbol()">
+            <option value="INR" <?php echo (isset($row['currency_code']) && $row['currency_code'] == 'INR') ? 'selected' : ''; ?>>INR</option>
+            <option value="USD" <?php echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? 'selected' : ''; ?>>USD</option>
+        </select>
+        <input type="hidden" name="currency_symbol" id="currency_symbol" value="<?php 
+            echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? '$' : '₹'; 
+        ?>">
+    </div>
+</div>
+
+<script>
+function updateCurrencySymbol() {
+    const currency = document.getElementById('currency_code').value;
+    const symbolField = document.getElementById('currency_symbol');
+    symbolField.value = (currency === 'USD') ? '$' : '₹';
+}
+</script>
+
         <div class="col-md-3">
             <div class="mb-3">
                 <label for="status">Status</label>
