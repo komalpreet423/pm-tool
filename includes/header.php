@@ -93,19 +93,21 @@
                                             <h6 class="m-0" key="t-notifications"> Notifications </h6>
                                         </div>
                                         <div class="col-auto">
-                                            <a href="/notifications.php" class="btn btn-sm btn-link font-size-14 text-center">view more </a>
+                                        <a href="<?php echo BASE_URL; ?>/notifications.php" class="btn btn-sm btn-link font-size-14 text-center">view more</a>
+
                                         </div>
                                     </div>
                                 </div>
 
                                 <?php foreach (array_slice($notifications, 0, 5) as $noti): ?>
-                                    <a href="<?php echo htmlspecialchars($noti['link']); ?>" class="text-reset notification-item">
+                                    <a href="<?php echo BASE_URL; htmlspecialchars($noti['link']); ?>/projects/index.php" class="text-reset notification-item">
                                         <div class="d-flex">
                                             <div class="avatar-xs me-3">
-                                                <span class="avatar-title bg-info rounded-circle font-size-16">
-                                                    <i class="bx bx-bell"></i>
+                                                <span class="avatar-title bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 32px;">
+                                                    <i class="bx bxs-bell"></i>
                                                 </span>
                                             </div>
+
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1"><?php echo htmlspecialchars($noti['message']); ?></h6>
                                                 <div class="font-size-12 text-muted">
