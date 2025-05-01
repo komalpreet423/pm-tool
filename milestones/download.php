@@ -38,7 +38,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $dompdf->render();
 
         // Output PDF
-        $dompdf->stream('milestone_' . $milestone['id'] . '.pdf', ['Attachment' => false]);
+        $dompdf->stream('milestone_' . $milestone['id'] . '.pdf', ['Attachment' => true]);
         exit();
     } else {
         echo "Milestone not found or not completed.";

@@ -2,58 +2,66 @@
     <form method="POST" name="expense-form" id="expense-form" class="p-3" enctype="multipart/form-data">
         <input type="hidden" name="expense_id" value="<?php echo isset($row['id']) ? $row['id'] : ''; ?>">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" name="title" value="<?php echo isset($row['title']) ? $row['title'] : ''; ?>" required>
+                    <input type="text" class="form-control" id="title" name="title"
+                        value="<?php echo isset($row['title']) ? $row['title'] : ''; ?>" required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="amount">Amount</label>
-                    <input type="number" class="form-control" id="amount" name="amount" required min="0" step="0.01" value="<?php echo isset($row['amount']) ? $row['amount'] : ''; ?>">
+                    <input type="number" class="form-control" id="amount" name="amount" required min="0" step="0.01"
+                        value="<?php echo isset($row['amount']) ? $row['amount'] : ''; ?>">
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="expense_date">Expense Date</label>
-                    <input type="text" class="form-control" id="expense_date" name="expense_date" required value="<?php echo isset($row['expense_date']) ? $row['expense_date'] : ''; ?>" autocomplete="off">
-                </div>
-            </div>
-            <?php 
-            if(isset($_FILES['attachment'])){
-                $file_name=$_FILES['image']['name'];
-                $file_size=$_FILES['image']['file_size'];
-                $file_tmp=$_FILES['image']['tmp_name'];
-                $file_type=$_FILES['image']['type'];
-                move_uploaded_file($file_tmp,"images/".$file_name);
-            }
-            ?>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label for="attachment">Attachment</label>
-                    <input type="file" class="form-control" id="attachment" name="attachment" value="<?php echo isset($row['attachment']) ? $row['attachment'] : ''; ?>" >
+                    <input type="text" class="form-control" id="expense_date" name="expense_date" required
+                        value="<?php echo isset($row['expense_date']) ? $row['expense_date'] : ''; ?>"
+                        autocomplete="off">
                 </div>
             </div>
 
+            <?php
+            if (isset($_FILES['attachment'])) {
+                $file_name = $_FILES['image']['name'];
+                $file_size = $_FILES['image']['file_size'];
+                $file_tmp = $_FILES['image']['tmp_name'];
+                $file_type = $_FILES['image']['type'];
+                move_uploaded_file($file_tmp, "images/" . $file_name);
+            }
+            ?>
+
+
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="attachment">Attachment</label>
+                    <input type="file" class="form-control" id="attachment" name="attachment"
+                        value="<?php echo isset($row['attachment']) ? $row['attachment'] : ''; ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="mb-3">
                     <label for="status">Status</label>
                     <select id="expense-status" class="form-select" name="status" required>
                         <option value="" selected disabled>Select Status</option>
-                        <option value="pending" <?php echo (($row['status'] ?? '') == 'pending') ? 'selected' : ''; ?>>Pending</option>
-                        <option value="approved" <?php echo (($row['status'] ?? '') == 'approved') ? 'selected' : ''; ?>>Approved</option>
-                        <option value="rejected" <?php echo (($row['status'] ?? '') == 'rejected') ? 'selected' : ''; ?>>Rejected</option>
+                        <option value="pending" <?php echo (($row['status'] ?? '') == 'pending') ? 'selected' : ''; ?>>
+                            Pending</option>
+                        <option value="approved" <?php echo (($row['status'] ?? '') == 'approved') ? 'selected' : ''; ?>>
+                            Approved</option>
+                        <option value="rejected" <?php echo (($row['status'] ?? '') == 'rejected') ? 'selected' : ''; ?>>
+                            Rejected</option>
                     </select>
                 </div>
             </div>
             <?php $categories = mysqli_query($conn, "SELECT * FROM `expense_categories`"); ?>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label>Category</label>
                 <select class="form-control" name="category_id" id="category_id" required>
                     <option value="" selected disabled>Select Category</option>
@@ -68,17 +76,20 @@
             <div class="col-md-12">
                 <div class="mb-3">
                     <label for="description">Description</label>
-                    <textarea id="description" class="form-control" name="description" rows="4" required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
+                    <textarea id="description" class="form-control" name="description" rows="4"
+                        required><?php echo isset($row['description']) ? $row['description'] : ''; ?></textarea>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" name="<?php echo isset($row['id']) ? 'edit_expense' : 'add_expense'; ?>">
+        <button type="submit" class="btn btn-primary"
+            name="<?php echo isset($row['id']) ? 'edit_expense' : 'add_expense'; ?>">
             <?php echo isset($row['id']) ? 'Update' : 'Submit'; ?>
         </button>
     </form>
 </div>
+</div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#expense_date").datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
@@ -96,7 +107,7 @@
                     number: true,
                     min: 0
                 },
-                category_id:"required",
+                category_id: "required",
                 expense_date: {
                     required: true,
                     date: true
@@ -128,14 +139,14 @@
                     required: "Please select a status."
                 }
             },
-              errorPlacement: function(error, element) {
+            errorPlacement: function (error, element) {
                 if (element.hasClass('select2-hidden-accessible')) {
                     error.insertAfter(element.next('.select2'));
                 } else {
                     error.insertAfter(element);
                 }
             },
-            highlight: function(element) {
+            highlight: function (element) {
                 if ($(element).hasClass('select2-hidden-accessible')) {
                     $(element).removeClass('is-invalid');
                     $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
@@ -143,7 +154,7 @@
                     $(element).addClass('is-invalid');
                 }
             },
-            unhighlight: function(element) {
+            unhighlight: function (element) {
                 if ($(element).hasClass('select2-hidden-accessible')) {
                     $(element).next('.select2').find('.select2-selection').removeClass('is-invalid');
                 } else {

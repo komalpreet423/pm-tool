@@ -247,12 +247,12 @@
                                     <span>Reports</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="#">Expense Report</a></li>
+                                    <li><a href="<?php echo BASE_URL; ?>/reports/expense-report.php">Expense Report</a></li>
                                     <li><a href="#">Invoice Report</a></li>
                                     <li><a href="#">Project Report</a></li>
                                     <li><a href="#">Employee Report</a></li>
-                                    <li><a href="#">Attendance Report</a></li>
-                                    <li><a href="#">Leave Report</a></li>
+                                    <li><a href="<?php echo BASE_URL; ?>/reports/attendance-report.php">Attendance Report</a></li>
+                                    <li><a href="<?php echo BASE_URL; ?>/reports/leaves-report.php">Leave Report</a></li>
                                     <li><a href="#">Daily Report</a></li>
                                 </ul>
                             </li>
