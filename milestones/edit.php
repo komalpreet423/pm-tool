@@ -27,7 +27,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 if (isset($_POST['edit-milestone'])) {
     $project_id = intval($_POST['project_id']);
     $milestone_name = mysqli_real_escape_string($conn, $_POST['milestone_name']);
-    $description = mysqli_real_escape_string($conn, $_POST['description']);
+    $description = isset($_POST['description']) ? strip_tags($_POST['description']) : '';
     $due_date = date('Y-m-d', strtotime($_POST['due_date']));
     $amount = !empty($_POST['amount']) ? floatval($_POST['amount']) : NULL;
     $currency_code = mysqli_real_escape_string($conn, $_POST['currency_code']);

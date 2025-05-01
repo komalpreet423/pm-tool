@@ -12,38 +12,44 @@
         <?php
         $sql = "SELECT * FROM clients";
         $query = mysqli_query($conn, $sql);
-            $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
+        $clients = mysqli_fetch_all($query, MYSQLI_ASSOC);
         ?>
-            <div class="container">
-                <table class="table table-sm" id="clientTable">
-                    <thead>
+        <div class="container">
+            <table class="table table-sm" id="clientTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>Company Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($clients as $key => $row): ?>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Address</th>
-                            <th>Action</th>
+                            <td><?= $key + 1; ?></td>
+                            <td><?= htmlspecialchars($row['name']); ?></td>
+                            <td><?= htmlspecialchars($row['email']); ?></td>
+                            <td><?= htmlspecialchars($row['phone']); ?></td>
+                            <td><?= htmlspecialchars($row['address']); ?></td>
+                            <td><?= isset($row['cname']) ? htmlspecialchars($row['cname']) : ''; ?></td>
+                            <td>
+                                <a href="./edit.php?id=<?= $row['id']; ?>" class="btn btn-primary btn-sm">
+                                    <i class="bx bx-edit fs-5"></i>
+                                </a>
+                                <button class="btn btn-danger delete-btn btn-sm" data-table-name="clients" data-id="<?= $row['id']; ?>">
+                                    <i class="bx bx-trash fs-5"></i>
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($clients as $key => $row) {
-                        ?>
-                            <tr>
-                                <td><?php echo $key + 1; ?></td>
-                                <td><?php echo $row['name']; ?></td>
-                                <td><?php echo $row['email']; ?></td>
-                                <td><?php echo $row['phone']; ?></td>
-                                <td><?php echo $row['address']; ?></td>
-                                <td><a href='./edit.php?id=<?php echo $row['id']; ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
-                                    <button class="btn btn-danger delete-btn btn-sm" data-table-name="clients" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+        </div>
     </div>
 </div>
 <script>

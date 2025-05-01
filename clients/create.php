@@ -3,25 +3,33 @@ ob_start();
 $plugins = ['datepicker'];
 require_once '../includes/header.php';
 $errorMessage = '';
+
 if (isset($_POST['add_client'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $phoneno = $_POST['phone'];
     $address = $_POST['address'];
+    $cname = $_POST['cname'];
+
     $query = "SELECT * FROM clients WHERE email = '$email' OR phone = '$phoneno'";
     $result = mysqli_query($conn, $query);
+
     if (mysqli_num_rows($result) > 0) {
-        $errorMessage =  "This email or phone number already exists";
+        $errorMessage = "This email or phone number already exists";
     } else {
-        $insert = "INSERT INTO clients (name, email, phone, address) VALUES ('$name', '$email', '$phoneno', '$address')";
-        header('Location: ' . BASE_URL . '/clients/index.php');
+        // ✅ FIXED: Added cname to the columns list
+        $insert = "INSERT INTO clients (name, email, phone, address, cname) VALUES ('$name', '$email', '$phoneno', '$address', '$cname')";
+
         if (mysqli_query($conn, $insert)) {
+            header('Location: ' . BASE_URL . '/clients/index.php');
+            exit();
         } else {
             $errorMessage = mysqli_error($conn);
         }
     }
 }
 ?>
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
@@ -31,10 +39,10 @@ if (isset($_POST['add_client'])) {
         </div>
     </div>
 </div>
-    <?php
-    if ($errorMessage) {
-        echo $errorMessage;
-    }
-    ?>
-    <?php include './form.php' ?>
+<?php
+if ($errorMessage) {
+    echo $errorMessage;
+}
+?>
+<?php include './form.php' ?>
 <?php require_once '../includes/footer.php'; ?>

@@ -6,7 +6,7 @@ $plugins = ['datepicker', 'select2'];
 if (isset($_POST['add_milestone'])) {
     $project_id = $_POST['project_id'];
     $milestone_name = $_POST['milestone_name'];
-    $description = $_POST['description'];
+    $description = isset($_POST['description']) ? strip_tags($_POST['description']) : '';
     $due_date = date('Y-m-d', strtotime($_POST['due_date']));
     $amount = $_POST['amount'] ? $_POST['amount'] : NULL;
     $currency_code = $_POST['currency_code'];
