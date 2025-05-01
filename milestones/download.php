@@ -85,8 +85,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         </style>
         
         <h1 style="color: #F3C100;">Invoice</h1>
-        <h5>Invoice No #  <b style="color:black;">000027</b></h5>
-<h5>Invoice Date : <b style="color:black;">' . gmdate("F j, Y") . '</b></h5>
+        <h5>Invoice No <b style="color:black;">#0001</b></h5>
+<h5>Invoice Date: <b style="color:black;">' . gmdate("F j, Y") . '</b></h5>
         
         <table>
             <tr>
