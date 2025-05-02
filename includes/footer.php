@@ -8,6 +8,8 @@
 <script src="<?php echo BASE_URL; ?>/assets/libs/node-waves/waves.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/app.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/libs/bootstrap-daterangepicker/moment.min.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/libs/bootstrap-daterangepicker/js/daterangepicker.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -19,7 +21,7 @@
 <script src="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/echarts/echarts.min.js"></script>
-<script src="<?php echo BASE_URL; ?>/assets/js/pages/echarts.init.js"></script>
+
 
 <script>
     $(document).ready(function () {
