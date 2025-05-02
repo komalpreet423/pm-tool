@@ -33,6 +33,7 @@
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <link href="<?php echo BASE_URL; ?>/assets/libs/bootstrap-daterangepicker/css/daterangepicker.css" rel="stylesheet">
         <link href="<?php echo BASE_URL; ?>/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet">
         <link href="<?php echo BASE_URL; ?>/assets/libs/select2/css/select2.min.css" rel="stylesheet">
         <link href="<?php echo BASE_URL; ?>/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
