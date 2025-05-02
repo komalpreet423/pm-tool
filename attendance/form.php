@@ -1,88 +1,130 @@
 <?php
-$users = mysqli_query($conn, "SELECT * FROM `users`");
+require_once '../includes/header.php'; // if not already included
+require_once '../includes/db.php';     // database connection
+
+if (isset($_POST['submit_attendance'])) {
+    $date = $_POST['date'];
+    $employee_ids = $_POST['employee_id'];
+    $statuses = $_POST['status'];
+    $notes = $_POST['note'];
+
+    // Basic validation
+    if (!empty($date) && is_array($employee_ids)) {
+        foreach ($employee_ids as $index => $employee_id) {
+            $status = mysqli_real_escape_string($conn, $statuses[$index]);
+            $note = mysqli_real_escape_string($conn, $notes[$index]);
+
+            // Optional: Check for duplicate entry for same user and date before insert
+            $checkQuery = "SELECT * FROM attendance WHERE employee_id = $employee_id AND date = '$date'";
+            $checkResult = mysqli_query($conn, $checkQuery);
+
+            if (mysqli_num_rows($checkResult) == 0) {
+                $insertQuery = "INSERT INTO attendance (employee_id, status, note, date)
+                                VALUES ($employee_id, '$status', '$note', '$date')";
+                mysqli_query($conn, $insertQuery);
+            } else {
+                // Optional: You could update instead of skipping
+                $updateQuery = "UPDATE attendance SET status = '$status', note = '$note'
+                                WHERE employee_id = $employee_id AND date = '$date'";
+                mysqli_query($conn, $updateQuery);
+            }
+        }
+        header("Location: index.php");
+        exit();
+    }
+}
+if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') {
+    $usersQuery = "SELECT id, name FROM users";
+} else {
+    $userId = $userProfile['id'];
+    $usersQuery = "SELECT id, name FROM users WHERE id = $userId";
+}
+
+$result = mysqli_query($conn, $usersQuery);
+$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
-<div class="card">
-    <div class="card-body">
-        <form method="POST" name="attendance-form" id="attendance-form" class="p-3" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="employee">Employee Name<span class="text-danger">*</span></label>
-                        <select id="employee" class="form-select" name="employee" required>
-                            <option value="" selected disabled>Select Employee</option>
-                            <?php
-                            $selectedemployeeid = isset($existingemployeeid) ? $existingemployeeid : (isset($row['employee_id']) ? $row['employee_id'] : null);
 
-                            while ($Ausers = mysqli_fetch_assoc($users)) {
-                                $selected = ($Ausers['id'] == $selectedemployeeid) ? 'selected' : '';
-                                echo '<option value="' . $Ausers['id'] . '" ' . $selected . '>' . htmlspecialchars($Ausers['name']) . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-
-
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="date">Date<span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="date" id="date" autocomplete="off"
-                            value="<?php echo isset($row['date']) ? $row['date'] : ''; ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="note">Note<span class="text-danger">*</span></label>
-                        <textarea class="form-control" name="note" id="note"><?php echo isset($row['note']) ? strip_tags($row['note']) : ''; ?></textarea>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="status">Status</label>
-                        <select class="form-select" id="attendance-status" name="status">
-                            <option value="" selected disabled>Select Status</option>
-                            <option value="present" <?php echo (isset($row['status']) && $row['status'] == 'present') ? 'selected' : ''; ?>>Present</option>
-                            <option value="short_leave" <?php echo (isset($row['status']) && $row['status'] == 'short_leave') ? 'selected' : ''; ?>>Short Leave</option>
-                            <option value="absent" <?php echo (isset($row['status']) && $row['status'] == 'absent') ? 'selected' : ''; ?>>Absent</option>
-                            <option value="late" <?php echo (isset($row['status']) && $row['status'] == 'late') ? 'selected' : ''; ?>>Late</option>
-                            <option value="half_day" <?php echo (isset($row['status']) && $row['status'] == 'half_day') ? 'selected' : ''; ?>>Half Day</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" name="employee_id" value="<?php echo isset($employee_id) ? $employee_id : ''; ?>">
-            <button type="submit" class="btn btn-primary" name="<?php echo isset($row['id']) ? 'edit_attendance' : 'add_attendance'; ?>">
-                <?php echo isset($row['id']) ? 'Update' : 'Submit'; ?>
-            </button>
-        </form>
+<form method="post" id="attendance-form">
+    <div class="col-md-2">
+        <div class="mb-3">
+            <label for="date">Date:</label>
+            <input type="text" class="form-control" name="date" id="date" required
+                value="<?php echo date('Y-m-d'); ?>" autocomplete="off">
+        </div>
     </div>
-</div>
 
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <form method="post" id="attendance-form">
+                    <table class="table table-sm" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>#</th> 
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $key => $user): ?>
+                                <tr>
+                                    <td><?php echo $key + 1; ?></td>
+                                    <td>
+                                        <?php echo $user['name']; ?>
+                                        <input type="hidden" name="employee_id[]" value="<?php echo $user['id']; ?>">
+                                    </td>
+                                    <td>
+                                        <select class="form-control status-select" name="status[]">
+                                            <option value="present">Present</option>
+                                            <option value="absent">Absent</option>
+                                            <option value="late">Late</option>
+                                            <option value="half_day">Half Day</option>
+                                            <option value="short_leave">Short Leave</option>
+                                        </select>
+
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="note[]" placeholder="Optional note">
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-primary" name="submit_attendance">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- JavaScript Section -->
 <script>
     $(document).ready(function() {
+        // Datepicker setup - only allow past and current dates
         $('#date').datepicker({
             format: 'yyyy-mm-dd',
-            autoclose: true
+            autoclose: true,
+            endDate: new Date(),
+            daysOfWeekDisabled: [0, 6]
         });
 
-        $('#attendance-status, #employee').select2();
+        // Enhance select boxes
+        $('.status-select').select2({
+            width: '100%'
+        });
 
+        // jQuery Validation
         $('#attendance-form').validate({
             rules: {
-                employee: "required",
-                date: "required",
-                note: "required",
-                status: "required",
+                'date': "required",
+                'status[]': {
+                    required: true
+                },
             },
             messages: {
-                employee: "Please select an employee",
-                date: "Please select a date",
-                note: "Please enter a note",
-                status: "Please select a status"
+                'status[]': "Please select a status",
+                'date': "Please select a date"
             },
             errorPlacement: function(error, element) {
                 if (element.hasClass('select2-hidden-accessible')) {
@@ -93,7 +135,6 @@ $users = mysqli_query($conn, "SELECT * FROM `users`");
             },
             highlight: function(element) {
                 if ($(element).hasClass('select2-hidden-accessible')) {
-                    $(element).removeClass('is-invalid');
                     $(element).next('.select2').find('.select2-selection').addClass('is-invalid');
                 } else {
                     $(element).addClass('is-invalid');

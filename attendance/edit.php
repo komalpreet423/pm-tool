@@ -1,19 +1,20 @@
 <?php
-ob_start();
-require_once '../includes/header.php';
-if (isset($_POST['edit_attendance'])) {
-    $id = $_GET['id'];
-    $employee_id= $_POST['employee'];
-    $date = $_POST['date'];
+require_once '../includes/db.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = intval($_POST['id']);
     $status = $_POST['status'];
     $note = $_POST['note'];
-    $sql = "UPDATE attendance SET employee_id = '$employee_id', date = '$date', status = '$status', note ='$note' WHERE id = $id";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-        header('Location: ' . BASE_URL . '/attendance/index.php');
-        exit();
+    $date = $_POST['date'];
+
+    $query = "UPDATE attendance SET status = $status, note =  $note, date =  $date WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sssi", $status, $note, $date, $id);
+
+    if ($stmt->execute()) {
+        header("Location: index.php?message=updated");
     } else {
-        echo "Error: " . mysqli_error($conn);
+        echo "Failed to update.";
     }
 }
 if (isset($_GET['id'])) {
