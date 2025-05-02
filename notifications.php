@@ -41,8 +41,18 @@ $extraNotifications = array_slice($notifications, 5);
                     <?php foreach ($extraNotifications as $noti): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($noti['message']); ?></td>
-                            <td><?php echo htmlspecialchars($noti['created_at']); ?>  </td>
-                            <td><a href="<?php echo htmlspecialchars($noti['link']); ?>" class="btn btn-sm btn-primary">View</a></td>
+                            <td><?php echo htmlspecialchars($noti['created_at']); ?> </td>
+                            <td>
+                                <?php
+                                $notificationLink = htmlspecialchars($noti['link']);
+                                // Debugging: Check the actual link generated
+                                echo "Notification Link: " . $notificationLink . "<br>";
+                                if (strpos($notificationLink, 'http') !== 0) {
+                                    $notificationLink = BASE_URL . $notificationLink;
+                                }
+                                ?>
+                                <a href="<?php echo $notificationLink; ?>" class="btn btn-sm btn-primary">View</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
