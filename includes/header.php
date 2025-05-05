@@ -19,15 +19,33 @@
             $notifications[] = $row;
         }
     }
+    $result = $conn->query("SELECT setting_value FROM settings WHERE setting_key = 'site_logo'");
+    $row = $result->fetch_assoc();
+    $logoPath = $row ? $row['setting_value'] : 'uploads/my_logo.png';
+
+    $page_title = 'PM Tool'; // default
+    $favicon = 'assets/images/default-favicon.ico';
+
+    $result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_title', 'site_favicon')");
+    while ($row = $result->fetch_assoc()) {
+        if ($row['setting_key'] === 'site_title') {
+            $page_title = $row['setting_value'];
+        }
+        if ($row['setting_key'] === 'site_favicon' && !empty($row['setting_value'])) {
+            $favicon = $row['setting_value'];
+        }
+    }
     ?>
+
+
     <!doctype html>
     <html lang="en">
 
     <head>
-        <meta charset="utf-8" />
-        <title><?php echo isset($page_title) ? $page_title : 'PM Tool'; ?></title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 ">
-        <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/assets/images/favicon.ico">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'PM Tool'; ?></title>
+        <link rel="icon" href="<?= htmlspecialchars($favicon) ?>" type="image/x-icon">
         <link href="<?php echo BASE_URL; ?>/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -52,21 +70,22 @@
                         <div class="navbar-brand-box">
                             <a href="<?php echo BASE_URL; ?>" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/small-logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="" height="17">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="17">
                                 </span>
                             </a>
                             <a href="<?php echo BASE_URL; ?>" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/small-logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="32">
                                 </span>
                             </a>
                         </div>
+
                         <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
                             <i class="fa fa-fw fa-bars"></i>
                         </button>
@@ -259,11 +278,12 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" class="waves-effect">
+                                <a href="<?php echo BASE_URL; ?>/settings.php" class="waves-effect">
                                     <i class="bx bx-cog"></i>
-                                    <span>Settings</span>
+                                    <span>Setting</span>
                                 </a>
                             </li>
+
                         </ul>
                     </div>
                 </div>
