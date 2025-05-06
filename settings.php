@@ -16,94 +16,99 @@ while ($row = $result->fetch_assoc()) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
 
-$logo = $settings['site_logo'];
-$page_title = $settings['site_title'];
-$favicon_path = $settings['site_favicon'];
-$small_logo = $settings['site_small_logo'];
+$logo = getSetting('site_logo');
+$page_title = getSetting('site_title');
+$favicon_path = getSetting('site_favicon');
+$small_logo = getSetting('site_small_logo');
+if (isset($_POST['save_settings']))
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST['site_title'])) {
+            $newTitle = trim($_POST['site_title']);
+            $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_title'");
+            $stmt->bind_param("s", $newTitle);
+            $stmt->execute();
+        }
+
+        if (isset($_FILES['site_logo']) && $_FILES['site_logo']['error'] == 0) {
+            $uploadDir = 'uploads/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $fileName = time() . '_' . basename($_FILES['site_logo']['name']);
+            $targetPath = $uploadDir . $fileName;
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+            if (in_array($_FILES['site_logo']['type'], $allowedTypes)) {
+                if (move_uploaded_file($_FILES['site_logo']['tmp_name'], $targetPath)) {
+                    $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_logo'");
+                    $stmt->bind_param("s", $targetPath);
+                    $stmt->execute();
+                } else {
+                    echo "<p style='color:red;'>Failed to upload logo.</p>";
+                }
+            }
+        }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['site_title'])) {
-        $newTitle = trim($_POST['site_title']);
-        $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_title'");
-        $stmt->bind_param("s", $newTitle);
-        $stmt->execute();
+        if (isset($_FILES['site_favicon']) && $_FILES['site_favicon']['error'] == 0) {
+            $uploadDir = 'uploads/favicons/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $fileName = time() . '_' . basename($_FILES['site_favicon']['name']);
+            $targetPath = $uploadDir . $fileName;
+
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon'];
+
+            if (in_array($_FILES['site_favicon']['type'], $allowedTypes)) {
+                if (move_uploaded_file($_FILES['site_favicon']['tmp_name'], $targetPath)) {
+                    $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_favicon'");
+                    $stmt->bind_param("s", $targetPath);
+                    $stmt->execute();
+                } else {
+                    echo "<p style='color:red;'>Failed to upload favicon.</p>";
+                }
+            } else {
+                echo "<p style='color:red;'>Invalid file type for favicon. Only .jpg, .png, .webp, .gif, and .ico are allowed.</p>";
+            }
+        }
     }
-
-    if (isset($_FILES['site_logo']) && $_FILES['site_logo']['error'] == 0) {
-        $uploadDir = 'uploads/';
+    if (isset($_FILES['site_small_logo']) && $_FILES['site_small_logo']['error'] == 0) {
+        $uploadDir = 'uploads/logos/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $fileName = time() . '_' . basename($_FILES['site_logo']['name']);
+        $fileName = time() . '_' . basename($_FILES['site_small_logo']['name']);
         $targetPath = $uploadDir . $fileName;
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
-        if (in_array($_FILES['site_logo']['type'], $allowedTypes)) {
-            if (move_uploaded_file($_FILES['site_logo']['tmp_name'], $targetPath)) {
-                $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_logo'");
+        if (in_array($_FILES['site_small_logo']['type'], $allowedTypes)) {
+            if (move_uploaded_file($_FILES['site_small_logo']['tmp_name'], $targetPath)) {
+                // Use UPSERT to ensure the key is inserted if not present
+                $stmt = $conn->prepare("
+                    INSERT INTO settings (setting_key, setting_value)
+                    VALUES ('site_small_logo', ?)
+                    ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)
+                ");
                 $stmt->bind_param("s", $targetPath);
                 $stmt->execute();
             } else {
-                echo "<p style='color:red;'>Failed to upload logo.</p>";
-            }
-        }
-    }
-
-
-    if (isset($_FILES['site_favicon']) && $_FILES['site_favicon']['error'] == 0) {
-        $uploadDir = 'uploads/favicons/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-
-        $fileName = time() . '_' . basename($_FILES['site_favicon']['name']);
-        $targetPath = $uploadDir . $fileName;
-
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon'];
-
-        if (in_array($_FILES['site_favicon']['type'], $allowedTypes)) {
-            if (move_uploaded_file($_FILES['site_favicon']['tmp_name'], $targetPath)) {
-                $stmt = $conn->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = 'site_favicon'");
-                $stmt->bind_param("s", $targetPath);
-                $stmt->execute();
-            } else {
-                echo "<p style='color:red;'>Failed to upload favicon.</p>";
+                echo "<p style='color:red;'>Failed to upload small logo.</p>";
             }
         } else {
-            echo "<p style='color:red;'>Invalid file type for favicon. Only .jpg, .png, .webp, .gif, and .ico are allowed.</p>";
+            echo "<p style='color:red;'>Invalid file type for small logo. Only JPG, PNG, WEBP, and GIF are allowed.</p>";
         }
     }
+    ?>
+    <script>
+        window.location.href = 'settings.php';
+    </script>
+    <?php
 }
-if (isset($_FILES['site_small_logo']) && $_FILES['site_small_logo']['error'] == 0) {
-    $uploadDir = 'uploads/logos/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
-    $fileName = time() . '_' . basename($_FILES['site_small_logo']['name']);
-    $targetPath = $uploadDir . $fileName;
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-
-    if (in_array($_FILES['site_small_logo']['type'], $allowedTypes)) {
-        if (move_uploaded_file($_FILES['site_small_logo']['tmp_name'], $targetPath)) {
-            // Use UPSERT to ensure the key is inserted if not present
-            $stmt = $conn->prepare("
-                INSERT INTO settings (setting_key, setting_value)
-                VALUES ('site_small_logo', ?)
-                ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)
-            ");
-            $stmt->bind_param("s", $targetPath);
-            $stmt->execute();
-        } else {
-            echo "<p style='color:red;'>Failed to upload small logo.</p>";
-        }
-    } else {
-        echo "<p style='color:red;'>Invalid file type for small logo. Only JPG, PNG, WEBP, and GIF are allowed.</p>";
-    }
-}
-
 ?>
 <h4 class="mb-0">Site Settings</h4>
 

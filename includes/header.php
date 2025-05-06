@@ -23,11 +23,10 @@
     //$row = $result->fetch_assoc();
     $logoPath = getSetting('site_logo') ?? 'uploads/my_logo.png';
     $mobLogoPath = getSetting('site_small_logo') ?? 'uploads/my_logo.png';
+    $favicon_path = getSetting('site_favicon') ?? 'assets/images/default-favicon.ico';
+    $page_title = getSetting('site_title') ?? 'PM Tool';
 
-    $page_title = 'PM Tool'; // default
-    $favicon = 'assets/images/default-favicon.ico';
-
-    $result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_title', 'site_favicon')");
+    /*$result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_title', 'site_favicon')");
     while ($row = $result->fetch_assoc()) {
         if ($row['setting_key'] === 'site_title') {
             $page_title = $row['setting_value'];
@@ -35,7 +34,7 @@
         if ($row['setting_key'] === 'site_favicon' && !empty($row['setting_value'])) {
             $favicon = $row['setting_value'];
         }
-    }
+    }*/
     ?>
 
 
@@ -46,7 +45,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'PM Tool'; ?></title>
-        <link rel="icon" href="<?= htmlspecialchars($favicon_path) ?>" type="image/x-icon">
+        <link rel="icon" href="<?php  echo BASE_URL.'/'.$favicon_path; ?>" type="image/x-icon">
         <link href="<?php echo BASE_URL; ?>/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />

@@ -60,8 +60,14 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                     </select>
                 </div>
             </div>
+            <?php
+            // Assuming the project name is already fetched from the database as $row['project_name']
+            ?>
+
             <div class="col-md-6">
                 <div class="row">
+                    <!-- Project Name (Hidden Input) -->
+                    <input type="hidden" name="project_name" value="<?php echo isset($row['project_name']) ? $row['project_name'] : ''; ?>">
                     <div class="col-md-4">
                         <label for="type">Type<span class="text-danger">*</span></label>
                         <select class="form-select" id="type" name="type" required>
@@ -70,11 +76,13 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                             <option value="fixed" <?php echo isset($row['type']) && $row['type'] == 'fixed' ? 'selected' : ''; ?>>Fixed</option>
                         </select>
                     </div>
-                    <div class="col-md-4" id="hourly_rate_container" style="display: none;">
+
+                    <div class="col-md-4" id="hourly_rate_container" style="display: <?php echo (isset($row['type']) && $row['type'] == 'hourly') ? 'block' : 'none'; ?>;">
                         <label for="hourly_rate">Hourly Rate<span class="text-danger">*</span></label>
                         <input type="number" class="form-control" id="hourly_rate" name="hourly_rate"
                             value="<?php echo isset($row['hourly_rate']) ? $row['hourly_rate'] : ''; ?>">
                     </div>
+
                     <div class="col-md-4">
                         <label for="currencycode">Currency Code<span class="text-danger">*</span></label>
                         <select class="form-select" id="currency-code" name="currencycode" required>
@@ -307,5 +315,43 @@ $employees = mysqli_query($conn, "SELECT * FROM `users` WHERE `role`='employee' 
                 });
             }
         });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect = document.getElementById('type');
+        const hourlyRateContainer = document.getElementById('hourly_rate_container');
+
+        // Function to toggle hourly rate visibility
+        function toggleHourlyRateVisibility() {
+            if (typeSelect.value === 'hourly') {
+                hourlyRateContainer.style.display = 'block'; // Show the hourly rate input
+            } else {
+                hourlyRateContainer.style.display = 'none'; // Hide the hourly rate input
+            }
+        }
+
+        // Initial check to toggle visibility based on the current type value
+        toggleHourlyRateVisibility();
+
+        // Add event listener to the type select input to toggle visibility when changed
+        typeSelect.addEventListener('change', toggleHourlyRateVisibility);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const typeSelect = document.getElementById('type');
+        const hourlyRateContainer = document.getElementById('hourly_rate_container');
+
+        // Function to toggle hourly rate visibility
+        function toggleHourlyRateVisibility() {
+            if (typeSelect.value === 'hourly') {
+                hourlyRateContainer.style.display = 'block'; // Show the hourly rate input
+            } else {
+                hourlyRateContainer.style.display = 'none'; // Hide the hourly rate input
+            }
+        }
+
+        // Initial check to toggle visibility based on the current type value
+        toggleHourlyRateVisibility();
+
+        // Add event listener to the type select input to toggle visibility when changed
+        typeSelect.addEventListener('change', toggleHourlyRateVisibility);
     });
 </script>
