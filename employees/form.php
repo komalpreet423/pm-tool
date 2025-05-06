@@ -45,30 +45,21 @@
                 <textarea class="form-control" name="address" id="address" required><?php echo isset($row['address']) ? $row['address'] : ''; ?></textarea>
             </div>
         </div>
-        <!-- <div class="col-md-3">
+        <div class="col-md-3">
             <div class="mb-3">
-                <label for="role">Role</label>
-                <select class="form-select" name="role" required>
+                <label for="role" class="form-label">Role</label>
 
-                    <option value="employee" <?php echo (isset($row['role']) && $row['role'] == 'employee') ? 'selected' : ''; ?>>Employee</option>
-                    <option value="Admin" <?php echo (isset($row['role']) && $row['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-                    <option value="team leader" <?php echo (isset($row['role']) && $row['role'] == 'team leader') ? 'selected' : ''; ?>>Team Leader</option>
-                    <option value="HR" <?php echo (isset($row['role']) && $row['role'] == 'HR') ? 'selected' : ''; ?>>HR</option>
+                <?php $role = isset($row['role']) ? $row['role'] : ''; ?>
+                <select name="role" id="role" class="form-select" required>
+                    <option value="">Select Role</option>
+                    <option value="admin" <?php echo ($role === 'admin') ? 'selected' : ''; ?>>Admin</option>
+                    <option value="hr" <?php echo ($role === 'hr') ? 'selected' : ''; ?>>HR</option>
+                    <option value="team leader" <?php echo ($role === 'team leader') ? 'selected' : ''; ?>>Team Leader</option>
+                    <option value="employee" <?php echo ($role === 'employee') ? 'selected' : ''; ?>>Employee</option>
                 </select>
             </div>
-        </div> -->
-         <div class="col-md-3">
-        <div class="mb-3">
-    <label for="role" class="form-label">Role</label>
-    <select name="role" id="role" class="form-select" required>
-        <option value="">Select Role</option>
-        <option value="admin" <?php echo ($row['role'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
-        <option value="hr" <?php echo ($row['role'] === 'hr') ? 'selected' : ''; ?>>HR</option>
-        <option value="team leader" <?php echo ($row['role'] === 'team leader') ? 'selected' : ''; ?>>Team Leader</option>
-        <option value="employee" <?php echo ($row['role'] === 'employee') ? 'selected' : ''; ?>>Employee</option>
-    </select>
-</div>
-   </div>
+        </div>
+
 
         <div class="col-md-3">
             <div class="mb-3">

@@ -1,14 +1,13 @@
 <?php require_once '../includes/functions.php'; ?>
 <?php
-    $user_values = userProfile();
-    
-    if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
-    {
-        $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
-        $_SESSION['toast'] = "Access denied. Employees only.";
-        header("Location: " . $redirectUrl); 
-        exit();
-    }
+$user_values = userProfile();
+
+if ($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin')) {
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl);
+    exit();
+}
 ?>
 <?php require_once '../includes/header.php'; ?>
 <div class="row">
@@ -21,11 +20,11 @@
 </div>
 <div class="card">
     <div class="card-body">
-    <?php
-    $sql = "SELECT * FROM users";
-    $query = mysqli_query($conn, $sql);
+        <?php
+        $sql = "SELECT * FROM users";
+        $query = mysqli_query($conn, $sql);
         $users = mysqli_fetch_all($query, MYSQLI_ASSOC);
-    ?>
+        ?>
         <table class="table table-sm" id="employeeTable">
             <thead>
                 <th>#</th>
@@ -47,28 +46,28 @@
                         <td><?php echo $row['phone_number'] ?></td>
                         <td><?php echo $row['job_title'] ?></td>
                         <td>
-                        <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">  
-                                    <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
-                                </span>
-                            </td>
+                            <span class="badge bg-<?php echo ($row['status'] == 'active') ? 'success' : (($row['status'] == 'inactive') ? 'warning' : (($row['status'] == 'terminated') ? 'danger' : 'secondary')) ?>">
+                                <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                            </span>
+                        </td>
                         <td>
                             <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-primary btn-sm"><i class="bx bx-edit fs-5"></i></a>
                             <button class="btn btn-danger btn-sm delete-btn btn-sm" data-table-name="users" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                         </td>
                     <?php  } ?>
             </tbody>
-</div>
+    </div>
 
-<script>
-    $(document).ready(function() {
-        $('#employeeTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "lengthMenu": [10, 25, 50, 100],
-            "autoWidth": false
+    <script>
+        $(document).ready(function() {
+            $('#employeeTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [10, 25, 50, 100],
+                "autoWidth": false
+            });
         });
-    });
-</script>
-<?php require_once '../includes/footer.php'; ?>
+    </script>
+    <?php require_once '../includes/footer.php'; ?>

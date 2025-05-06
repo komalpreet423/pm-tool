@@ -7,7 +7,6 @@
         exit();
     }
 
-    $notifications = [];
     $user_id = $_SESSION['user_id'] ?? null;
     $userProfile = userProfile();
     $userId = $userProfile['id'];
@@ -18,17 +17,35 @@
     if ($query && mysqli_num_rows($query) > 0) {
         while ($row = mysqli_fetch_assoc($query)) {
             $notifications[] = $row;
-        }
+        }   
     }
+    //$result = $conn->query("SELECT setting_value FROM settings WHERE setting_key IN ('site_logo', 'site_small_logo')");
+    //$row = $result->fetch_assoc();
+    $logoPath = getSetting('site_logo') ?? 'uploads/my_logo.png';
+    $mobLogoPath = getSetting('site_small_logo') ?? 'uploads/my_logo.png';
+    $favicon_path = getSetting('site_favicon') ?? 'assets/images/default-favicon.ico';
+    $page_title = getSetting('site_title') ?? 'PM Tool';
+
+    /*$result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_title', 'site_favicon')");
+    while ($row = $result->fetch_assoc()) {
+        if ($row['setting_key'] === 'site_title') {
+            $page_title = $row['setting_value'];
+        }
+        if ($row['setting_key'] === 'site_favicon' && !empty($row['setting_value'])) {
+            $favicon = $row['setting_value'];
+        }
+    }*/
     ?>
+
+
     <!doctype html>
     <html lang="en">
 
     <head>
-        <meta charset="utf-8" />
-        <title><?php echo isset($page_title) ? $page_title : 'PM Tool'; ?></title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 ">
-        <link rel="shortcut icon" href="<?php echo BASE_URL; ?>/assets/images/favicon.ico">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'PM Tool'; ?></title>
+        <link rel="icon" href="<?php  echo BASE_URL.'/'.$favicon_path; ?>" type="image/x-icon">
         <link href="<?php echo BASE_URL; ?>/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -51,23 +68,24 @@
                 <div class="navbar-header">
                     <div class="d-flex">
                         <div class="navbar-brand-box">
-                            <a href="<?php echo BASE_URL; ?>" class="logo logo-dark">
+                            <a href="<?php echo BASE_URL; ?>" class="logo">
                                 <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/small-logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $mobLogoPath; ?>" id="mobile-logo" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="" height="17">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" id="web-logo" height="32">
                                 </span>
                             </a>
-                            <a href="<?php echo BASE_URL; ?>" class="logo logo-light">
+                            <!--a href="<?php echo BASE_URL; ?>" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/small-logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL; ?>/assets/images/logo.png" alt="" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="32">
                                 </span>
-                            </a>
+                            </a-->
                         </div>
+
                         <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
                             <i class="fa fa-fw fa-bars"></i>
                         </button>
@@ -94,21 +112,20 @@
                                             <h6 class="m-0" key="t-notifications"> Notifications </h6>
                                         </div>
                                         <div class="col-auto">
-                                        <a href="<?php echo BASE_URL; ?>/notifications.php" class="btn btn-sm btn-link font-size-14 text-center">view more</a>
+                                            <a href="<?php echo BASE_URL; ?>/notifications.php" class="btn btn-sm btn-link font-size-14 text-center">view more</a>
 
                                         </div>
                                     </div>
                                 </div>
 
                                 <?php foreach (array_slice($notifications, 0, 5) as $noti): ?>
-                                    <a href="<?php echo BASE_URL; htmlspecialchars($noti['link']); ?>/projects/index.php" class="text-reset notification-item">
+                                    <a href="<?php echo htmlspecialchars($noti['link']); ?>" class="text-reset notification-item">
                                         <div class="d-flex">
                                             <div class="avatar-xs me-3">
                                                 <span class="avatar-title bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 32px;">
                                                     <i class="bx bxs-bell"></i>
                                                 </span>
                                             </div>
-
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1"><?php echo htmlspecialchars($noti['message']); ?></h6>
                                                 <div class="font-size-12 text-muted">
@@ -121,6 +138,7 @@
                                         </div>
                                     </a>
                                 <?php endforeach; ?>
+
 
                                 <?php if (count($notifications) > 5): ?>
                                     <div class="p-2 border-top d-grid">
@@ -187,6 +205,12 @@
                                 <a href="<?php echo BASE_URL; ?>/clients/index.php" class="waves-effect">
                                     <i class="bx bx-user"></i>
                                     <span>Clients</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo BASE_URL; ?>/invoices/index.php" class="waves-effect">
+                                <i class="fas fa-file"></i>
+                                    <span>Invoice</span>
                                 </a>
                             </li>
                             <li class="menu-title">HR</li>
@@ -260,11 +284,12 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" class="waves-effect">
+                                <a href="<?php echo BASE_URL; ?>/settings.php" class="waves-effect">
                                     <i class="bx bx-cog"></i>
-                                    <span>Settings</span>
+                                    <span>Setting</span>
                                 </a>
                             </li>
+
                         </ul>
                     </div>
                 </div>

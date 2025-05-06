@@ -12,7 +12,7 @@ if (isset($_POST['add_milestone'])) {
     $currency_code = $_POST['currency_code'];
     $status = $_POST['status'];
 
-    $projectCheckQuery = "SELECT id FROM projects WHERE id = '$project_id' AND type = 'fixed'";
+    $projectCheckQuery = "SELECT id FROM projects ";
     $result = mysqli_query($conn, $projectCheckQuery);
 
     if (empty($amount)) {
