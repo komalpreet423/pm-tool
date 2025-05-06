@@ -5,11 +5,13 @@ require_once './includes/header.php';
 $settings = [
     'site_logo' => 'uploads/my_logo.png',
     'site_title' => 'PM Tool',
-    'site_favicon' => 'assets/images/default-favicon.ico'
+    'site_favicon' => 'assets/images/default-favicon.ico',
+    'site_small_logo' => 'uploads/logos/small-default.png' // Add this line
 ];
 
+
 // Fetch settings from the database
-$result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_logo', 'site_title', 'site_favicon')");
+$result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_logo', 'site_title', 'site_favicon', 'site_small_logo')");
 while ($row = $result->fetch_assoc()) {
     $settings[$row['setting_key']] = $row['setting_value'];
 }
@@ -17,6 +19,8 @@ while ($row = $result->fetch_assoc()) {
 $logo = $settings['site_logo'];
 $page_title = $settings['site_title'];
 $favicon_path = $settings['site_favicon'];
+$small_logo = $settings['site_small_logo'];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['site_title'])) {
@@ -72,6 +76,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+if (isset($_FILES['site_small_logo']) && $_FILES['site_small_logo']['error'] == 0) {
+    $uploadDir = 'uploads/logos/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $fileName = time() . '_' . basename($_FILES['site_small_logo']['name']);
+    $targetPath = $uploadDir . $fileName;
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+    if (in_array($_FILES['site_small_logo']['type'], $allowedTypes)) {
+        if (move_uploaded_file($_FILES['site_small_logo']['tmp_name'], $targetPath)) {
+            // Use UPSERT to ensure the key is inserted if not present
+            $stmt = $conn->prepare("
+                INSERT INTO settings (setting_key, setting_value)
+                VALUES ('site_small_logo', ?)
+                ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)
+            ");
+            $stmt->bind_param("s", $targetPath);
+            $stmt->execute();
+        } else {
+            echo "<p style='color:red;'>Failed to upload small logo.</p>";
+        }
+    } else {
+        echo "<p style='color:red;'>Invalid file type for small logo. Only JPG, PNG, WEBP, and GIF are allowed.</p>";
+    }
+}
+
 ?>
 <h4 class="mb-0">Site Settings</h4>
 
@@ -87,26 +119,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             placeholder="Enter new title" value="<?= htmlspecialchars($page_title) ?>">
                     </div>
                 </div>
-
                 <div class="row mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="site_favicon" class="form-label fw-semibold">Site Favicon</label>
                         <div class="d-flex align-items-center gap-3 mb-2">
                             <img src="<?= htmlspecialchars($favicon_path) ?>" alt="Favicon" class="rounded border" style="max-height: 32px;">
                         </div>
                         <input type="file" class="form-control" id="site_favicon" name="site_favicon" accept="image/*">
-
-
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="site_logo" class="form-label fw-semibold">Site Logo</label>
                         <div class="d-flex align-items-center gap-3 mb-2">
-                            <img src="<?= htmlspecialchars($logo) ?>" alt="Site Logo" class="rounded border" style="max-height: 33px;">
+                            <img src="<?= htmlspecialchars($logo) ?>" alt="Site Logo" class="rounded border" style="max-height: 32px;">
                         </div>
                         <input type="file" class="form-control" id="site_logo" name="site_logo" accept="image/*">
                     </div>
+
+                    <div class="col-md-4">
+                        <label for="site_small_logo" class="form-label fw-semibold">Site Small Logo</label>
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <img src="<?= htmlspecialchars($small_logo) ?>" alt="Site Small Logo" class="rounded border" style="max-height: 32px;">
+                        </div>
+                        <input type="file" class="form-control" id="site_small_logo" name="site_small_logo" accept="image/*">
+                    </div>
                 </div>
+
 
                 <div class="text-start">
                     <button type="submit" name="save_settings" class="btn btn-primary px-4">
@@ -117,9 +155,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 </div>
-</div>
-
-
-
-
 <?php require_once './includes/footer.php'; ?>

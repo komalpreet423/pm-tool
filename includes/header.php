@@ -17,11 +17,12 @@
     if ($query && mysqli_num_rows($query) > 0) {
         while ($row = mysqli_fetch_assoc($query)) {
             $notifications[] = $row;
-        }
+        }   
     }
-    $result = $conn->query("SELECT setting_value FROM settings WHERE setting_key = 'site_logo'");
-    $row = $result->fetch_assoc();
-    $logoPath = $row ? $row['setting_value'] : 'uploads/my_logo.png';
+    //$result = $conn->query("SELECT setting_value FROM settings WHERE setting_key IN ('site_logo', 'site_small_logo')");
+    //$row = $result->fetch_assoc();
+    $logoPath = getSetting('site_logo') ?? 'uploads/my_logo.png';
+    $mobLogoPath = getSetting('site_small_logo') ?? 'uploads/my_logo.png';
 
     $page_title = 'PM Tool'; // default
     $favicon = 'assets/images/default-favicon.ico';
@@ -45,7 +46,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'PM Tool'; ?></title>
-        <link rel="icon" href="<?= htmlspecialchars($favicon) ?>" type="image/x-icon">
+        <link rel="icon" href="<?= htmlspecialchars($favicon_path) ?>" type="image/x-icon">
         <link href="<?php echo BASE_URL; ?>/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -68,22 +69,22 @@
                 <div class="navbar-header">
                     <div class="d-flex">
                         <div class="navbar-brand-box">
-                            <a href="<?php echo BASE_URL; ?>" class="logo logo-dark">
+                            <a href="<?php echo BASE_URL; ?>" class="logo">
                                 <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
+                                    <img src="<?php echo BASE_URL . '/' . $mobLogoPath; ?>" id="mobile-logo" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="17">
+                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" id="web-logo" height="32">
                                 </span>
                             </a>
-                            <a href="<?php echo BASE_URL; ?>" class="logo logo-light">
+                            <!--a href="<?php echo BASE_URL; ?>" class="logo logo-light">
                                 <span class="logo-sm">
                                     <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
                                 </span>
                                 <span class="logo-lg">
                                     <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="32">
                                 </span>
-                            </a>
+                            </a-->
                         </div>
 
                         <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
