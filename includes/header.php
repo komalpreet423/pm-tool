@@ -189,6 +189,12 @@
                                     <span>Clients</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo BASE_URL; ?>/invoices/index.php" class="waves-effect">
+                                <i class="fas fa-file"></i>
+                                    <span>Invoice</span>
+                                </a>
+                            </li>
                             <li class="menu-title">HR</li>
                             <?php
                             if (isset($userProfile['role']) && ($userProfile['role'] == 'hr' || $userProfile['role'] == 'admin')) {
