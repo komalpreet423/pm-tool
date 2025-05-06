@@ -21,6 +21,7 @@
                     LEFT JOIN employee_projects ep ON p.id = ep.project_id 
                     LEFT JOIN users e ON ep.employee_id = e.id 
                     WHERE ep.employee_id = '$userId' AND e.role = 'employee'";
+
                 } else {
                     $sql = "SELECT * FROM projects";
                 }

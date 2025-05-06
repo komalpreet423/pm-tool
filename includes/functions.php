@@ -19,4 +19,10 @@ function userProfile()
         }
     }
 }
+function getSetting($key){
+    global $conn;
+    $result = $conn->query("SELECT setting_value FROM settings WHERE setting_key = '".$key."'");
+    $row = $result->fetch_assoc();
+    return $row['setting_value'] ;
+}
 ?>

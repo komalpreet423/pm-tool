@@ -25,11 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $sql = "INSERT INTO projects (name, start_date, due_date, currency_code, status, type, hourly_rate, description, client_id, team_leader_id) 
                 VALUES ('$name', '$startdate', '$duedate', '$currencycode', '$status', '$type', '$hourly_rate', '$description', '$client', " . ($team_leader ? "'$team_leader'" : "NULL") . ")";
+    
         if (mysqli_query($conn, $sql)) {
             $project_id = mysqli_insert_id($conn);
             foreach ($employees as $employee_id) {
                 $assignEmployee = "INSERT INTO employee_projects (employee_id, project_id, assigned_date) 
                                 VALUES ('$employee_id', '$project_id', NOW())";
+                                 
                 mysqli_query($conn, $assignEmployee);
 
                 $message = "You have been assigned to a new project: " . $name;
@@ -38,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $notif_sql = "INSERT INTO notifications (user_id, message, link) 
                               VALUES ('$employee_id', '$message', '$link')";
                 mysqli_query($conn, $notif_sql) or die("Notification insert failed: " . mysqli_error($conn));
+                
             }
 
             if (!empty($_FILES['project_documents']['name'][0])) {

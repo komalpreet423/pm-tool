@@ -30,8 +30,8 @@
                     <option value="USD" <?php echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? 'selected' : ''; ?>>USD</option>
                 </select>
                 <input type="hidden" name="currency_symbol" id="currency_symbol" value="<?php
-                                                                                        echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? '$' : '₹';
-                                                                                        ?>">
+                echo (isset($row['currency_code']) && $row['currency_code'] == 'USD') ? '$' : '₹';
+                ?>">
             </div>
         </div>
 
