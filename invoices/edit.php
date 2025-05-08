@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Redirect back to index page with success flag
+   
     header('Location: ' . BASE_URL . '/invoices/index.php?updated=1');
     exit();
 }
 
-// Fetch invoice and items
+
 if (isset($_GET['id'])) {
     $invoiceId = intval($_GET['id']);
     $sql = "SELECT * FROM invoices WHERE id = '$invoiceId'";

@@ -81,7 +81,7 @@ $html = '<meta charset="UTF-8">
 
 <table>
     <tr>
-        <td class="btr" style="padding-bottom:90px;">
+        <td class="btr" style="padding-bottom:70px;">
             <h1 style="color: #F3C100 ;margin-bottom:10px;">Billed By</h1>
             <strong style="color:white;font-size: 15px;">' . htmlspecialchars($invoice['billed_by_name']) . '</strong> 
             <p style="color:white;font-size: 15px;">' . nl2br(htmlspecialchars($invoice['billed_by_address'])) . '</p>

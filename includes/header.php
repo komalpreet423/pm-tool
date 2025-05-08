@@ -268,12 +268,15 @@
                             <?php if ($userProfile['role'] === 'admin' ) { ?>
 
                             <li>
-                                <a href="<?php echo BASE_URL; ?>/settings.php" class="waves-effect">
-                                    <i class="bx bx-cog"></i>
-                                    <span>Settings</span>
-                                </a>
-                            </li>
-                            <?php } ?>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <i class="bx bx-cog"></i>
+                                        <span>Settings</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="<?php echo BASE_URL; ?>/settings/site-setting.php">Site Setting</a></li>
+                                        <li><a href="<?php echo BASE_URL; ?>/settings/billing-setting.php">Billing</a></li>
+                                    </ul>
+                                </li>
 
                         </ul>
                     </div>
