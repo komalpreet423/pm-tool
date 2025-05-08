@@ -17,7 +17,7 @@
     if ($query && mysqli_num_rows($query) > 0) {
         while ($row = mysqli_fetch_assoc($query)) {
             $notifications[] = $row;
-        }   
+        }
     }
 
     $logoPath = getSetting('site_logo') ?? 'uploads/my_logo.png';
@@ -35,7 +35,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'PM Tool'; ?></title>
-        <link rel="icon" href="<?php  echo BASE_URL.'/'.$favicon_path; ?>" type="image/x-icon">
+        <link rel="icon" href="<?php echo BASE_URL . '/' . $favicon_path; ?>" type="image/x-icon">
         <link href="<?php echo BASE_URL; ?>/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/style.css" id="style" rel="stylesheet" type="text/css" />
         <link href="<?php echo BASE_URL; ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
@@ -138,7 +138,8 @@
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="<?php echo BASE_URL.'/'; echo $userProfile['profile_pic'] ?? 'assets/images/default-user.png'; ?>"
+                                <img class="rounded-circle header-profile-user" src="<?php echo BASE_URL . '/';
+                                                                                        echo $userProfile['profile_pic'] ?? 'assets/images/default-user.png'; ?>"
                                     alt="Header Avatar">
                                 <span class="d-none d-xl-inline-block ms-1"><?php echo userProfile()['name']; ?></span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -183,15 +184,18 @@
                                     <span>Milestones</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<?php echo BASE_URL; ?>/clients/index.php" class="waves-effect">
-                                    <i class="bx bx-user"></i>
-                                    <span>Clients</span>
-                                </a>
-                            </li>
+                            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+
+                                <li>
+                                    <a href="<?php echo BASE_URL; ?>/clients/index.php" class="waves-effect">
+                                        <i class="bx bx-user"></i>
+                                        <span>Clients</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <li>
                                 <a href="<?php echo BASE_URL; ?>/invoices/index.php" class="waves-effect">
-                                <i class="fas fa-file"></i>
+                                    <i class="fas fa-file"></i>
                                     <span>Invoice</span>
                                 </a>
                             </li>
@@ -205,9 +209,7 @@
                                         <span>Employees</span>
                                     </a>
                                 </li>
-                            <?php
-                            }
-                            ?>
+                            <?php } ?>
                             <li>
                                 <a href="<?php echo BASE_URL; ?>/holidays/index.php" class="waves-effect">
                                     <i class="bx bx-calendar"></i>
@@ -250,6 +252,7 @@
                                     <span>Policies</span>
                                 </a>
                             </li>
+                            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
                             <li>
                                 <a href="javascript: void(0);" class="has-arrow waves-effect">
                                     <i class="bx bxs-report"></i>
@@ -261,6 +264,9 @@
                                     <li><a href="<?php echo BASE_URL; ?>/reports/leaves-report.php">Leave Report</a></li>
                                 </ul>
                             </li>
+                            <?php } ?>
+                            <?php if ($userProfile['role'] === 'admin' ) { ?>
+
                             <li>
                                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                                         <i class="bx bx-cog"></i>
@@ -271,7 +277,6 @@
                                         <li><a href="<?php echo BASE_URL; ?>/settings/billing-setting.php">Billing</a></li>
                                     </ul>
                                 </li>
-                            
 
                         </ul>
                     </div>
