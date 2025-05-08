@@ -1,9 +1,21 @@
-<?php require_once '../includes/header.php'; ?>
+<?php require_once '../includes/header.php'; 
+$user_values = userProfile();
+
+if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+{
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl); 
+    exit();
+}
+?>
 <div class="row">
     <div class="col-12">
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Clients</h4>
+            <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
             <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Client</a>
+            <?php } ?>
         </div>
     </div>
 </div>

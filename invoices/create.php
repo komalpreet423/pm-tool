@@ -1,17 +1,6 @@
 <?php
 ob_start();
 require_once '../includes/header.php';
-$user_values = userProfile();
-
-if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
-{
-    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
-    $_SESSION['toast'] = "Access denied. Employees only.";
-    header("Location: " . $redirectUrl); 
-    exit();
-}
-
-
 if (isset($_POST['add-invoices'])) {
     $invoiceId = $conn->real_escape_string($_POST['invoiceId']);
     $invoiceDate = $conn->real_escape_string($_POST['invoiceDate']);
