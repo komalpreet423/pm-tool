@@ -14,8 +14,7 @@
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script
-    src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/select2/js/select2.min.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/libs/summernote/summernote-bs4.min.js"></script>
@@ -25,6 +24,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 
 
 <script>

@@ -68,7 +68,14 @@ $userRole = $userProfile['role'];
                         <td><?php echo $row['leave_type'] ?></td>
                         <td><?php echo $row['start_date'] ?></td>
                         <td><?php echo $row['end_date'] ?></td>
-                        <td><?php echo ucfirst($row['status']) ?></td>
+                        <td>
+                            <span class="badge bg-<?php
+                                                    echo ($row['status'] === 'Approved') ? 'success' : (($row['status'] === 'Rejected') ? 'danger' : (($row['status'] === 'Pending') ? 'secondary' : 'dark'));
+                                                    ?>">
+                                <?php echo ucfirst(str_replace('_', ' ', $row['status'])); ?>
+                            </span>
+                        </td>
+
                         <td><?php echo $row['reason'] ?></td>
                         <?php if (in_array($userRole, ['admin', 'hr'])): ?>
                             <td>
