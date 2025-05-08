@@ -2,7 +2,15 @@
 ob_start();
 require_once '../includes/header.php';
 $plugins = ['datepicker', 'select2'];
+$user_values = userProfile();
 
+if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+{
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl); 
+    exit();
+}
 if (isset($_POST['edit_project']) && isset($_GET['id'])) {
     $id = $_GET['id'];
     $name = $_POST['name'];
