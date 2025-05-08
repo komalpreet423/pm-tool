@@ -18,7 +18,7 @@
 
             <div class="d-flex flex-wrap justify-content-between">
                 <div class="col-md-6 pe-md-3 mb-3">
-                    <h6 class="mb-2">Billed To</h6>
+                    <h6 class="mb-2"><b>Billed To:</b></h6>
                     <div class="mb-3">
                         <label for="billedToName" class="form-label">Client/Company Name</label>
                         <input type="text" class="form-control" id="billedToName" name="billedToName"
@@ -38,7 +38,7 @@
 
 
                 <div class="col-md-6 ps-md-3 mb-3">
-                    <h6 class="mb-2">Billed By</h6>
+                    <h6 class="mb-2"><b>Billed By:</b></h6>
                     <div class="mb-3">
                         <label for="billedByName" class="form-label">Name</label>
                         <input type="text" class="form-control" id="billedByName" name="billedByName"

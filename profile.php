@@ -19,15 +19,17 @@ if (isset($_FILES['profile-pic']) && $_FILES['profile-pic']['error'] === UPLOAD_
         $targetDir = 'images/';
         if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
         $newFileName = uniqid() . '.' . $fileExtension;
-        $targetFile = $targetDir . $newFileName;
-        if (move_uploaded_file($_FILES['profile-pic']['tmp_name'], $targetFile)) {
+       $targetFile = $targetDir . $newFileName;
+    
+       if (move_uploaded_file($_FILES['profile-pic']['tmp_name'], $targetFile)) {
             $profilePicPath = $targetFile;
         }
     }
 }
     $sqlquery = "UPDATE users 
-        SET name = '$name', email = '$email', phone_number = '$phone_no', address = '$address', password_hash = '$epassword', profile_pic = '$profilePicPath'
-        WHERE id = '$id'";
+        SET name = '$name', email = '$email', phone_number = '$phone_no', address = '$address', password_hash = '$epassword', profile_pic = '$targetFile'
+        WHERE id = '".$userProfile['id']."'";
+        
     $result = mysqli_query($conn, $sqlquery);
 
   

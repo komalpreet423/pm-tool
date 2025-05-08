@@ -35,7 +35,7 @@ if (isset($_POST['add_leave'])) {
             $stmt->execute();
         }
 
-        header('Location: ' . BASE_URL . './leaves/index.php');
+        header('Location: ' . BASE_URL . '/leaves/index.php');
         exit();
     }
 } else {

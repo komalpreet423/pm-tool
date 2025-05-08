@@ -1,4 +1,6 @@
 <?php require_once '../includes/header.php';
+require_once '../includes/db.php';
+
 $userProfile = userProfile();
 $userRole = $userProfile['role']; ?>
 <div class="row">
@@ -45,7 +47,7 @@ $userRole = $userProfile['role']; ?>
                             foreach ($files as $file) {
                                 $file = trim($file);
                                 if (!empty($file)) {
-                                    echo '<a href="  ' . htmlspecialchars($file) . '" target="_blank">' . basename($file) . '</a><br>';
+                                    echo '<a href="' . htmlspecialchars($file) . '" target="_blank">' . basename($file) . '</a><br>';
                                 }
                             }
                             ?>
@@ -54,13 +56,14 @@ $userRole = $userProfile['role']; ?>
                         <td><?php echo $row['description'] ?></td>
                         <?php if ($userRole === 'admin' || $userRole === 'hr'): ?>
                             <td>
-                                <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-primary">Edit</a>
-                                <a href="delete.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this?')">Delete</a>
+                                <a href='./edit.php?id=<?php echo $row['id'] ?>' class="btn btn-success btn-sm"><i class="bx bx-edit fs-5"></i></a>
+                                <button class="btn btn-danger btn-sm delete-btn" data-table-name="policies" data-id="<?php echo $row['id'] ?>"><i class="bx bx-trash fs-5"></i></button>
                             </td>
                         <?php endif; ?>
 
                     <?php  } ?>
             </tbody>
+        </table>
     </div>
 
 </div>

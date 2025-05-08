@@ -8,4 +8,3 @@ define('BASE_URL', 'http://localhost/test/pm-tool');
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-?>
