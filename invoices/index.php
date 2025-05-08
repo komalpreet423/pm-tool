@@ -5,21 +5,21 @@
         <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
             <h4 class="mb-sm-0 font-size-18">Invoices</h4>
             <a href="./create.php" class="btn btn-primary d-flex">
-                <i class="bx bx-plus me-1 fs-5"> </i>Add Invoice
+                <i class="bx bx-plus me-1 fs-5"></i>Add Invoice
             </a>
         </div>
     </div>
 </div>
 
 <?php if (isset($_GET['updated']) && $_GET['updated'] == 1): ?>
-    <div class="alert alert-success" id="update-success-msg">
-        Invoice updated successfully.
-    </div>
+    <div class="alert alert-success" id="update-success-msg">Invoice updated successfully.</div>
+<?php elseif (isset($_GET['created']) && $_GET['created'] == 1): ?>
+    <div class="alert alert-success" id="update-success-msg">Invoice created successfully.</div>
 <?php endif; ?>
 
 <div class="card">
     <div class="card-body">
-        <table id="milestoneTable" class="table table-bordered table-striped">
+        <table id="invoiceTable" class="table table-sm">
             <thead>
                 <tr>
                     <th>#</th>
@@ -45,16 +45,17 @@
                         echo "<td>" . htmlspecialchars($row['invoice_date']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['billed_by_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['billed_to_client_company_name']) . "</td>";
-                        echo "<td>
-                            <a href='./edit.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm'>
+                        echo "<td class='d-flex gap-1'>
+                            <a href='./edit.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
                                 <i class='bx bx-edit fs-5'></i>
                             </a>
-                            <button class='btn btn-danger btn-sm delete-btn' data-table-name='invoices' data-id='" . htmlspecialchars($row['id']) . "'>
+                            <button class='btn btn-danger btn-sm delete-btn' 
+                                    data-table-name='invoices' data-id='" . htmlspecialchars($row['id']) . "' title='Delete'>
                                 <i class='bx bx-trash fs-5'></i>
                             </button>
-                            <a href='./download.php?id=" . $row['id'] . "' class='btn btn-success btn-sm'>
-            <i class='bx bx-download fs-5'></i>
-        </a>
+                            <a href='./download.php?id=" . $row['id'] . "' class='btn btn-success btn-sm' title='Download'>
+                                <i class='bx bx-download fs-5'></i>
+                            </a>
                         </td>";
                         echo "</tr>";
                     }
@@ -68,21 +69,20 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('#milestoneTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "lengthMenu": [10, 25, 50, 100],
-            "autoWidth": false
-        });
+
+          $(document).ready(function() {
+              $('#invoiceTable').DataTable({
+                  "paging": true,
+                  "searching": true,
+                  "ordering": true,
+                  "info": true,
+                  "lengthMenu": [10, 25, 50, 100],
+                  "autoWidth": false
+              });
+        setTimeout(() => {
+            document.getElementById('update-success-msg')?.remove();
+        }, 3000);
     });
-
-
-    setTimeout(() => {
-        document.getElementById('update-success-msg')?.remove();
-    }, 3000);
 </script>
 
 <?php require_once '../includes/footer.php'; ?>
