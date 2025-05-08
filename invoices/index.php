@@ -1,4 +1,5 @@
-<?php require_once '../includes/header.php'; ?>
+<?php require_once '../includes/header.php';
+$userRole = $userProfile['role']; ?>
 
 <div class="row">
     <div class="col-12">
@@ -45,18 +46,15 @@
                         echo "<td>" . htmlspecialchars($row['invoice_date']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['billed_by_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['billed_to_client_company_name']) . "</td>";
-                        echo "<td class='d-flex gap-1'>
-                            <a href='./edit.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm' title='Edit'>
-                                <i class='bx bx-edit fs-5'></i>
-                            </a>
-                            <button class='btn btn-danger btn-sm delete-btn' 
-                                    data-table-name='invoices' data-id='" . htmlspecialchars($row['id']) . "' title='Delete'>
-                                <i class='bx bx-trash fs-5'></i>
-                            </button>
-                            <a href='./download.php?id=" . $row['id'] . "' class='btn btn-success btn-sm' title='Download'>
-                                <i class='bx bx-download fs-5'></i>
-                            </a>
-                        </td>";
+                        echo "<td>";
+                        echo "<a href='./edit.php?id=" . $row['id'] . "' class='btn btn-primary btn-sm'><i class='bx bx-edit fs-5'></i></a> ";
+
+                        if ($userRole === 'admin' || $userRole === 'hr') {
+                            echo "<button class='btn btn-danger btn-sm delete-btn' data-table-name='invoices' data-id='" . htmlspecialchars($row['id']) . "'><i class='bx bx-trash fs-5'></i></button> ";
+                        }
+
+                        echo "<a href='./download.php?id=" . $row['id'] . "' class='btn btn-success btn-sm'><i class='bx bx-download fs-5'></i></a>";
+                        echo "</td>";
                         echo "</tr>";
                     }
                 } else {
@@ -64,11 +62,13 @@
                 }
                 ?>
             </tbody>
+
         </table>
     </div>
 </div>
 
 <script>
+<<<<<<< HEAD
 
           $(document).ready(function() {
               $('#invoiceTable').DataTable({
@@ -82,6 +82,17 @@
         setTimeout(() => {
             document.getElementById('update-success-msg')?.remove();
         }, 3000);
+=======
+    $(document).ready(function() {
+        $('#milestoneTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthMenu": [10, 25, 50, 100],
+            "autoWidth": false
+        });
+>>>>>>> 62dcf729a6a8af4f573811c4fa49c3664c2b7e1f
     });
 </script>
 

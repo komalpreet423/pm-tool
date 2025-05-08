@@ -43,14 +43,14 @@ if (mysqli_num_rows($query) > 0) {
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="name">Project Name: <?php echo $project['name']; ?></label>
+                        <label for="name"><b>Project Name: </b><?php echo $project['name']; ?></label>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label for="name"><?php echo $project['description']; ?></label>
+                        <label for="name"> <label for="name"><b>Description: </b><?php echo $project['description']; ?></label>
                     </div>
                 </div>
             </div>

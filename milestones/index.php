@@ -4,7 +4,9 @@
         <div class="col-12">
             <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
                 <h4 class="mb-sm-0 font-size-18">Milestones</h4>
-                <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Milestone</a>
+                <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
+                    <a href="./create.php" class="btn btn-primary d-flex"><i class="bx bx-plus me-1 fs-5"> </i>Add Milestone</a>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -48,13 +50,16 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="./edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
-                                    <i class="bx bx-edit fs-5"></i>
-                                </a>
+                                <?php if ($userProfile['role'] === 'admin' || $userProfile['role'] === 'hr') { ?>
 
-                                <button class="btn btn-danger delete-btn btn-sm" data-table-name="project_milestones" data-id="<?php echo $row['id']; ?>">
-                                    <i class="bx bx-trash fs-5"></i>
-                                </button>
+                                    <a href="./edit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm">
+                                        <i class="bx bx-edit fs-5"></i>
+                                    </a>
+
+                                    <button class="btn btn-danger delete-btn btn-sm" data-table-name="project_milestones" data-id="<?php echo $row['id']; ?>">
+                                        <i class="bx bx-trash fs-5"></i>
+                                    </button>
+                                <?php } ?>
 
                                 <?php if ($row['status'] == 'completed') { ?>
                                     <a href="download.php?id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">
@@ -62,15 +67,19 @@
                                     </a>
                                 <?php } ?>
 
-                                <button
-                                    type="button"
-                                    class="btn btn-info btn-sm request-btn"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#hourlyRateModal"
-                                    data-hourly-rate="<?php echo htmlspecialchars($row['hourly_rate']); ?>"
-                                    data-currency-code="<?php echo htmlspecialchars($row['currency_code']); ?>"> <!-- Add currency code -->
-                                    <i class="bx bx-time"></i> Request
-                                </button>
+                                <?php if ($userProfile['role'] === 'employee' && $row['status'] != 'completed') { ?>
+                                    <button
+                                        type="button"
+                                        class="btn btn-info btn-sm request-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#hourlyRateModal"
+                                        data-id="<?php echo $row['id']; ?>"
+                                        data-due-date="<?php echo htmlspecialchars($row['due_date']); ?>">
+                                        <i class="bx bx-time"></i> Request
+                                    </button>
+
+                                <?php } ?>
+
 
                             </td>
 
@@ -86,62 +95,58 @@
     <div class="modal fade" id="hourlyRateModal" tabindex="-1" aria-labelledby="hourlyRateModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <div class="modal-header">
-                   <label for="">Due Dates</label>
+                    <h5 class="modal-title" id="hourlyRateModalLabel">Due Date</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <!-- Amount Field -->
-                    <div class="mb-3">
-                        <?php $currency_code = $row['currency_code']; // e.g., 'INR', 'USD'
-                        $currency_symbols = [
-                            'INR' => '₹',
-                            'USD' => '$',
-                            // Add more if needed
-                        ];
-
-                        $currency_symbol = isset($currency_symbols[$currency_code]) ? $currency_symbols[$currency_code] : '';
-
-                        ?>
-                        <label for="amount" class="form-label">Amount</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="currencySign">
-                                <?php echo $currency_symbol; ?>
-                            </span>
-                            <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount"
-                                value="<?php echo isset($row['amount']) ? htmlspecialchars($row['amount']) : ''; ?>">
-                        </div>
-                    </div>
-
-
-                    <!-- Due Date Field -->
                     <div class="mb-3">
                         <label for="due_date" class="form-label">Due Date</label>
                         <input type="text" class="form-control" id="due_date" name="due_date"
-                            value="<?php echo  $row['due_date'];  ?>">
+                            value="<?php echo htmlspecialchars($row['due_date']); ?>" readonly>
                     </div>
+                </div>
 
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#milestoneTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "lengthMenu": [10, 25, 50, 100],
+                "autoWidth": false
+            });
 
-
-        <script>
-            $(document).ready(function() {
-                $('#milestoneTable').DataTable({
-                    "paging": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "lengthMenu": [10, 25, 50, 100],
-                    "autoWidth": false
+            $('#hourlyRateModal').on('shown.bs.modal', function() {
+                $('#due_date').datepicker({
+                    format: 'yyyy-mm-dd',
+                    autoclose: true,
+                    container: '#hourlyRateModal .modal-body',
                 });
             });
-        </script>
 
-        <?php require_once '../includes/footer.php'; ?>
+            $('#due_date').on('click', function() {
+                $(this).datepicker('update');
+            });
+
+            $('#hourlyRateModal').on('show.bs.modal', function(event) {
+                const button = $(event.relatedTarget);
+
+                const dueDate = button.data('due-date');
+
+                const modal = $(this);
+                modal.find('#due_date').val(dueDate);
+            });
+        });
+    </script>
+
+    <?php require_once '../includes/footer.php'; ?>

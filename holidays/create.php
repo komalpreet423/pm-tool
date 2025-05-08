@@ -2,6 +2,16 @@
 ob_start();
 $plugins = ['datepicker'];
 require '../includes/header.php';
+$user_values = userProfile();
+
+if($user_values['role'] && ($user_values['role'] !== 'hr' && $user_values['role'] !== 'admin'))
+{
+    $redirectUrl = $_SERVER['HTTP_REFERER'] ?? '/test/pm-tool';
+    $_SESSION['toast'] = "Access denied. Employees only.";
+    header("Location: " . $redirectUrl); 
+    exit();
+}
+
 $errorMessage = '';
 if (isset($_POST['add_holiday'])) {
     $name = $_POST['name'];

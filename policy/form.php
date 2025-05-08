@@ -23,7 +23,7 @@
                     <ul class="list-u   nstyled" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
                         <?php
                         $files = is_array($row['file']) ? $row['file'] : explode(',', $row['file']);
-                        $base_url = '/uploads/'; 
+                        $base_url = '/uploads/';
                         $image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
                         foreach ($files as $file):
                             $file = trim($file);
@@ -31,11 +31,11 @@
                         ?>
                             <li style="margin-bottom: 10px;">
                                 <?php if (in_array($ext, $image_extensions)): ?>
-                                    <a href="<?php echo htmlspecialchars($file); ?>" target="_blank">
+                                    <a href="<?php echo BASE_URL . '/' . htmlspecialchars($file); ?>" target="_blank">
                                         <img src="<?php echo htmlspecialchars($file); ?>" alt="Uploaded Image" style="max-width: 100%; height: auto; max-height: 100px; border-radius: 5px;" />
                                     </a>
                                 <?php else: ?>
-                                    <a href="<?php echo htmlspecialchars($file); ?>" target="_blank">
+                                    <a href="<?php echo BASE_URL . '/' . htmlspecialchars($file); ?>" target="_blank">
                                         <?php echo htmlspecialchars(basename($file)); ?>
                                     </a>
                                 <?php endif; ?>

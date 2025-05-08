@@ -19,22 +19,12 @@
             $notifications[] = $row;
         }   
     }
-    //$result = $conn->query("SELECT setting_value FROM settings WHERE setting_key IN ('site_logo', 'site_small_logo')");
-    //$row = $result->fetch_assoc();
+
     $logoPath = getSetting('site_logo') ?? 'uploads/my_logo.png';
     $mobLogoPath = getSetting('site_small_logo') ?? 'uploads/my_logo.png';
     $favicon_path = getSetting('site_favicon') ?? 'assets/images/default-favicon.ico';
     $page_title = getSetting('site_title') ?? 'PM Tool';
 
-    /*$result = $conn->query("SELECT setting_key, setting_value FROM settings WHERE setting_key IN ('site_title', 'site_favicon')");
-    while ($row = $result->fetch_assoc()) {
-        if ($row['setting_key'] === 'site_title') {
-            $page_title = $row['setting_value'];
-        }
-        if ($row['setting_key'] === 'site_favicon' && !empty($row['setting_value'])) {
-            $favicon = $row['setting_value'];
-        }
-    }*/
     ?>
 
 
@@ -76,14 +66,6 @@
                                     <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" id="web-logo" height="32">
                                 </span>
                             </a>
-                            <!--a href="<?php echo BASE_URL; ?>" class="logo logo-light">
-                                <span class="logo-sm">
-                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Small Logo" height="32">
-                                </span>
-                                <span class="logo-lg">
-                                    <img src="<?php echo BASE_URL . '/' . $logoPath; ?>" alt="Logo" height="32">
-                                </span>
-                            </a-->
                         </div>
 
                         <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
@@ -119,7 +101,7 @@
                                 </div>
 
                                 <?php foreach (array_slice($notifications, 0, 5) as $noti): ?>
-                                    <a href="<?php echo htmlspecialchars($noti['link']); ?>" class="text-reset notification-item">
+                                    <a href="<?php echo BASE_URL; ?>/leaves/index.php" class="text-reset notification-item">
                                         <div class="d-flex">
                                             <div class="avatar-xs me-3">
                                                 <span class="avatar-title bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 32px;">
@@ -142,7 +124,7 @@
 
                                 <?php if (count($notifications) > 5): ?>
                                     <div class="p-2 border-top d-grid">
-                                        <a class="btn btn-sm btn-link font-size-14 text-center" href="http://localhost/test/pm-tool/notifications.php">
+                                        <a class="btn btn-sm btn-link font-size-14 text-center" href="<?php echo BASE_URL; ?>/notifications.php">
                                             <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">View More..</span>
                                         </a>
 
@@ -156,7 +138,7 @@
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="<?php echo BASE_URL; ?>/assets/images/default-user.png"
+                                <img class="rounded-circle header-profile-user" src="<?php echo BASE_URL.'/'; echo $userProfile['profile_pic'] ?? 'assets/images/default-user.png'; ?>"
                                     alt="Header Avatar">
                                 <span class="d-none d-xl-inline-block ms-1"><?php echo userProfile()['name']; ?></span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -275,12 +257,8 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                     <li><a href="<?php echo BASE_URL; ?>/reports/expense-report.php">Expense Report</a></li>
-                                    <li><a href="#">Invoice Report</a></li>
-                                    <li><a href="#">Project Report</a></li>
-                                    <li><a href="#">Employee Report</a></li>
                                     <li><a href="<?php echo BASE_URL; ?>/reports/attendance-report.php">Attendance Report</a></li>
                                     <li><a href="<?php echo BASE_URL; ?>/reports/leaves-report.php">Leave Report</a></li>
-                                    <li><a href="#">Daily Report</a></li>
                                 </ul>
                             </li>
                             <li>
