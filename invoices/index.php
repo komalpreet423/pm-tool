@@ -68,7 +68,6 @@ $userRole = $userProfile['role']; ?>
 </div>
 
 <script>
-<<<<<<< HEAD
 
           $(document).ready(function() {
               $('#invoiceTable').DataTable({
@@ -82,17 +81,6 @@ $userRole = $userProfile['role']; ?>
         setTimeout(() => {
             document.getElementById('update-success-msg')?.remove();
         }, 3000);
-=======
-    $(document).ready(function() {
-        $('#milestoneTable').DataTable({
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "lengthMenu": [10, 25, 50, 100],
-            "autoWidth": false
-        });
->>>>>>> 62dcf729a6a8af4f573811c4fa49c3664c2b7e1f
     });
 </script>
 

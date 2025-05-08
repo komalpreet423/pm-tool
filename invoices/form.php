@@ -18,13 +18,8 @@
             </div>
 
             <div class="d-flex flex-wrap justify-content-between">
-<<<<<<< HEAD
-                <div class="col-md-5 pe-md-3 mb-3">
-                    <h6 class="mb-2"><b class="fs-5">Billed To</b></h6>
-=======
                 <div class="col-md-6 pe-md-3 mb-3">
                     <h6 class="mb-2"><b>Billed To:</b></h6>
->>>>>>> 62dcf729a6a8af4f573811c4fa49c3664c2b7e1f
                     <div class="mb-3">
                         <label for="billedToName" class="form-label">Client/Company Name</label>
                         <input type="text" class="form-control" id="billedToName" name="billedToName"
