@@ -46,12 +46,11 @@ $extraNotifications = array_slice($notifications, 5);
                                 <?php
                                 $notificationLink = htmlspecialchars($noti['link']);
                                 // Debugging: Check the actual link generated
-                                echo "Notification Link: " . $notificationLink . "<br>";
                                 if (strpos($notificationLink, 'http') !== 0) {
                                     $notificationLink = BASE_URL . $notificationLink;
                                 }
                                 ?>
-                                <a href="<?php echo $notificationLink; ?>" class="btn btn-sm btn-primary">View</a>
+                                <a href="<?php echo BASE_URL; ?>/projects/index.php" class="btn btn-sm btn-primary">View</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

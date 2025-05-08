@@ -29,14 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['project_status'])) {
 }
 
 // Fetch the project status after update or on GET
-$sql = "SELECT ps.*, p.name AS project_name, p.description AS project_description 
+$sql = "SELECT ps.*, 
+               p.name AS project_name, 
+               p.description AS project_description
         FROM project_status ps
         JOIN projects p ON ps.project_id = p.id
         WHERE ps.id = $id";
+
+// Run the query
 $query = mysqli_query($conn, $sql);
 
-
+// Fetch result
 $project = mysqli_fetch_assoc($query);
+
+// Debug output to check what's returned
+
+// Debug: Check if correct employee is fetched
+
 if (isset($_POST['project_status'])) {
     $chargable_hours = (int)$_POST['chargable_hours'];
     $non_chargable_hours = (int)$_POST['non_chargable_hours'];
@@ -55,46 +64,41 @@ if (isset($_POST['project_status'])) {
     } else {
         echo "<div class='alert alert-danger'>Error updating project status: " . mysqli_error($conn) . "</div>";
     }
-
-?>
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Edit Daily Report</h4>
-                <a href="./index.php" class="btn btn-primary d-flex">
-                    <i class="bx bx-left-arrow-alt me-1 fs-4"></i> Go Back
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="name">Project Name: <?php echo htmlspecialchars($project['project_name']); ?></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="description"><?php echo htmlspecialchars(strip_tags($project['project_description'])); ?></label>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-<?php
 };
 ?>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box pb-3 d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Edit Daily Report</h4>
+            <a href="./index.php" class="btn btn-primary d-flex">
+                <i class="bx bx-left-arrow-alt me-1 fs-4"></i> Go Back
+            </a>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         <form method="POST">
             <div class="row">
+                <!-- Display Assigned Employee Name -->
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="employee_name">Employee name</label>
+                        <input type="text" id="employee_name" class="form-control"
+                            value="<?php echo htmlspecialchars($project['employee_name']); ?>" readonly>
+                    </div>
+                </div>
+
+                <!-- Display Project Name -->
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label for="project_name">Project Name</label>
+                        <input type="text" id="project_name" class="form-control"
+                            value="<?php echo htmlspecialchars($project['project_name']); ?>" readonly>
+                    </div>
+                </div>
+
+
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="chargable_hours">Spend Hours</label>

@@ -2,6 +2,7 @@
 require('../vendor/autoload.php');
 use Dompdf\Dompdf;
 
+
 require_once '../includes/db.php';
 
 $invoiceId = $_GET['id'] ?? 0;
@@ -10,6 +11,7 @@ $invoiceId = $_GET['id'] ?? 0;
 $invoiceSql = "SELECT * FROM invoices WHERE id = ?";
 $stmt = $conn->prepare($invoiceSql);
 $stmt->bind_param("i", $invoiceId);
+
 $stmt->execute();
 $invoiceResult = $stmt->get_result();
 $invoice = $invoiceResult->fetch_assoc();
